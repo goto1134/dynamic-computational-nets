@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/new project.ico</file>
+        <file>icons/open.ico</file>
+    </qresource>
+</RCC>

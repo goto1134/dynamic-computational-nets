@@ -13,8 +13,21 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    elementsort.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    elementsort.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    resources.qrc
+
+DISTFILES += \
+    icons/new project.ico \
+    translations/translation_en.ts \
+    translations/translation_ru.ts
+
+TRANSLATIONS += translations/translation_en.ts \
+    translations/translation_ru.ts

@@ -17,6 +17,8 @@ class MainWindow : public QMainWindow
 
     private:
         Ui::MainWindow *ui;
+        void setActionGroups(QWidget *parent);
+        void setStretchFatrors();
 };
 
 #endif // MAINWINDOW_H

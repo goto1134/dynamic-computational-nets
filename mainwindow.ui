@@ -1,24 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>goto1134</author>
  <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>973</width>
+    <height>637</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QMenuBar" name="menuBar" />
-  <widget class="QToolBar" name="mainToolBar" />
-  <widget class="QWidget" name="centralWidget" />
-  <widget class="QStatusBar" name="statusBar" />
+  <property name="locale">
+   <locale language="English" country="UnitedKingdom"/>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QSplitter" name="projectSplitter">
+      <property name="contextMenuPolicy">
+       <enum>Qt::ActionsContextMenu</enum>
+      </property>
+      <property name="toolTipDuration">
+       <number>-3</number>
+      </property>
+      <property name="locale">
+       <locale language="Russian" country="Russia"/>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
+      <widget class="QTreeView" name="treeView">
+       <property name="locale">
+        <locale language="Russian" country="Russia"/>
+       </property>
+      </widget>
+      <widget class="QSplitter" name="graphicSplitter">
+       <property name="locale">
+        <locale language="Russian" country="Russia"/>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="childrenCollapsible">
+        <bool>false</bool>
+       </property>
+       <widget class="QGraphicsView" name="graphicsView">
+        <property name="locale">
+         <locale language="Russian" country="Russia"/>
+        </property>
+       </widget>
+       <widget class="QTableView" name="tableView">
+        <property name="locale">
+         <locale language="Russian" country="Russia"/>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>973</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::TopToolBarArea</set>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>true</bool>
+   </attribute>
+   <addaction name="actionCreateDVS"/>
+   <addaction name="actionLoadDVS"/>
+   <addaction name="actionSaveDVS"/>
+   <addaction name="separator"/>
+   <addaction name="actionCheck"/>
+   <addaction name="actionGarbage"/>
+   <addaction name="separator"/>
+   <addaction name="actionPlay"/>
+   <addaction name="actionPause"/>
+   <addaction name="actionStop"/>
+   <addaction name="actionStepBack"/>
+   <addaction name="actionStepForward"/>
+   <addaction name="separator"/>
+   <addaction name="actionOptions"/>
+  </widget>
+  <widget class="QToolBar" name="redactorToolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::TopToolBarArea</set>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>true</bool>
+   </attribute>
+   <addaction name="actionCoursor"/>
+   <addaction name="actionPlace"/>
+   <addaction name="actionTransition"/>
+   <addaction name="actionRegularConnection"/>
+   <addaction name="actionControlConnection"/>
+  </widget>
+  <action name="actionCreateDVS">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/new project.ico</normaloff>:/icons/icons/new project.ico</iconset>
+   </property>
+   <property name="text">
+    <string>CreateDVS</string>
+   </property>
+   <property name="toolTip">
+    <string>Create new DVS model</string>
+   </property>
+  </action>
+  <action name="actionLoadDVS">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/open.ico</normaloff>:/icons/icons/open.ico</iconset>
+   </property>
+   <property name="text">
+    <string>LoadDVS</string>
+   </property>
+   <property name="toolTip">
+    <string>Load DVS Project</string>
+   </property>
+  </action>
+  <action name="actionSaveDVS">
+   <property name="text">
+    <string>saveDVS</string>
+   </property>
+   <property name="toolTip">
+    <string>Save DVS</string>
+   </property>
+  </action>
+  <action name="actionCoursor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Coursor</string>
+   </property>
+  </action>
+  <action name="actionPlace">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Place</string>
+   </property>
+  </action>
+  <action name="actionTransition">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Transition</string>
+   </property>
+  </action>
+  <action name="actionRegularConnection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>RegularConnection</string>
+   </property>
+  </action>
+  <action name="actionControlConnection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>ControlConnection</string>
+   </property>
+  </action>
+  <action name="actionOptions">
+   <property name="text">
+    <string>Options</string>
+   </property>
+  </action>
+  <action name="actionPlay">
+   <property name="text">
+    <string>Play</string>
+   </property>
+  </action>
+  <action name="actionPause">
+   <property name="text">
+    <string>Pause</string>
+   </property>
+  </action>
+  <action name="actionGarbage">
+   <property name="text">
+    <string>Garbage</string>
+   </property>
+  </action>
+  <action name="actionCheck">
+   <property name="text">
+    <string>Check</string>
+   </property>
+  </action>
+  <action name="actionStop">
+   <property name="text">
+    <string>Stop</string>
+   </property>
+  </action>
+  <action name="actionStepForward">
+   <property name="text">
+    <string>StepForward</string>
+   </property>
+  </action>
+  <action name="actionStepBack">
+   <property name="text">
+    <string>StepBack</string>
+   </property>
+  </action>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
- <resources/>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
