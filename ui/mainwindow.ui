@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>973</width>
-    <height>637</height>
+    <width>854</width>
+    <height>578</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -71,7 +71,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>973</width>
+     <width>854</width>
      <height>21</height>
     </rect>
    </property>
@@ -87,7 +87,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
    <addaction name="actionCreateDVS"/>
    <addaction name="actionLoadDVS"/>
@@ -128,7 +128,7 @@
   </widget>
   <action name="actionCreateDVS">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/icons/icons/new project.ico</normaloff>:/icons/icons/new project.ico</iconset>
    </property>
    <property name="text">
@@ -140,7 +140,7 @@
   </action>
   <action name="actionLoadDVS">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/icons/icons/open.ico</normaloff>:/icons/icons/open.ico</iconset>
    </property>
    <property name="text">
@@ -241,7 +241,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

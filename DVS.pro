@@ -13,13 +13,21 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    elementsort.cpp
+    ui/viewmodel/ProjectTreeModel.cpp \
+    ui/viewmodel/TreeItem.cpp \
+    ui/MainWindow.cpp \
+    model/ElementSort.cpp \
+    model/Transition.cpp
 
-HEADERS  += mainwindow.h \
-    elementsort.h
+HEADERS  += \
+    ui/viewmodel/ProjectTreeModel.h \
+    ui/viewmodel/TreeItem.h \
+    ui/MainWindow.h \
+    model/ElementSort.h \
+    model/Transition.h
 
-FORMS    += mainwindow.ui
+FORMS    += \
+    ui/mainwindow.ui
 
 RESOURCES += \
     resources.qrc
@@ -27,7 +35,8 @@ RESOURCES += \
 DISTFILES += \
     icons/new project.ico \
     translations/translation_en.ts \
-    translations/translation_ru.ts
+    translations/translation_ru.ts \
+    global/sorts.xml
 
 TRANSLATIONS += translations/translation_en.ts \
     translations/translation_ru.ts

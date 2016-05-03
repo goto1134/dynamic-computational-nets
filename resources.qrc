@@ -3,4 +3,7 @@
         <file>icons/new project.ico</file>
         <file>icons/open.ico</file>
     </qresource>
+    <qresource prefix="/">
+        <file>default.txt</file>
+    </qresource>
 </RCC>

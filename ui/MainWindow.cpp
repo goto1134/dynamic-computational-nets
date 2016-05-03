@@ -1,5 +1,8 @@
-#include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QFile>
+
+#include "MainWindow.h"
+#include "viewmodel/ProjectTreeModel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -9,6 +12,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setActionGroups(parent);
     setStretchFatrors();
+
+    QFile file(":/default.txt");
+    file.open(QIODevice::ReadOnly);
+
+    ui->treeView->setModel(new ProjectTreeModel(file.readAll()));
+
+    file.close();
 }
 
 MainWindow::~MainWindow()
