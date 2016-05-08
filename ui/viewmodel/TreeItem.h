@@ -7,21 +7,37 @@
 class TreeItem
 {
     public:
-        explicit TreeItem(const QList<QVariant> &aData, TreeItem *aParentItem = 0);
+        enum TreeItemType
+        {
+            Service = 0,
+            SortContainer = 1,
+            Sort = 2,
+            ObjectNetsContainer = 3,
+            Class = 4,
+            ObjectNet = 5,
+            Axiom = 6
+        };
+
+
+        explicit TreeItem(QString aName, TreeItem *aParentItem = 0, TreeItemType aItemType = Service);
         ~TreeItem();
 
         void appendChild(TreeItem *aChild);
 
-        TreeItem *child(int aRow);
+        TreeItem *child(int aRow) const;
         int childCount() const;
         int dataLength() const;
         QVariant getData(int aIndex) const;
         int row() const;
-        TreeItem *getParentItem();
+        TreeItem *getParentItem() const;
+        QVariant getItemType() const;
+
+        void setItemName(QString aName);
 
     private:
+        QVariant mItemName;
         QList<TreeItem*> mChildItems;
-        QList<QVariant> mItemData;
+        QVariant mItemType;
         TreeItem *mParentItem;
 };
 

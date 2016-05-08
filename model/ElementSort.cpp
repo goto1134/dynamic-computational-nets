@@ -1,11 +1,20 @@
 #include "ElementSort.h"
 
-ElementSort::ElementSort()
+#include <QDebug>
+
+ElementSort::ElementSort(QString aName, QColor *aColor)
 {
-    mName="";
+    qDebug() << "Sort " << aName;
+    mName = aName;
+    mColor = aColor;
 }
 
-QString ElementSort::getName()
+QColor *ElementSort::getColor() const
+{
+    return mColor;
+}
+
+QString ElementSort::getName() const
 {
     return mName;
 }

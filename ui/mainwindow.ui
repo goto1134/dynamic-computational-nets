@@ -132,7 +132,7 @@
      <normaloff>:/icons/icons/new project.ico</normaloff>:/icons/icons/new project.ico</iconset>
    </property>
    <property name="text">
-    <string>CreateDVS</string>
+    <string>Create DCN</string>
    </property>
    <property name="toolTip">
     <string>Create new DVS model</string>
@@ -144,7 +144,7 @@
      <normaloff>:/icons/icons/open.ico</normaloff>:/icons/icons/open.ico</iconset>
    </property>
    <property name="text">
-    <string>LoadDVS</string>
+    <string>Load DCN</string>
    </property>
    <property name="toolTip">
     <string>Load DVS Project</string>
@@ -152,7 +152,7 @@
   </action>
   <action name="actionSaveDVS">
    <property name="text">
-    <string>saveDVS</string>
+    <string>Save DCN</string>
    </property>
    <property name="toolTip">
     <string>Save DVS</string>
@@ -187,7 +187,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>RegularConnection</string>
+    <string>Regular Connection</string>
    </property>
   </action>
   <action name="actionControlConnection">
@@ -195,7 +195,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>ControlConnection</string>
+    <string>Control Connection</string>
    </property>
   </action>
   <action name="actionOptions">
@@ -230,12 +230,12 @@
   </action>
   <action name="actionStepForward">
    <property name="text">
-    <string>StepForward</string>
+    <string>Step Forward</string>
    </property>
   </action>
   <action name="actionStepBack">
    <property name="text">
-    <string>StepBack</string>
+    <string>Step Back</string>
    </property>
   </action>
  </widget>

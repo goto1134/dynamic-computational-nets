@@ -5,11 +5,14 @@
 #include <QAbstractItemModel>
 
 #include "TreeItem.h"
+#include "model/ElementSort.h"
+#include "model/NetClass.h"
 
 class ProjectTreeModel : public QAbstractItemModel
 {
+        Q_OBJECT
     public:
-        explicit ProjectTreeModel(const QString &aData, QObject *aParent = 0);
+        explicit ProjectTreeModel(QString aProjectName, QObject *aParent = 0);
         ~ProjectTreeModel();
         QVariant data(const QModelIndex &aIndex, int aRole) const Q_DECL_OVERRIDE;
         Qt::ItemFlags flags(const QModelIndex &aIndex) const Q_DECL_OVERRIDE;
@@ -18,11 +21,22 @@ class ProjectTreeModel : public QAbstractItemModel
         QModelIndex parent(const QModelIndex &aIndex) const Q_DECL_OVERRIDE;
         int rowCount(const QModelIndex &aParent = QModelIndex()) const Q_DECL_OVERRIDE;
         int columnCount(const QModelIndex &aParent = QModelIndex()) const Q_DECL_OVERRIDE;
+        void updateSortsData(QList<QString> aSortNames);
+
+        void addElementSort(QString aSortName);
+        void addNetClass(QString aClassName);
+        void addObjectNet(QModelIndex &aParent, QString aNetName);
+
+
 
        private:
-           void setupModelData(const QStringList &aLines, TreeItem *aParent);
 
+           QMap<QString, ElementSort*> mElementSorts;
+           QMap<QString, NetClass*> mNetClasses;
            TreeItem *mRootItem;
+           TreeItem *mSortParent;
+           TreeItem *mObjectNetsParent;
+           TreeItem *mAxiom;
 };
 
 #endif // DCNTREEMODEL_H

@@ -17,14 +17,16 @@ SOURCES += main.cpp\
     ui/viewmodel/TreeItem.cpp \
     ui/MainWindow.cpp \
     model/ElementSort.cpp \
-    model/Transition.cpp
+    model/NetClass.cpp \
+    model/ObjectNet.cpp
 
 HEADERS  += \
     ui/viewmodel/ProjectTreeModel.h \
     ui/viewmodel/TreeItem.h \
     ui/MainWindow.h \
     model/ElementSort.h \
-    model/Transition.h
+    model/NetClass.h \
+    model/ObjectNet.h
 
 FORMS    += \
     ui/mainwindow.ui
@@ -32,11 +34,9 @@ FORMS    += \
 RESOURCES += \
     resources.qrc
 
-DISTFILES += \
-    icons/new project.ico \
+DISTFILES += icons/new project.ico \
     translations/translation_en.ts \
-    translations/translation_ru.ts \
-    global/sorts.xml
+    translations/translation_ru.ts
 
 TRANSLATIONS += translations/translation_en.ts \
     translations/translation_ru.ts
