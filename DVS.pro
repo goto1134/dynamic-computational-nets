@@ -18,7 +18,11 @@ SOURCES += main.cpp\
     ui/MainWindow.cpp \
     model/ElementSort.cpp \
     model/NetClass.cpp \
-    model/ObjectNet.cpp
+    model/ObjectNet.cpp \
+    ui/redactor/ObjectNetRedactor.cpp \
+    ui/viewmodel/PropertyTableModel.cpp \
+    ui/redactor/items/ArrowItem.cpp \
+    ui/redactor/items/NetObjectItem.cpp
 
 HEADERS  += \
     ui/viewmodel/ProjectTreeModel.h \
@@ -26,7 +30,11 @@ HEADERS  += \
     ui/MainWindow.h \
     model/ElementSort.h \
     model/NetClass.h \
-    model/ObjectNet.h
+    model/ObjectNet.h \
+    ui/redactor/ObjectNetRedactor.h \
+    ui/viewmodel/PropertyTableModel.h \
+    ui/redactor/items/ArrowItem.h \
+    ui/redactor/items/NetObjectItem.h
 
 FORMS    += \
     ui/mainwindow.ui

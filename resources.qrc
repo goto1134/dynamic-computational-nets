@@ -2,5 +2,24 @@
     <qresource prefix="/icons">
         <file>icons/new project.ico</file>
         <file>icons/open.ico</file>
+        <file>icons/clean.ico</file>
+        <file>icons/find.ico</file>
+        <file>icons/step back.ico</file>
+        <file>icons/step forward.ico</file>
+        <file>icons/settings.ico</file>
+        <file>icons/coursor.ico</file>
+        <file>icons/place.ico</file>
+        <file>icons/terminal.ico</file>
+        <file>icons/nonterminal.ico</file>
+        <file>icons/connection.ico</file>
+        <file>icons/element types.ico</file>
+        <file>icons/type.ico</file>
+        <file>icons/net container.ico</file>
+        <file>icons/net.ico</file>
+        <file>icons/net class.ico</file>
+        <file>icons/pause.ico</file>
+        <file>icons/play.ico</file>
+        <file>icons/save.ico</file>
+        <file>icons/stop.ico</file>
     </qresource>
 </RCC>

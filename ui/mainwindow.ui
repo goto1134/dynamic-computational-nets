@@ -123,6 +123,7 @@
    <addaction name="actionCoursor"/>
    <addaction name="actionPlace"/>
    <addaction name="actionTransition"/>
+   <addaction name="actionNonTerminalTransition"/>
    <addaction name="actionRegularConnection"/>
    <addaction name="actionControlConnection"/>
   </widget>
@@ -151,6 +152,10 @@
    </property>
   </action>
   <action name="actionSaveDVS">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/save.ico</normaloff>:/icons/icons/save.ico</iconset>
+   </property>
    <property name="text">
     <string>Save DCN</string>
    </property>
@@ -162,6 +167,10 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/coursor.ico</normaloff>:/icons/icons/coursor.ico</iconset>
+   </property>
    <property name="text">
     <string>Coursor</string>
    </property>
@@ -169,6 +178,10 @@
   <action name="actionPlace">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/place.ico</normaloff>:/icons/icons/place.ico</iconset>
    </property>
    <property name="text">
     <string>Place</string>
@@ -178,6 +191,10 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/terminal.ico</normaloff>:/icons/icons/terminal.ico</iconset>
+   </property>
    <property name="text">
     <string>Transition</string>
    </property>
@@ -185,6 +202,10 @@
   <action name="actionRegularConnection">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/connection.ico</normaloff>:/icons/icons/connection.ico</iconset>
    </property>
    <property name="text">
     <string>Regular Connection</string>
@@ -197,45 +218,92 @@
    <property name="text">
     <string>Control Connection</string>
    </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionOptions">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/settings.ico</normaloff>:/icons/icons/settings.ico</iconset>
+   </property>
    <property name="text">
     <string>Options</string>
    </property>
   </action>
   <action name="actionPlay">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/play.ico</normaloff>:/icons/icons/play.ico</iconset>
+   </property>
    <property name="text">
     <string>Play</string>
    </property>
   </action>
   <action name="actionPause">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/pause.ico</normaloff>:/icons/icons/pause.ico</iconset>
+   </property>
    <property name="text">
     <string>Pause</string>
    </property>
   </action>
   <action name="actionGarbage">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/clean.ico</normaloff>:/icons/icons/clean.ico</iconset>
+   </property>
    <property name="text">
     <string>Garbage</string>
    </property>
   </action>
   <action name="actionCheck">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/find.ico</normaloff>:/icons/icons/find.ico</iconset>
+   </property>
    <property name="text">
     <string>Check</string>
    </property>
   </action>
   <action name="actionStop">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/stop.ico</normaloff>:/icons/icons/stop.ico</iconset>
+   </property>
    <property name="text">
     <string>Stop</string>
    </property>
   </action>
   <action name="actionStepForward">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/step forward.ico</normaloff>:/icons/icons/step forward.ico</iconset>
+   </property>
    <property name="text">
     <string>Step Forward</string>
    </property>
   </action>
   <action name="actionStepBack">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/step back.ico</normaloff>:/icons/icons/step back.ico</iconset>
+   </property>
    <property name="text">
     <string>Step Back</string>
+   </property>
+  </action>
+  <action name="actionNonTerminalTransition">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/icons/nonterminal.ico</normaloff>:/icons/icons/nonterminal.ico</iconset>
+   </property>
+   <property name="text">
+    <string>NonTerminalTransition</string>
    </property>
   </action>
  </widget>

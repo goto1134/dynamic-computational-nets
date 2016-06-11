@@ -12,13 +12,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     setActionGroups(parent);
-    connect(ui->actionCreateDVS, SIGNAL(triggered()), this, SLOT(createProject()));
     setStretchFatrors();
 
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->treeView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 
     connect(ui->actionCreateDVS, SIGNAL(triggered()), this, SLOT(createNewProject()));
+
+    mNetRedactor = new ObjectNetRedactor(this);
+    ui->graphicsView->setScene(mNetRedactor);
+    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+    connect(ui->actionCoursor, SIGNAL(triggered()), mNetRedactor, SLOT(setMouseTool()));
+    connect(ui->actionPlace, SIGNAL(triggered()), mNetRedactor, SLOT(setPlaceTool()));
+    connect(ui->actionTransition, SIGNAL(triggered()), mNetRedactor, SLOT(setTerminalTransitionTool()));
+    connect(ui->actionNonTerminalTransition, SIGNAL(triggered()), mNetRedactor, SLOT(setNonTerminalTransitionTool()));
+    connect(ui->actionRegularConnection, SIGNAL(triggered()), mNetRedactor, SLOT(setConnectionTool()));
 }
 
 MainWindow::~MainWindow()
@@ -34,6 +42,7 @@ void MainWindow::setActionGroups(QWidget *parent)
     actionGroup->addAction(ui->actionCoursor);
     actionGroup->addAction(ui->actionTransition);
     actionGroup->addAction(ui->actionRegularConnection);
+    actionGroup->addAction(ui->actionNonTerminalTransition);
 }
 
 void MainWindow::setStretchFatrors()
@@ -59,11 +68,8 @@ void MainWindow::createNewProject()
     }
 }
 
-void MainWindow::showContextMenu(QPoint aPoint)
+void MainWindow::showContextMenuOnExistingItem(QModelIndex modelIndex, QPoint aPoint)
 {
-    QModelIndex modelIndex = ui->treeView->indexAt(aPoint);
-    qDebug() << modelIndex.column() << modelIndex.row() << modelIndex.parent();
-
     QMenu *menu = new QMenu(this);
 
     int itemType = modelIndex.model()->data(modelIndex, Qt::UserRole).toInt();
@@ -86,17 +92,23 @@ void MainWindow::showContextMenu(QPoint aPoint)
     }
     else
     {
-        menu->addAction(new QAction("Action 1", this));
-        menu->addAction(new QAction("Action 2", this));
-        menu->addAction(new QAction("Action 3", this));
+        menu->addAction(new QAction("Menu is Not Configured for this item", this));
+//        menu->addAction(new QAction("Action 2", this));
+//        menu->addAction(new QAction("Action 3", this));
     }
     menu->popup(ui->treeView->viewport()->mapToGlobal(aPoint));
     ui->treeView->update(modelIndex);
 }
 
-void MainWindow::createProject()
+void MainWindow::showContextMenu(QPoint aPoint)
 {
+    QModelIndex modelIndex = ui->treeView->indexAt(aPoint);
+    qDebug() << modelIndex.column() << modelIndex.row() << modelIndex.parent();
 
+    if(modelIndex.column() > -1 && modelIndex.row() > -1)
+    {
+        showContextMenuOnExistingItem(modelIndex, aPoint);
+    }
 }
 
 void MainWindow::addSort()

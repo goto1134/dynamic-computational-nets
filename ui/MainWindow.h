@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "viewmodel/ProjectTreeModel.h"
+#include "redactor/objectnetredactor.h"
 
 namespace Ui {
     class MainWindow;
@@ -22,11 +23,13 @@ class MainWindow : public QMainWindow
 
         Ui::MainWindow *ui;
 
+        ObjectNetRedactor *mNetRedactor;
         ProjectTreeModel *mTreeModel;
+        void showContextMenuOnExistingItem(QModelIndex modelIndex, QPoint aPoint);
+        
     private slots:
         void createNewProject();
         void showContextMenu(QPoint aPoint);
-        void createProject();
         void addSort();
         void addNetClass();
         void addObjectNet();
