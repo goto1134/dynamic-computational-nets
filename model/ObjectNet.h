@@ -11,11 +11,13 @@ class Connection;
 class ObjectNet: public ProjectNamedObject
 {
     public:
-        explicit ObjectNet(const QString &aName);
+        explicit ObjectNet(const QString &aName, const quint64 &aID, const quint64 &aNetClassID);
         explicit ObjectNet(QXmlStreamReader *aInputStream);
 
         void load(QXmlStreamReader *aInputStream);
         void save(QXmlStreamWriter *aOutputStream) const;
+        quint64 netClassID() const;
+
     private:
         quint64 mNetClassID;
         QSet<Place *> mPlaces;

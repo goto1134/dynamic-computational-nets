@@ -4,7 +4,7 @@
 #include <QMap>
 #include "ProjectNamedObject.h"
 
-#include "Place.h"
+class Place;
 class ObjectNet;
 //class Place;
 
@@ -14,7 +14,9 @@ class NetClass : public ProjectNamedObject
         explicit NetClass(const QString& aName, const quint64 &aID);
         explicit NetClass(QXmlStreamReader *aInputStream);
 
-        bool createObjectNet(QString aNetName);
+        quint64 createObjectNet(QString aNetName);
+        ObjectNet* getObjectNetByID(const quint64 &aID);
+        QList<quint64> getObjectNetsIDs() const;
         void load(QXmlStreamReader *aInputStream);
         void save(QXmlStreamWriter *aOutputStream) const;
 
@@ -22,7 +24,7 @@ class NetClass : public ProjectNamedObject
         void addOutputPlace(Place *aPlace);
 
     private:
-        QMap<QString, ObjectNet*> mObjectNets;
+        QMap<quint64, ObjectNet *> mObjectNets;
         QSet<Place *> mInputPlaces;
         QSet<Place *> mOutputPlaces;
 

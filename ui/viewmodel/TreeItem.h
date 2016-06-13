@@ -37,6 +37,9 @@ class TreeItem
 
         void setItemName(QString aName);
 
+        quint64 getObjectID() const;
+        void setObjectID(const quint64 &objectID);
+
     private:
         QVariant mItemName;
         QList<TreeItem*> mChildItems;

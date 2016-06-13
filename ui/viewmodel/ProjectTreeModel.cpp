@@ -25,7 +25,12 @@ ProjectTreeModel::ProjectTreeModel(QObject *aParent)
     mObjectNetsParent->appendChild(mAxiom);
     foreach(quint64 classID, model.getNetClassesIDs())
     {
-        mObjectNetsParent->appendChild(new TreeItem(classID, mObjectNetsParent, TreeItem::Class));
+        TreeItem *netClass = new TreeItem(classID, mObjectNetsParent, TreeItem::Class);
+        mObjectNetsParent->appendChild(netClass);
+        foreach (quint64 objectNetID, model.getNetClassByID(classID)->getObjectNetsIDs())
+        {
+            netClass->appendChild(new TreeItem(objectNetID, netClass, TreeItem::ObjectNet));
+        }
     }
 }
 
@@ -178,11 +183,11 @@ int ProjectTreeModel::columnCount(const QModelIndex &aParent) const
 void ProjectTreeModel::addElementSort(QString aSortName)
 {
     qDebug() << "add Sort " << aSortName;
-    if(!mElementSorts.contains(aSortName))
+    if(quint64 id = ProjectModel::getInstance().createElementSort(aSortName))
     {
         emit layoutAboutToBeChanged();
         //        mElementSorts.insert(aSortName, new ElementSort(aSortName));
-        mSortParent->appendChild(new TreeItem(aSortName, mSortParent, TreeItem::Sort));
+        mSortParent->appendChild(new TreeItem(id, mSortParent, TreeItem::Sort));
         emit layoutChanged();
     }
 }
@@ -190,11 +195,11 @@ void ProjectTreeModel::addElementSort(QString aSortName)
 void ProjectTreeModel::addNetClass(QString aClassName)
 {
     qDebug() << "add Net Class " << aClassName;
-    if(ProjectModel::getInstance().createNetClass(aClassName))
+    if(quint64 id = ProjectModel::getInstance().createNetClass(aClassName))
     {
         emit layoutAboutToBeChanged();
 
-        mObjectNetsParent->appendChild(new TreeItem(aClassName, mObjectNetsParent, TreeItem::Class));
+        mObjectNetsParent->appendChild(new TreeItem(id, mObjectNetsParent, TreeItem::Class));
 
         emit layoutChanged();
     }
@@ -207,11 +212,15 @@ void ProjectTreeModel::addObjectNet(QModelIndex &aParent, QString aNetName)
         TreeItem *parent = static_cast<TreeItem*>(aParent.internalPointer());
         if(parent->getItemType() == TreeItem::Class)
         {
-            NetClass *netClass = mNetClasses.value(parent->getData(0).toString());
-            if(netClass->createObjectNet(aNetName))
+            if(quint64 id =
+                    ProjectModel::getInstance()
+                    .getNetClassByID(parent->getObjectID())
+                    ->createObjectNet(aNetName))
             {
                 emit layoutAboutToBeChanged();
-                parent->appendChild(new TreeItem(aNetName, parent, TreeItem::ObjectNet));
+
+                parent->appendChild(new TreeItem(id, parent, TreeItem::ObjectNet));
+
                 emit layoutChanged();
             }
         }

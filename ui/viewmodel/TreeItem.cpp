@@ -3,6 +3,9 @@
 #include <QIcon>
 
 #include "../../model/ProjectModel.h"
+#include "../../model/ObjectNet.h"
+#include "../../model/ElementSort.h"
+#include "../../model/NetClass.h"
 
 TreeItem::TreeItem(QString aName, TreeItem *aParentItem, TreeItemType aItemType)
 {
@@ -22,6 +25,13 @@ TreeItem::TreeItem(quint64 aObjectID, TreeItem *aParentItem, TreeItem::TreeItemT
     else if(aItemType == Sort)
     {
         mItemName = ProjectModel::getInstance().getSortByID(aObjectID)->name();
+    }
+    else if(aItemType == ObjectNet)
+    {
+        mItemName = ProjectModel::getInstance()
+                    .getNetClassByID(mParentItem->getObjectID())
+                    ->getObjectNetByID(aObjectID)
+                    ->name();
     }
     mObjectID = aObjectID;
 }
@@ -108,4 +118,14 @@ QVariant TreeItem::getTextColor() const
 void TreeItem::setItemName(QString aName)
 {
     mItemName = aName;
+}
+
+quint64 TreeItem::getObjectID() const
+{
+    return mObjectID;
+}
+
+void TreeItem::setObjectID(const quint64 &objectID)
+{
+    mObjectID = objectID;
 }

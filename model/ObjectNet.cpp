@@ -7,10 +7,10 @@ const QString OBJECT_NET = "object_net";
 const QString TRANSITIONS_LABEL = "transitions";
 const QString CLASS_ID = "net_class_id";
 
-ObjectNet::ObjectNet(const QString &aName)
-    :ProjectNamedObject(ProjectObject::Net, aName)
+ObjectNet::ObjectNet(const QString &aName, const quint64 &aID, const quint64 &aNetClassID)
+    :ProjectNamedObject(ProjectObject::Net, aName, aID)
 {
-
+    mNetClassID = aNetClassID;
 }
 
 ObjectNet::ObjectNet(QXmlStreamReader *aInputStream)
@@ -126,4 +126,9 @@ void ObjectNet::save(QXmlStreamWriter *aOutputStream) const
         ProjectNamedObject::save(aOutputStream);
     }
     aOutputStream->writeEndElement();
+}
+
+quint64 ObjectNet::netClassID() const
+{
+    return mNetClassID;
 }

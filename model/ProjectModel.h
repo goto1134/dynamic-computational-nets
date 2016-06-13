@@ -2,13 +2,17 @@
 #define PROJECTMODEL_H
 
 #include <QtCore>
-#include "NetClass.h"
-#include "ElementSort.h"
+class NetClass;
+class ElementSort;
 
 class ElementSort;
 class NetClass;
 class ProjectModel;
 
+/**
+ * @brief The ProjectModelDestroyer class
+ * удаляет объект модели при завершении работы приложения.
+ */
 class ProjectModelDestroyer
 {
     private:
@@ -18,6 +22,10 @@ class ProjectModelDestroyer
         void initialize(ProjectModel *aProjectModel);
 };
 
+/**
+ * @brief The ProjectModel class
+ * Хранит объекты модели и отвечает за их корректное сохранение/восстановление.
+ */
 class ProjectModel
 {
     public:
@@ -35,6 +43,7 @@ class ProjectModel
 
         QString getName() const;
         void setName(const QString &name);
+        quint64 generateID();
 
     protected:
         ProjectModel(const QString &aName);
@@ -46,7 +55,6 @@ class ProjectModel
 
         friend class ProjectModelDestroyer;
     private:
-        quint64 generateID();
         quint64 mMaxID;
         static ProjectModel *mProjectModel;
         static ProjectModelDestroyer mDestroyer;

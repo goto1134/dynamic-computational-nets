@@ -1,6 +1,6 @@
 #include "ProjectModel.h"
-#include "ElementSort.h"
 #include "NetClass.h"
+#include "ElementSort.h"
 #include <QDebug>
 
 ///
@@ -68,6 +68,8 @@ ProjectModel::~ProjectModel()
 
 }
 
+///---------------------------------XML---------------------------------------
+
 void ProjectModel::save(QXmlStreamWriter *aOutputStream) const
 {
     aOutputStream->writeStartDocument();
@@ -103,7 +105,6 @@ void ProjectModel::load(QXmlStreamReader *aInputStream)
     if(aInputStream->readNextStartElement()
             && aInputStream->name() == PROJECT_LABEL)
     {
-        qDebug() << aInputStream->name();
         foreach(QXmlStreamAttribute attribute,  aInputStream->attributes())
         {
             QString name = attribute.name().toString();
@@ -120,36 +121,31 @@ void ProjectModel::load(QXmlStreamReader *aInputStream)
         if(aInputStream->readNextStartElement()
                 && aInputStream->name() == SORTS)
         {
-            qDebug() << aInputStream->name();
             while (aInputStream->readNextStartElement()
                    && !(aInputStream->isEndElement()
                         && aInputStream->name() == SORTS)
                    )
             {
-                qDebug() << aInputStream->name();
                 ElementSort *sort = new ElementSort(aInputStream);
                 mSorts.insert(sort->ID(), sort);
             }
         }
-        qDebug() << aInputStream->name();
         if(aInputStream->readNextStartElement()
                 && aInputStream->name() == NET_CLASSES)
         {
-            qDebug() << aInputStream->name();
             while (aInputStream->readNextStartElement()
                    && !(aInputStream->isEndElement()
                         && aInputStream->name() == NET_CLASSES))
             {
-                qDebug() << aInputStream->name();
                 NetClass *netClass = new NetClass(aInputStream);
                 mClasses.insert(netClass->ID(), netClass);
             }
         }
-        qDebug() << aInputStream->name();
     }
     aInputStream->skipCurrentElement();
 }
 
+///---------------------------------CHILDREN---------------------------------------
 
 quint64 ProjectModel::createNetClass(QString aClassName)
 {
@@ -168,14 +164,7 @@ quint64 ProjectModel::createNetClass(QString aClassName)
 
 NetClass *ProjectModel::getNetClassByID(const quint64 &aID)
 {
-    if(mClasses.keys().contains(aID))
-    {
-        return (mClasses.value(aID));
-    }
-    else
-    {
-        return 0;
-    }
+    return (mClasses.value(aID, 0));
 }
 
 ElementSort *ProjectModel::getSortByID(const quint64 &aID)
@@ -185,7 +174,17 @@ ElementSort *ProjectModel::getSortByID(const quint64 &aID)
 
 quint64 ProjectModel::createElementSort(QString aSortName)
 {
+    foreach (ElementSort *sort, mSorts.values())
+    {
+        if(sort->name() == aSortName)
+        {
+            return 0;
+        }
+    }
 
+    quint64 id = generateID();
+    mSorts.insert(id, new ElementSort(aSortName, id));
+    return id;
 }
 
 QList<quint64> ProjectModel::getNetClassesIDs()
@@ -197,6 +196,8 @@ QList<quint64> ProjectModel::getSortsIDs()
 {
     return mSorts.keys();
 }
+
+///---------------------------------PROPERTIES---------------------------------------
 
 quint64 ProjectModel::generateID()
 {
@@ -212,5 +213,3 @@ void ProjectModel::setName(const QString &name)
 {
     mName = name;
 }
-
-
