@@ -21,14 +21,15 @@ SOURCES += main.cpp\
     ui/redactor/ObjectNetRedactor.cpp \
     ui/redactor/items/ArrowItem.cpp \
     ui/redactor/items/NetObjectItem.cpp \
-    ui/viewmodel/objectwithproperties.cpp \
     model/ProjectObject.cpp \
     model/ProjectNamedObject.cpp \
     model/Place.cpp \
     model/Connection.cpp \
     model/TerminalTransition.cpp \
     model/NonTerminalTransition.cpp \
-    model/ProjectModel.cpp
+    model/ProjectModel.cpp \
+    ui/viewmodel/DataWidget.cpp \
+    ui/viewmodel/PropertyWidget.cpp
 
 HEADERS  += \
     ui/viewmodel/ProjectTreeModel.h \
@@ -40,14 +41,15 @@ HEADERS  += \
     ui/redactor/ObjectNetRedactor.h \
     ui/redactor/items/ArrowItem.h \
     ui/redactor/items/NetObjectItem.h \
-    ui/viewmodel/ObjectWithProperties.h \
     model/ProjectObject.h \
     model/ProjectNamedObject.h \
     model/Place.h \
     model/Connection.h \
     model/TerminalTransition.h \
     model/NonTerminalTransition.h \
-    model/ProjectModel.h
+    model/ProjectModel.h \
+    ui/viewmodel/DataWidget.h \
+    ui/viewmodel/PropertyWidget.h
 
 FORMS    += \
     ui/mainwindow.ui

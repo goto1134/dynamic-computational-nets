@@ -1,5 +1,5 @@
-#ifndef DCNTREEMODEL_H
-#define DCNTREEMODEL_H
+#ifndef PROJECTTREEMODEL_H
+#define PROJECTTREEMODEL_H
 
 #include <QObject>
 #include <QAbstractItemModel>
@@ -37,4 +37,4 @@ class ProjectTreeModel : public QAbstractItemModel
         TreeItem *mAxiom;
 };
 
-#endif // DCNTREEMODEL_H
+#endif // PROJECTTREEMODEL_H

@@ -1,5 +1,5 @@
-#ifndef ARROW_H
-#define ARROW_H
+#ifndef ARROWITEM_H
+#define ARROWITEM_H
 
 #include <QGraphicsLineItem>
 
@@ -43,4 +43,4 @@ class ArrowItem : public QGraphicsLineItem
 };
 //! [0]
 
-#endif // ARROW_H
+#endif // ARROWITEM_H

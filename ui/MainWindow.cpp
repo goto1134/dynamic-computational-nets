@@ -18,6 +18,8 @@
 #include "model/NonTerminalTransition.h"
 #include "model/ObjectNet.h"
 #include "model/ProjectModel.h"
+#include "viewmodel/DataWidget.h"
+#include "viewmodel/PropertyWidget.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -36,7 +38,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionLoadDVS, SIGNAL(triggered()), this, SLOT(loadProject()));
 
     connect(ui->actionSaveDVS, SIGNAL(triggered()), this, SLOT(saveDVS()));
-
     createNetRedactor();
 }
 
@@ -59,6 +60,8 @@ void MainWindow::setActionGroups(QWidget *parent)
 void MainWindow::setStretchFatrors()
 {
     ui->graphicSplitter->setStretchFactor(0,5);
+    mPropertyWidget = new PropertyWidget();
+    ui->graphicSplitter->addWidget(mPropertyWidget);
     ui->graphicSplitter->setStretchFactor(1,0);
     ui->projectSplitter->setStretchFactor(0,0);
     ui->projectSplitter->setStretchFactor(1,6);
@@ -79,11 +82,11 @@ void MainWindow::createNewProject()
     }
 }
 
-void MainWindow::showContextMenuOnExistingItem(QModelIndex modelIndex, QPoint aPoint)
+void MainWindow::showContextMenuOnExistingItem(QModelIndex aModelIndex, QPoint aPoint)
 {
     QMenu *menu = new QMenu(this);
 
-    int itemType = modelIndex.model()->data(modelIndex, Qt::UserRole).toInt();
+    int itemType = aModelIndex.model()->data(aModelIndex, Qt::UserRole).toInt();
     if(itemType == TreeItem::Sort)
     {
         menu->addAction("Rename");
@@ -106,7 +109,7 @@ void MainWindow::showContextMenuOnExistingItem(QModelIndex modelIndex, QPoint aP
         menu->addAction(new QAction("Menu is Not Configured for this item", this));
     }
     menu->popup(ui->treeView->viewport()->mapToGlobal(aPoint));
-    ui->treeView->update(modelIndex);
+    ui->treeView->update(aModelIndex);
 }
 
 void MainWindow::showContextMenu(QPoint aPoint)
@@ -118,6 +121,38 @@ void MainWindow::showContextMenu(QPoint aPoint)
     {
         showContextMenuOnExistingItem(modelIndex, aPoint);
     }
+}
+
+void MainWindow::showProperties(const QModelIndex &aModelIndex)
+{
+    int itemType = aModelIndex.model()->data(aModelIndex, Qt::UserRole).toInt();
+    if(itemType == TreeItem::Sort
+            || itemType == TreeItem::Class
+            || itemType == TreeItem::ObjectNet)
+    {
+        quint64 id = aModelIndex.model()->data(aModelIndex, Qt::UserRole + 1).toULongLong();
+        if(itemType == TreeItem::ObjectNet)
+        {
+            quint64 parentID = aModelIndex.model()->data(aModelIndex.parent(), Qt::UserRole + 1).toULongLong();
+            mPropertyWidget->setProjectObject(ProjectModel::getInstance().getNetClassByID(parentID)->getObjectNetByID(id));
+        }
+        else
+        {
+            if(itemType == TreeItem::Sort)
+            {
+                mPropertyWidget->setProjectObject(ProjectModel::getInstance().getSortByID(id));
+            }
+            else if(itemType == TreeItem::Class)
+            {
+                mPropertyWidget->setProjectObject(ProjectModel::getInstance().getNetClassByID(id));
+            }
+            else
+            {
+                mPropertyWidget->clear();
+            }
+        }
+    }
+    ui->treeView->update(aModelIndex);
 }
 
 void MainWindow::addSort()
@@ -186,6 +221,7 @@ void MainWindow::updateTreeModel()
 {
     mTreeModel = new ProjectTreeModel();
     ui->treeView->setModel(mTreeModel);
+    connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(showProperties(QModelIndex)));
     ui->treeView->expandAll();
 }
 

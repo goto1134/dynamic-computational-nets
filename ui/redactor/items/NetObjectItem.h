@@ -1,5 +1,5 @@
-#ifndef DIAGRAMITEM_H
-#define DIAGRAMITEM_H
+#ifndef NETOBJECTITEM_H
+#define NETOBJECTITEM_H
 
 #include <QGraphicsPixmapItem>
 #include <QList>
@@ -60,4 +60,4 @@ class NetObjectItem : public QGraphicsPolygonItem
 };
 //! [0]
 
-#endif // DIAGRAMITEM_H
+#endif // NETOBJECTITEM_H

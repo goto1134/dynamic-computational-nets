@@ -1,4 +1,6 @@
 #include "ProjectObject.h"
+#include <QFrame>
+#include <QVBoxLayout>
 
 const QString OBJECT_LABEL = "object";
 const QString TYPE_LABEL = "type";
@@ -62,6 +64,18 @@ void ProjectObject::load(QXmlStreamReader *aInputStream)
         }
     }
     aInputStream->skipCurrentElement();
+}
+
+QList<QWidget *> *ProjectObject::getPropertyWidgets()
+{
+    QList<QWidget *> *propertyWidgets = new QList<QWidget *>();
+//    QFrame *widget = new QFrame();
+//    QVBoxLayout *mainLayout = new QVBoxLayout();
+//    widget->setLayout(mainLayout);
+//    mainLayout->addItem();
+
+//    propertyWidgets->append();
+    return propertyWidgets;
 }
 
 void ProjectObject::save(QXmlStreamWriter *aOutputStream) const

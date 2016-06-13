@@ -22,7 +22,7 @@
    <locale language="English" country="UnitedKingdom"/>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <widget class="QSplitter" name="projectSplitter">
       <property name="contextMenuPolicy">
@@ -62,11 +62,6 @@
         <bool>false</bool>
        </property>
        <widget class="QGraphicsView" name="graphicsView">
-        <property name="locale">
-         <locale language="Russian" country="Russia"/>
-        </property>
-       </widget>
-       <widget class="QListView" name="listView">
         <property name="locale">
          <locale language="Russian" country="Russia"/>
         </property>

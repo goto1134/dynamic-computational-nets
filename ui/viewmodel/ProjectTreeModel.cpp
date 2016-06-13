@@ -58,6 +58,10 @@ QVariant ProjectTreeModel::data(const QModelIndex &aIndex, int aRole) const
     {
         return item->getItemType();
     }
+    else if(aRole == Qt::UserRole + 1)
+    {
+        return QVariant(item->getObjectID());
+    }
     else if(aRole == Qt::ForegroundRole)
     {
         QVariant color = item->getTextColor();

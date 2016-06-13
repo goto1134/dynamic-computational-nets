@@ -2,11 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QObject>
 
 class ProjectTreeModel;
 class ObjectNetRedactor;
 class PropertyTableModel;
 class ProjectModel;
+class QModelIndex;
+class PropertyWidget;
 
 namespace Ui {
     class MainWindow;
@@ -28,12 +31,12 @@ class MainWindow : public QMainWindow
 
         ObjectNetRedactor *mNetRedactor;
         ProjectTreeModel *mTreeModel;
-        void showContextMenuOnExistingItem(QModelIndex modelIndex, QPoint aPoint);
-        
+        PropertyWidget *mPropertyWidget;
+        void showContextMenuOnExistingItem(QModelIndex aModelIndex, QPoint aPoint);
         void createNetRedactor();
-
         void updateTreeModel();
-
+    public slots:
+        void showProperties(const QModelIndex &aModelIndex);
     private slots:
         void createNewProject();
         void showContextMenu(QPoint aPoint);
