@@ -29,8 +29,8 @@ QRectF ArrowItem::boundingRect() const
 
     return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(),
                                       line().p2().y() - line().p1().y()))
-        .normalized()
-        .adjusted(-extra, -extra, extra, extra);
+            .normalized()
+            .adjusted(-extra, -extra, extra, extra);
 }
 
 QPainterPath ArrowItem::shape() const
@@ -87,9 +87,9 @@ void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,QWidge
     }
 
     QPointF arrowP1 = line().p1() + QPointF(sin(angle + Pi / 3) * arrowSize,
-                                    cos(angle + Pi / 3) * arrowSize);
+                                            cos(angle + Pi / 3) * arrowSize);
     QPointF arrowP2 = line().p1() + QPointF(sin(angle + Pi - Pi / 3) * arrowSize,
-                                    cos(angle + Pi - Pi / 3) * arrowSize);
+                                            cos(angle + Pi - Pi / 3) * arrowSize);
 
     arrowHead.clear();
     arrowHead << line().p1() << arrowP1 << arrowP2;

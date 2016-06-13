@@ -16,18 +16,18 @@ void NetObjectItem::setMyPolygon()
     switch (mElementType) {
         case Place:
             mPolygon << QPointF(-25, -25) << QPointF(25, -25)
-                      << QPointF(25, 25) << QPointF(-25, 25)
-                      << QPointF(-25, -25);
+                     << QPointF(25, 25) << QPointF(-25, 25)
+                     << QPointF(-25, -25);
             break;
         case TerminalTransition:
             mPolygon << QPointF(-10, -100) << QPointF(10, -100)
-                      << QPointF(10, 100) << QPointF(-10, 100)
-                      << QPointF(-10, -100);
+                     << QPointF(10, 100) << QPointF(-10, 100)
+                     << QPointF(-10, -100);
             break;
         case NonTerminalTransition:
             mPolygon << QPointF(-30, -100) << QPointF(30, -100)
-                      << QPointF(30, 100) << QPointF(-30, 100)
-                      << QPointF(-30, -100);
+                     << QPointF(30, 100) << QPointF(-30, 100)
+                     << QPointF(-30, -100);
             break;
     }
     setPolygon(mPolygon);
@@ -133,7 +133,7 @@ void NetObjectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
         {
             setBrush(QBrush(Qt::black));
         }
-        QGraphicsPolygonItem::paint(painter, option, widget);    
+        QGraphicsPolygonItem::paint(painter, option, widget);
     }
 }
 

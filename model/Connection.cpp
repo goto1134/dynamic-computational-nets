@@ -26,28 +26,28 @@ void Connection::load(QXmlStreamReader *aInputStream)
     {
         foreach(QXmlStreamAttribute attribute,  aInputStream->attributes())
         {
-           QString name = attribute.name().toString();
-           if(name == START_ID)
-           {
-               mStartID = attribute.value().toULongLong();
-           }
-           else if( name == END_ID)
-           {
-               mEndID = attribute.value().toULongLong();
-           }
-           else if( name == RESOURCE_NUMBER_LABEL)
-           {
-               mResources = attribute.value().toUInt();
-           }
-           else if( name == TIME_LABEL)
-           {
-               mTime = attribute.value().toUInt();
-           }
-           else if( name == CONTROL_LABEL)
-           {
-               mIsControl = attribute.value().toUInt();
-           }
-       }
+            QString name = attribute.name().toString();
+            if(name == START_ID)
+            {
+                mStartID = attribute.value().toULongLong();
+            }
+            else if( name == END_ID)
+            {
+                mEndID = attribute.value().toULongLong();
+            }
+            else if( name == RESOURCE_NUMBER_LABEL)
+            {
+                mResources = attribute.value().toUInt();
+            }
+            else if( name == TIME_LABEL)
+            {
+                mTime = attribute.value().toUInt();
+            }
+            else if( name == CONTROL_LABEL)
+            {
+                mIsControl = attribute.value().toUInt();
+            }
+        }
         aInputStream->readNextStartElement();
         ProjectObject::load(aInputStream);
     }

@@ -101,7 +101,6 @@ void ObjectNetRedactor::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void ObjectNetRedactor::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    QGraphicsItem *target;
     if(mRedactorTool == Connection
             && line != 0
             && mIsDrawing)
@@ -143,18 +142,23 @@ void ObjectNetRedactor::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         }
 
         if (startItems.count() > 0 && endItems.count() > 0 &&
-            startItems.first()->type() == NetObjectItem::Type &&
-            endItems.first()->type() == NetObjectItem::Type &&
-            startItems.first() != endItems.first())
+                startItems.first()->type() == NetObjectItem::Type &&
+                endItems.first()->type() == NetObjectItem::Type &&
+                startItems.first() != endItems.first())
         {
             NetObjectItem *startItem = qgraphicsitem_cast<NetObjectItem *>(startItems.first());
             NetObjectItem *endItem = qgraphicsitem_cast<NetObjectItem *>(endItems.first());
-            if(startItem->elementType() == NetObjectItem::Place
-                    && ( endItem->elementType() == NetObjectItem::TerminalTransition
-                        || endItem->elementType() == NetObjectItem::NonTerminalTransition )
-                    || ( startItem->elementType() == NetObjectItem::TerminalTransition
-                        || startItem->elementType() == NetObjectItem::NonTerminalTransition )
-                    && endItem->elementType() == NetObjectItem::Place)
+            if(
+                    (startItem->elementType() == NetObjectItem::Place
+                     && ( endItem->elementType() == NetObjectItem::TerminalTransition
+                          || endItem->elementType() == NetObjectItem::NonTerminalTransition )
+                     )
+                    || (
+                        ( startItem->elementType() == NetObjectItem::TerminalTransition
+                          || startItem->elementType() == NetObjectItem::NonTerminalTransition
+                          )
+                        && endItem->elementType() == NetObjectItem::Place)
+                    )
             {
                 ArrowItem *arrow = new ArrowItem(startItem, endItem);
                 arrow->setColor(Qt::black);

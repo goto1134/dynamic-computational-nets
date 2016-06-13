@@ -20,6 +20,7 @@ class TreeItem
 
 
         explicit TreeItem(QString aName, TreeItem *aParentItem = 0, TreeItemType aItemType = Service);
+        explicit TreeItem(quint64 aObjectID, TreeItem *aParentItem, TreeItemType aItemType);
         ~TreeItem();
 
         void appendChild(TreeItem *aChild);
@@ -32,6 +33,7 @@ class TreeItem
         TreeItem *getParentItem() const;
         QVariant getItemType() const;
         QVariant getImage() const;
+        QVariant getTextColor() const;
 
         void setItemName(QString aName);
 
@@ -40,6 +42,7 @@ class TreeItem
         QList<TreeItem*> mChildItems;
         TreeItemType mItemType;
         TreeItem *mParentItem;
+        quint64 mObjectID;
 };
 
 #endif // TREEITEM_H

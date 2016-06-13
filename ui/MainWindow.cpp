@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QTreeView>
 #include <QInputDialog>
+#include <QFileDialog>
 
 #include "MainWindow.h"
 
@@ -16,6 +17,7 @@
 #include "model/TerminalTransition.h"
 #include "model/NonTerminalTransition.h"
 #include "model/ObjectNet.h"
+#include "model/ProjectModel.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -31,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->treeView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 
     connect(ui->actionCreateDVS, SIGNAL(triggered()), this, SLOT(createNewProject()));
+    connect(ui->actionLoadDVS, SIGNAL(triggered()), this, SLOT(loadProject()));
 
     connect(ui->actionSaveDVS, SIGNAL(triggered()), this, SLOT(saveDVS()));
 
@@ -65,14 +68,14 @@ void MainWindow::createNewProject()
 {
     bool ok;
     QString text = QInputDialog::getText(this,
-                                 QString("Enter Project Name"),
-                                 QString("Project Name:"),
-                                 QLineEdit::Normal, "", &ok);
+                                         QString("Enter Project Name"),
+                                         QString("Project Name:"),
+                                         QLineEdit::Normal, "", &ok);
     if (ok && !text.isEmpty())
     {
-        mTreeModel = new ProjectTreeModel(text);
-        ui->treeView->setModel(mTreeModel);
-        ui->treeView->expandAll();
+        ProjectModel::newProject(text);
+        //        mTreeModel = new ProjectTreeModel(text);
+        updateTreeModel();
     }
 }
 
@@ -121,9 +124,9 @@ void MainWindow::addSort()
 {
     bool ok;
     QString text = QInputDialog::getText(this,
-                                 QString("Add Sort"),
-                                 QString("Sort Name:"),
-                                 QLineEdit::Normal, "", &ok);
+                                         QString("Add Sort"),
+                                         QString("Sort Name:"),
+                                         QLineEdit::Normal, "", &ok);
     if (ok && !text.isEmpty())
     {
         mTreeModel->addElementSort(text);
@@ -134,9 +137,9 @@ void MainWindow::addNetClass()
 {
     bool ok;
     QString text = QInputDialog::getText(this,
-                                 QString("Add Net Class"),
-                                 QString("Clss Name:"),
-                                 QLineEdit::Normal, "", &ok);
+                                         QString("Add Net Class"),
+                                         QString("Clss Name:"),
+                                         QLineEdit::Normal, "", &ok);
     if (ok && !text.isEmpty())
     {
         mTreeModel->addNetClass(text);
@@ -149,9 +152,9 @@ void MainWindow::addObjectNet()
     QModelIndex classIndex = ui->treeView->selectionModel()->currentIndex();
     bool ok;
     QString text = QInputDialog::getText(this,
-                                 QString("Add Object Net"),
-                                 QString("Net Name:"),
-                                 QLineEdit::Normal, "", &ok);
+                                         QString("Add Object Net"),
+                                         QString("Net Name:"),
+                                         QLineEdit::Normal, "", &ok);
     if (ok && !text.isEmpty())
     {
         mTreeModel->addObjectNet(classIndex, text);
@@ -160,24 +163,43 @@ void MainWindow::addObjectNet()
 
 void MainWindow::saveDVS()
 {
-    QString fileName = "TEST.txt";
-    QFile file( fileName );
-    if ( file.open(QIODevice::ReadWrite) )
+    if(& ProjectModel::getInstance())
     {
-        QXmlStreamWriter stream( &file );
-        QColor *color = new QColor(10,20,30);
-        ObjectNet *object = new ObjectNet("Net 1");
-        object->save(&stream);
+        QString fileName = QFileDialog::getSaveFileName(this, "Save project", QDir::currentPath(), tr("DC net project  (*.dcn)"));
+        QFile file( fileName );
+        if ( file.open(QIODevice::ReadWrite) )
+        {
+            file.resize(0);
+            QXmlStreamWriter stream( &file );
+            ProjectModel &project = ProjectModel::getInstance();
+            if(&project)
+            {
+                project.save(&stream);
+            }
+        }
+        file.close();
     }
-    file.close();
+
+}
+
+void MainWindow::updateTreeModel()
+{
+    mTreeModel = new ProjectTreeModel();
+    ui->treeView->setModel(mTreeModel);
+    ui->treeView->expandAll();
+}
+
+void MainWindow::loadProject()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Open project", QDir::currentPath(), tr("DC net project  (*.dcn)"));
+    QFile file( fileName );
     if(file.open(QIODevice::ReadOnly))
     {
         QXmlStreamReader stream (&file);
-        stream.readNextStartElement();
-        ObjectNet *object = new ObjectNet(&stream);
-//        ProjectNamedObject *object = new ProjectNamedObject(&stream);
+        ProjectModel &project = ProjectModel::newProject(&stream);
+        updateTreeModel();
         qDebug() << "point";
-        object->type();
+        qDebug() << &project;
     }
     file.close();
 }
@@ -196,13 +218,13 @@ void MainWindow::createNetRedactor()
 
 //void addToolBarToWidget()
 //{
-    //    QToolBar* toolBar = new QToolBar();
-    //    toolBar->addAction(ui->actionCoursor);
-    //    toolBar->addAction(ui->actionPlace);
-    //    QWidget* view = new QWidget();
+//    QToolBar* toolBar = new QToolBar();
+//    toolBar->addAction(ui->actionCoursor);
+//    toolBar->addAction(ui->actionPlace);
+//    QWidget* view = new QWidget();
 
-    //    QVBoxLayout* vbox = new QVBoxLayout();
-    //    vbox->addWidget(toolBar);
-    //    vbox->addWidget(view);
-    //    ui->widget->setLayout(vbox);
+//    QVBoxLayout* vbox = new QVBoxLayout();
+//    vbox->addWidget(toolBar);
+//    vbox->addWidget(view);
+//    ui->widget->setLayout(vbox);
 //}

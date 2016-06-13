@@ -38,28 +38,28 @@ void Place::load(QXmlStreamReader *aInputStream)
     if(aInputStream->isStartElement()
             && aInputStream->name() == PLACE_LABEL)
     {
-       foreach(QXmlStreamAttribute attribute,  aInputStream->attributes())
-       {
-           QString name = attribute.name().toString();
-           if(name == SORT_ID)
-           {
-               mSortID = attribute.value().toULongLong();
-           }
-           else if( name == RESOURCE_NUMBER_LABEL)
-           {
-               mResourceNumber = attribute.value().toULongLong();
-           }
-       }
-       if(aInputStream->readNextStartElement()
-               && aInputStream->name() == CONNECTIONS_LABEL)
-       {
-           getConnectionsIDs(&mInputConnIDs, aInputStream, INPUT_LABEL);
-           getConnectionsIDs(&mOutputConnIDs, aInputStream, OUTPUT_LABEL);
-           aInputStream->skipCurrentElement();
-       }
-       aInputStream->readNextStartElement();
+        foreach(QXmlStreamAttribute attribute,  aInputStream->attributes())
+        {
+            QString name = attribute.name().toString();
+            if(name == SORT_ID)
+            {
+                mSortID = attribute.value().toULongLong();
+            }
+            else if( name == RESOURCE_NUMBER_LABEL)
+            {
+                mResourceNumber = attribute.value().toULongLong();
+            }
+        }
+        if(aInputStream->readNextStartElement()
+                && aInputStream->name() == CONNECTIONS_LABEL)
+        {
+            getConnectionsIDs(&mInputConnIDs, aInputStream, INPUT_LABEL);
+            getConnectionsIDs(&mOutputConnIDs, aInputStream, OUTPUT_LABEL);
+            aInputStream->skipCurrentElement();
+        }
+        aInputStream->readNextStartElement();
 
-       ProjectObject::load(aInputStream);
+        ProjectObject::load(aInputStream);
     }
     aInputStream->skipCurrentElement();
 }

@@ -10,6 +10,7 @@ class ProjectNamedObject : public ProjectObject
     public:
         explicit ProjectNamedObject();
         explicit ProjectNamedObject(const ProjectObject::Type &aType, const QString& aName);
+        explicit ProjectNamedObject(const Type &aType, const QString &aName, const quint64 &aID);
         explicit ProjectNamedObject(QXmlStreamReader *aInputStream);
 
         void load(QXmlStreamReader *aInputStream);

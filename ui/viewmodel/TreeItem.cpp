@@ -2,17 +2,28 @@
 #include <QtAlgorithms>
 #include <QIcon>
 
-//TreeItem::TreeItem(const QList<QVariant> &aData, TreeItem *aParentItem)
-//{
-//    mParentItem = aParentItem;
-//    mItemData = aData;
-//}
+#include "../../model/ProjectModel.h"
 
 TreeItem::TreeItem(QString aName, TreeItem *aParentItem, TreeItemType aItemType)
 {
     mParentItem = aParentItem;
     mItemName = aName;
     mItemType = aItemType;
+}
+
+TreeItem::TreeItem(quint64 aObjectID, TreeItem *aParentItem, TreeItem::TreeItemType aItemType)
+{
+    mItemType = aItemType;
+    mParentItem = aParentItem;
+    if(aItemType == Class)
+    {
+        mItemName = ProjectModel::getInstance().getNetClassByID(aObjectID)->name();
+    }
+    else if(aItemType == Sort)
+    {
+        mItemName = ProjectModel::getInstance().getSortByID(aObjectID)->name();
+    }
+    mObjectID = aObjectID;
 }
 
 TreeItem::~TreeItem()
@@ -83,6 +94,15 @@ QVariant TreeItem::getImage() const
         default:
             return QVariant();
     }
+}
+
+QVariant TreeItem::getTextColor() const
+{
+    if(mItemType == Sort)
+    {
+        return ProjectModel::getInstance().getSortByID(mObjectID)->color();
+    }
+    return QVariant();
 }
 
 void TreeItem::setItemName(QString aName)

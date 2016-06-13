@@ -12,8 +12,8 @@ const QString G_LABEL = "g";
 const QString B_LABEL = "b";
 
 
-ElementSort::ElementSort(const QString &aName, const QColor &aColor)
-    :ProjectNamedObject(ProjectObject::Sort, aName)
+ElementSort::ElementSort(const QString &aName, const quint64 &aID, const QColor &aColor)
+    :ProjectNamedObject(ProjectObject::Sort, aName, aID)
 {
     qDebug() << "Sort " << aName;
     mColor = aColor;

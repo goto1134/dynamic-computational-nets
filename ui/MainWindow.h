@@ -6,6 +6,7 @@
 class ProjectTreeModel;
 class ObjectNetRedactor;
 class PropertyTableModel;
+class ProjectModel;
 
 namespace Ui {
     class MainWindow;
@@ -19,7 +20,7 @@ class MainWindow : public QMainWindow
         explicit MainWindow(QWidget *parent = 0);
         ~MainWindow();
 
-    private:        
+    private:
         void setActionGroups(QWidget *parent);
         void setStretchFatrors();
 
@@ -31,6 +32,8 @@ class MainWindow : public QMainWindow
         
         void createNetRedactor();
 
+        void updateTreeModel();
+
     private slots:
         void createNewProject();
         void showContextMenu(QPoint aPoint);
@@ -38,6 +41,7 @@ class MainWindow : public QMainWindow
         void addNetClass();
         void addObjectNet();
         void saveDVS();
+        void loadProject();
 };
 
 #endif // MAINWINDOW_H

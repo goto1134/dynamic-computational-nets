@@ -12,7 +12,7 @@ class ProjectTreeModel : public QAbstractItemModel
 {
         Q_OBJECT
     public:
-        explicit ProjectTreeModel(QString aProjectName, QObject *aParent = 0);
+        explicit ProjectTreeModel(QObject *aParent = 0);
         ~ProjectTreeModel();
         QVariant data(const QModelIndex &aIndex, int aRole) const Q_DECL_OVERRIDE;
         Qt::ItemFlags flags(const QModelIndex &aIndex) const Q_DECL_OVERRIDE;
@@ -27,16 +27,14 @@ class ProjectTreeModel : public QAbstractItemModel
         void addNetClass(QString aClassName);
         void addObjectNet(QModelIndex &aParent, QString aNetName);
 
+    private:
 
-
-       private:
-
-           QMap<QString, ElementSort*> mElementSorts;
-           QMap<QString, NetClass*> mNetClasses;
-           TreeItem *mRootItem;
-           TreeItem *mSortParent;
-           TreeItem *mObjectNetsParent;
-           TreeItem *mAxiom;
+        QMap<QString, ElementSort*> mElementSorts;
+        QMap<QString, NetClass*> mNetClasses;
+        TreeItem *mRootItem;
+        TreeItem *mSortParent;
+        TreeItem *mObjectNetsParent;
+        TreeItem *mAxiom;
 };
 
 #endif // DCNTREEMODEL_H

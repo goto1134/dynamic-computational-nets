@@ -28,15 +28,15 @@ void NonTerminalTransition::load(QXmlStreamReader *aInputStream)
     if(aInputStream->isStartElement()
             && aInputStream->name() == NON_TERMINAL_TRANSITION)
     {
-       foreach(QXmlStreamAttribute attribute,  aInputStream->attributes())
-       {
-           if(attribute.name().toString() == NET_ID)
-           {
-               mNetID = attribute.value().toULongLong();
-           }
-       }
-       aInputStream->readNextStartElement();
-       TerminalTransition::load(aInputStream);
+        foreach(QXmlStreamAttribute attribute,  aInputStream->attributes())
+        {
+            if(attribute.name().toString() == NET_ID)
+            {
+                mNetID = attribute.value().toULongLong();
+            }
+        }
+        aInputStream->readNextStartElement();
+        TerminalTransition::load(aInputStream);
     }
     aInputStream->skipCurrentElement();
 }

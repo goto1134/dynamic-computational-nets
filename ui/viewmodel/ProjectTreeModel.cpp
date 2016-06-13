@@ -2,20 +2,31 @@
 #include <QDebug>
 #include <QColor>
 
-ProjectTreeModel::ProjectTreeModel(QString aProjectName, QObject *aParent) : QAbstractItemModel(aParent)
+#include "../../model/ProjectModel.h"
+
+ProjectTreeModel::ProjectTreeModel(QObject *aParent)
+    : QAbstractItemModel(aParent)
 {
-    mRootItem = new TreeItem(aProjectName);
+    ProjectModel &model = ProjectModel::getInstance();
+    mRootItem = new TreeItem(model.getName());
 
     mSortParent = new TreeItem("Element Sorts", mRootItem, TreeItem::SortContainer);
     mRootItem->appendChild(mSortParent);
-    mElementSorts.insert("nat",new ElementSort("nat"));
-    mSortParent->appendChild(new TreeItem("nat", mSortParent, TreeItem::Sort));
+    foreach(quint64 sortID, model.getSortsIDs())
+    {
+        mSortParent->appendChild(new TreeItem(sortID, mSortParent, TreeItem::Sort));
+    }
+
 
     mObjectNetsParent = new TreeItem("Object-Nets", mRootItem, TreeItem::ObjectNetsContainer);
     mRootItem->appendChild(mObjectNetsParent);
 
     mAxiom = new TreeItem("Axiom", mObjectNetsParent, TreeItem::Axiom);
     mObjectNetsParent->appendChild(mAxiom);
+    foreach(quint64 classID, model.getNetClassesIDs())
+    {
+        mObjectNetsParent->appendChild(new TreeItem(classID, mObjectNetsParent, TreeItem::Class));
+    }
 }
 
 ProjectTreeModel::~ProjectTreeModel()
@@ -29,33 +40,23 @@ QVariant ProjectTreeModel::data(const QModelIndex &aIndex, int aRole) const
     {
         return QVariant();
     }
-
+    TreeItem *item = static_cast<TreeItem*>(aIndex.internalPointer());
     if (aRole == Qt::DisplayRole)
     {
-        TreeItem *item = static_cast<TreeItem*>(aIndex.internalPointer());
         return item->getData(aIndex.column());
     }
     else if(aRole == Qt::DecorationRole)
     {
-        TreeItem *item = static_cast<TreeItem*>(aIndex.internalPointer());
         return item->getImage();;
     }
     else if(aRole == Qt::UserRole)
     {
-        TreeItem *item = static_cast<TreeItem*>(aIndex.internalPointer());
         return item->getItemType();
     }
     else if(aRole == Qt::ForegroundRole)
     {
-        TreeItem *item = static_cast<TreeItem*>(aIndex.internalPointer());
-        if(item->getItemType().toInt() == TreeItem::Sort)
-        {
-            return QColor(Qt::black);
-        }
-        else
-        {
-            return QVariant();
-        }
+        QVariant color = item->getTextColor();
+        return color;
     }
     else
     {
@@ -132,6 +133,11 @@ QModelIndex ProjectTreeModel::parent(const QModelIndex &aIndex) const
     return createIndex(parentItem->row(), 0, parentItem);
 }
 
+/**
+ * @brief ProjectTreeModel::rowCount
+ * @param aParent
+ * @return
+ */
 int ProjectTreeModel::rowCount(const QModelIndex &aParent) const
 {
     TreeItem *parentItem;
@@ -152,6 +158,11 @@ int ProjectTreeModel::rowCount(const QModelIndex &aParent) const
     return parentItem->childCount();
 }
 
+/**
+ * @brief ProjectTreeModel::columnCount
+ * @param aParent
+ * @return
+ */
 int ProjectTreeModel::columnCount(const QModelIndex &aParent) const
 {
     if (aParent.isValid())
@@ -170,7 +181,7 @@ void ProjectTreeModel::addElementSort(QString aSortName)
     if(!mElementSorts.contains(aSortName))
     {
         emit layoutAboutToBeChanged();
-        mElementSorts.insert(aSortName, new ElementSort(aSortName));
+        //        mElementSorts.insert(aSortName, new ElementSort(aSortName));
         mSortParent->appendChild(new TreeItem(aSortName, mSortParent, TreeItem::Sort));
         emit layoutChanged();
     }
@@ -178,30 +189,31 @@ void ProjectTreeModel::addElementSort(QString aSortName)
 
 void ProjectTreeModel::addNetClass(QString aClassName)
 {
-    qDebug() << "add Sort " << aClassName;
-    if(!mNetClasses.contains(aClassName))
+    qDebug() << "add Net Class " << aClassName;
+    if(ProjectModel::getInstance().createNetClass(aClassName))
     {
         emit layoutAboutToBeChanged();
-        mNetClasses.insert(aClassName, new NetClass(aClassName));
+
         mObjectNetsParent->appendChild(new TreeItem(aClassName, mObjectNetsParent, TreeItem::Class));
+
         emit layoutChanged();
     }
 }
 
 void ProjectTreeModel::addObjectNet(QModelIndex &aParent, QString aNetName)
 {
-        if(aParent.isValid())
+    if(aParent.isValid())
+    {
+        TreeItem *parent = static_cast<TreeItem*>(aParent.internalPointer());
+        if(parent->getItemType() == TreeItem::Class)
         {
-            TreeItem *parent = static_cast<TreeItem*>(aParent.internalPointer());
-            if(parent->getItemType() == TreeItem::Class)
+            NetClass *netClass = mNetClasses.value(parent->getData(0).toString());
+            if(netClass->createObjectNet(aNetName))
             {
-                NetClass *netClass = mNetClasses.value(parent->getData(0).toString());
-                if(netClass->createObjectNet(aNetName))
-                {
-                    emit layoutAboutToBeChanged();
-                    parent->appendChild(new TreeItem(aNetName, parent, TreeItem::ObjectNet));
-                    emit layoutChanged();
-                }
+                emit layoutAboutToBeChanged();
+                parent->appendChild(new TreeItem(aNetName, parent, TreeItem::ObjectNet));
+                emit layoutChanged();
             }
         }
+    }
 }

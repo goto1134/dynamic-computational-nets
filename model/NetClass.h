@@ -11,7 +11,7 @@ class ObjectNet;
 class NetClass : public ProjectNamedObject
 {
     public:
-        explicit NetClass(const QString& aName);
+        explicit NetClass(const QString& aName, const quint64 &aID);
         explicit NetClass(QXmlStreamReader *aInputStream);
 
         bool createObjectNet(QString aNetName);

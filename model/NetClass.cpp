@@ -4,8 +4,8 @@
 
 const QString NET_CLASS_LABEL = "net_class";
 
-NetClass::NetClass(const QString &aName)
-    :ProjectNamedObject(ProjectObject::NetClass, aName)
+NetClass::NetClass(const QString &aName, const quint64 &aID)
+    :ProjectNamedObject(ProjectObject::NetClass, aName, aID)
 {
 }
 

@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     model/Place.cpp \
     model/Connection.cpp \
     model/TerminalTransition.cpp \
-    model/NonTerminalTransition.cpp
+    model/NonTerminalTransition.cpp \
+    model/ProjectModel.cpp
 
 HEADERS  += \
     ui/viewmodel/ProjectTreeModel.h \
@@ -45,7 +46,8 @@ HEADERS  += \
     model/Place.h \
     model/Connection.h \
     model/TerminalTransition.h \
-    model/NonTerminalTransition.h
+    model/NonTerminalTransition.h \
+    model/ProjectModel.h
 
 FORMS    += \
     ui/mainwindow.ui

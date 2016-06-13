@@ -43,28 +43,28 @@ void ProjectObject::setType(const Type &aType)
     mType = aType;
 }
 
-ProjectObject::load(QXmlStreamReader *aInputStream)
+void ProjectObject::load(QXmlStreamReader *aInputStream)
 {
     if(aInputStream->isStartElement()
             && aInputStream->name() == OBJECT_LABEL)
     {
-       foreach(QXmlStreamAttribute attribute,  aInputStream->attributes())
-       {
-           QString name = attribute.name().toString();
-           if(name == ID_LABEL)
-           {
-               mID = attribute.value().toULongLong();
-           }
-           else if( name == TYPE_LABEL)
-           {
-               mType = static_cast<ProjectObject::Type>(attribute.value().toUInt());
-           }
-       }
+        foreach(QXmlStreamAttribute attribute,  aInputStream->attributes())
+        {
+            QString name = attribute.name().toString();
+            if(name == ID_LABEL)
+            {
+                mID = attribute.value().toULongLong();
+            }
+            else if( name == TYPE_LABEL)
+            {
+                mType = static_cast<ProjectObject::Type>(attribute.value().toUInt());
+            }
+        }
     }
     aInputStream->skipCurrentElement();
 }
 
-ProjectObject::save(QXmlStreamWriter *aOutputStream) const
+void ProjectObject::save(QXmlStreamWriter *aOutputStream) const
 {
     aOutputStream->writeStartElement(OBJECT_LABEL);
     {

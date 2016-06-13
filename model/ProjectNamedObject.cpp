@@ -13,7 +13,12 @@ ProjectNamedObject::ProjectNamedObject(const Type &aType, const QString &aName)
     :ProjectObject(aType)
 {
     mName = aName;
-    setID(12);
+}
+
+ProjectNamedObject::ProjectNamedObject(const Type &aType, const QString &aName, const quint64 &aID)
+    :ProjectObject(aType, aID)
+{
+    mName = aName;
 }
 
 ProjectNamedObject::ProjectNamedObject(QXmlStreamReader *aInputStream)

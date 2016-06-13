@@ -26,8 +26,8 @@ class ProjectObject
         explicit ProjectObject(const Type &aType);
         explicit ProjectObject(const Type &aType, const quint64 &aID);
         explicit ProjectObject(QXmlStreamReader *aInputStream);
-        save(QXmlStreamWriter *aOutputStream) const;
-        load(QXmlStreamReader *aInputStream);
+        void save(QXmlStreamWriter *aOutputStream) const;
+        void load(QXmlStreamReader *aInputStream);
         Type type() const;
         quint64 ID() const;
 

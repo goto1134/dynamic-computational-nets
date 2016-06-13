@@ -8,7 +8,7 @@
 class ElementSort : public ProjectNamedObject
 {
     public:
-        explicit ElementSort(const QString &aName, const QColor &aColor = QColor(Qt::black));
+        explicit ElementSort(const QString &aName, const quint64 &aID, const QColor &aColor = QColor(Qt::black));
         explicit ElementSort(QXmlStreamReader *aInputStream);
 
         void load(QXmlStreamReader *aInputStream);
