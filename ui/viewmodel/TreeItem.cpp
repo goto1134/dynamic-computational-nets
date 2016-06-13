@@ -1,5 +1,6 @@
 #include "TreeItem.h"
 #include <QtAlgorithms>
+#include <QIcon>
 
 //TreeItem::TreeItem(const QList<QVariant> &aData, TreeItem *aParentItem)
 //{
@@ -39,7 +40,7 @@ int TreeItem::dataLength() const
     return 1;
 }
 
-QVariant TreeItem::getData(int aIndex) const
+QVariant TreeItem::getData(int ) const
 {
     return mItemName;
 }
@@ -61,7 +62,27 @@ TreeItem *TreeItem::getParentItem() const
 
 QVariant TreeItem::getItemType() const
 {
-    return mItemType;
+    return QVariant(mItemType);
+}
+
+QVariant TreeItem::getImage() const
+{
+    switch(mItemType)
+    {
+        case SortContainer:
+            return QIcon(":/icons/icons/element types.ico");
+        case Sort:
+            return QIcon(":/icons/icons/type.ico");
+        case ObjectNetsContainer:
+            return QIcon(":/icons/icons/net container.ico");
+        case Class:
+            return QIcon(":/icons/icons/net class.ico");
+        case Axiom:
+        case ObjectNet:
+            return QIcon(":/icons/icons/net.ico");
+        default:
+            return QVariant();
+    }
 }
 
 void TreeItem::setItemName(QString aName)

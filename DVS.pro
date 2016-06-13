@@ -11,7 +11,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = DVS
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
     ui/viewmodel/ProjectTreeModel.cpp \
     ui/viewmodel/TreeItem.cpp \
@@ -20,9 +19,15 @@ SOURCES += main.cpp\
     model/NetClass.cpp \
     model/ObjectNet.cpp \
     ui/redactor/ObjectNetRedactor.cpp \
-    ui/viewmodel/PropertyTableModel.cpp \
     ui/redactor/items/ArrowItem.cpp \
-    ui/redactor/items/NetObjectItem.cpp
+    ui/redactor/items/NetObjectItem.cpp \
+    ui/viewmodel/objectwithproperties.cpp \
+    model/ProjectObject.cpp \
+    model/ProjectNamedObject.cpp \
+    model/Place.cpp \
+    model/Connection.cpp \
+    model/TerminalTransition.cpp \
+    model/NonTerminalTransition.cpp
 
 HEADERS  += \
     ui/viewmodel/ProjectTreeModel.h \
@@ -32,9 +37,15 @@ HEADERS  += \
     model/NetClass.h \
     model/ObjectNet.h \
     ui/redactor/ObjectNetRedactor.h \
-    ui/viewmodel/PropertyTableModel.h \
     ui/redactor/items/ArrowItem.h \
-    ui/redactor/items/NetObjectItem.h
+    ui/redactor/items/NetObjectItem.h \
+    ui/viewmodel/ObjectWithProperties.h \
+    model/ProjectObject.h \
+    model/ProjectNamedObject.h \
+    model/Place.h \
+    model/Connection.h \
+    model/TerminalTransition.h \
+    model/NonTerminalTransition.h
 
 FORMS    += \
     ui/mainwindow.ui

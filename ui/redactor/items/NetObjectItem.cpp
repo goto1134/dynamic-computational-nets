@@ -7,6 +7,9 @@
 #include <QPainter>
 
 const QString DELETE_ACTION_NAME = "Delete";
+const QString ADD_ONE_ACTION_NAME = "Add One";
+const QString SUBTRACT_ONE_ACTION_NAME = "Subtract One";
+
 
 void NetObjectItem::setMyPolygon()
 {
@@ -138,11 +141,26 @@ void NetObjectItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     QMenu menu;
     menu.addAction(DELETE_ACTION_NAME);
-    QAction *a = menu.exec(event->screenPos());
-    if(a && a->text() == "Delete")
+    if(mElementType == Place)
     {
-//        qDebug() << "Delete";
-        delete this;
+        menu.addAction(ADD_ONE_ACTION_NAME);
+        menu.addAction(SUBTRACT_ONE_ACTION_NAME);
+    }
+    QAction *a = menu.exec(event->screenPos());
+    if(a)
+    {
+        if(a->text() == DELETE_ACTION_NAME)
+        {
+            delete this;
+        }
+        else if (a->text() == ADD_ONE_ACTION_NAME)
+        {
+            mTextItem->setPlainText(QString::number(mTextItem->toPlainText().toInt() + 1));
+        }
+        else if (a->text() == SUBTRACT_ONE_ACTION_NAME)
+        {
+            mTextItem->setPlainText(QString::number(mTextItem->toPlainText().toInt() - 1));
+        }
     }
 }
 

@@ -35,6 +35,11 @@ QVariant ProjectTreeModel::data(const QModelIndex &aIndex, int aRole) const
         TreeItem *item = static_cast<TreeItem*>(aIndex.internalPointer());
         return item->getData(aIndex.column());
     }
+    else if(aRole == Qt::DecorationRole)
+    {
+        TreeItem *item = static_cast<TreeItem*>(aIndex.internalPointer());
+        return item->getImage();;
+    }
     else if(aRole == Qt::UserRole)
     {
         TreeItem *item = static_cast<TreeItem*>(aIndex.internalPointer());

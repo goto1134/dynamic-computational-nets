@@ -21,5 +21,6 @@
         <file>icons/play.ico</file>
         <file>icons/save.ico</file>
         <file>icons/stop.ico</file>
+        <file>icons/icon.png</file>
     </qresource>
 </RCC>

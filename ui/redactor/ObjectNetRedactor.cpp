@@ -48,7 +48,7 @@ void ObjectNetRedactor::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     {
         if(mRedactorTool == Place)
         {
-            NetObjectItem * item = new NetObjectItem(NetObjectItem::Place,"",0);
+            NetObjectItem * item = new NetObjectItem(NetObjectItem::Place,"0",0);
             item->setPos(mouseEvent->scenePos());
             addItem(item);
         }
@@ -120,6 +120,27 @@ void ObjectNetRedactor::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
         removeItem(line);
         delete line;
+
+        if(startItems.count() > 1)
+        {
+            foreach(QGraphicsItem *item, startItems)
+            {
+                if(item->type() != NetObjectItem::Type)
+                {
+                    startItems.removeOne(item);
+                }
+            }
+        }
+        if(endItems.count() > 1)
+        {
+            foreach(QGraphicsItem *item, endItems)
+            {
+                if(item->type() != NetObjectItem::Type)
+                {
+                    endItems.removeOne(item);
+                }
+            }
+        }
 
         if (startItems.count() > 0 && endItems.count() > 0 &&
             startItems.first()->type() == NetObjectItem::Type &&

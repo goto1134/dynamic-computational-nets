@@ -2,16 +2,26 @@
 #define OBJECTNET_H
 
 #include <QObject>
+#include "ProjectNamedObject.h"
+class Place;
+class TerminalTransition;
+class NonTerminalTransition;
+class Connection;
 
-class ObjectNet
+class ObjectNet: public ProjectNamedObject
 {
     public:
-        explicit ObjectNet(QString aName);
-        QString getName() const;
-        void setName(const QString &aName);
+        explicit ObjectNet(const QString &aName);
+        explicit ObjectNet(QXmlStreamReader *aInputStream);
 
+        void load(QXmlStreamReader *aInputStream);
+        void save(QXmlStreamWriter *aOutputStream) const;
     private:
-        QString mName;
+        quint64 mNetClassID;
+        QSet<Place *> mPlaces;
+        QSet<Connection *> mConnections;
+        QSet<TerminalTransition *> mTTransitions;
+        QSet<NonTerminalTransition *> mNTTransitions;
 };
 
 #endif // OBJECTNET_H

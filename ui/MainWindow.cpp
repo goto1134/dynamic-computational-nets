@@ -5,6 +5,19 @@
 #include <QInputDialog>
 
 #include "MainWindow.h"
+
+#include "model/ProjectNamedObject.h"
+#include "viewmodel/ProjectTreeModel.h"
+#include "redactor/ObjectNetRedactor.h"
+#include "model/ElementSort.h"
+#include "model/Place.h"
+#include "model/NetClass.h"
+#include "model/Connection.h"
+#include "model/TerminalTransition.h"
+#include "model/NonTerminalTransition.h"
+#include "model/ObjectNet.h"
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -19,14 +32,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->actionCreateDVS, SIGNAL(triggered()), this, SLOT(createNewProject()));
 
-    mNetRedactor = new ObjectNetRedactor(this);
-    ui->graphicsView->setScene(mNetRedactor);
-    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
-    connect(ui->actionCoursor, SIGNAL(triggered()), mNetRedactor, SLOT(setMouseTool()));
-    connect(ui->actionPlace, SIGNAL(triggered()), mNetRedactor, SLOT(setPlaceTool()));
-    connect(ui->actionTransition, SIGNAL(triggered()), mNetRedactor, SLOT(setTerminalTransitionTool()));
-    connect(ui->actionNonTerminalTransition, SIGNAL(triggered()), mNetRedactor, SLOT(setNonTerminalTransitionTool()));
-    connect(ui->actionRegularConnection, SIGNAL(triggered()), mNetRedactor, SLOT(setConnectionTool()));
+    connect(ui->actionSaveDVS, SIGNAL(triggered()), this, SLOT(saveDVS()));
+
+    createNetRedactor();
 }
 
 MainWindow::~MainWindow()
@@ -93,8 +101,6 @@ void MainWindow::showContextMenuOnExistingItem(QModelIndex modelIndex, QPoint aP
     else
     {
         menu->addAction(new QAction("Menu is Not Configured for this item", this));
-//        menu->addAction(new QAction("Action 2", this));
-//        menu->addAction(new QAction("Action 3", this));
     }
     menu->popup(ui->treeView->viewport()->mapToGlobal(aPoint));
     ui->treeView->update(modelIndex);
@@ -152,6 +158,41 @@ void MainWindow::addObjectNet()
     }
 }
 
+void MainWindow::saveDVS()
+{
+    QString fileName = "TEST.txt";
+    QFile file( fileName );
+    if ( file.open(QIODevice::ReadWrite) )
+    {
+        QXmlStreamWriter stream( &file );
+        QColor *color = new QColor(10,20,30);
+        ObjectNet *object = new ObjectNet("Net 1");
+        object->save(&stream);
+    }
+    file.close();
+    if(file.open(QIODevice::ReadOnly))
+    {
+        QXmlStreamReader stream (&file);
+        stream.readNextStartElement();
+        ObjectNet *object = new ObjectNet(&stream);
+//        ProjectNamedObject *object = new ProjectNamedObject(&stream);
+        qDebug() << "point";
+        object->type();
+    }
+    file.close();
+}
+
+void MainWindow::createNetRedactor()
+{
+    mNetRedactor = new ObjectNetRedactor(this);
+    ui->graphicsView->setScene(mNetRedactor);
+    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+    connect(ui->actionCoursor, SIGNAL(triggered()), mNetRedactor, SLOT(setMouseTool()));
+    connect(ui->actionPlace, SIGNAL(triggered()), mNetRedactor, SLOT(setPlaceTool()));
+    connect(ui->actionTransition, SIGNAL(triggered()), mNetRedactor, SLOT(setTerminalTransitionTool()));
+    connect(ui->actionNonTerminalTransition, SIGNAL(triggered()), mNetRedactor, SLOT(setNonTerminalTransitionTool()));
+    connect(ui->actionRegularConnection, SIGNAL(triggered()), mNetRedactor, SLOT(setConnectionTool()));
+}
 
 //void addToolBarToWidget()
 //{

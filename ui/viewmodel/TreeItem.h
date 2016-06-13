@@ -31,13 +31,14 @@ class TreeItem
         int row() const;
         TreeItem *getParentItem() const;
         QVariant getItemType() const;
+        QVariant getImage() const;
 
         void setItemName(QString aName);
 
     private:
         QVariant mItemName;
         QList<TreeItem*> mChildItems;
-        QVariant mItemType;
+        TreeItemType mItemType;
         TreeItem *mParentItem;
 };
 

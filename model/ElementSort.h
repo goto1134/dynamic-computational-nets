@@ -1,23 +1,27 @@
 #ifndef ELEMENTSORT_H
 #define ELEMENTSORT_H
-#include <QString>
-#include <QColor>
-#include <QVariant>
 
-class ElementSort
+#include <QtCore>
+#include <QColor>
+#include "ProjectNamedObject.h"
+
+class ElementSort : public ProjectNamedObject
 {
     public:
-        ElementSort(QString aName, QColor *aColor = new QColor(Qt::black));
-        QColor *getColor() const;
-        QString getName() const;
+        explicit ElementSort(const QString &aName, const QColor &aColor = QColor(Qt::black));
+        explicit ElementSort(QXmlStreamReader *aInputStream);
 
-        void setName(QString aName);
+        void load(QXmlStreamReader *aInputStream);
+        void save(QXmlStreamWriter *aOutputStream) const;
+
+        QColor color() const;
+        void setColor(const QColor &aColor);
+
     private:
-        QString mName;
-        QColor *mColor;
-//    signals:
+        QColor mColor;
+        //    signals:
 
-//    public slots:
+        //    public slots:
 };
 
 #endif // ELEMENTSORT_H
