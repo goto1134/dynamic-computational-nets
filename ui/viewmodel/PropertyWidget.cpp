@@ -145,6 +145,17 @@ void PropertyWidget::applyNamedObjectDataChanged()
     }
 }
 
+void PropertyWidget::applySortSettings()
+{
+    ElementSort *sort = static_cast<ElementSort *>(mObject);
+    QColor color = sort->color();
+    QColor newColor = QColor(mRedSlider->value(), mGreenSlider->value(), mBlueSlider->value());
+    if(color != newColor)
+    {
+        sort->setColor(newColor);
+    }
+}
+
 void PropertyWidget::apply()
 {
     ProjectObject::Type type = mObject->type();
@@ -155,13 +166,7 @@ void PropertyWidget::apply()
         applyNamedObjectDataChanged();
         if(type == ProjectObject::Sort)
         {
-            ElementSort *sort = static_cast<ElementSort *>(mObject);
-            QColor color = sort->color();
-            QColor newColor = QColor(mRedSlider->value(), mGreenSlider->value(), mBlueSlider->value());
-            if(color != newColor)
-            {
-                sort->setColor(newColor);
-            }
+            applySortSettings();
         }
     }
 

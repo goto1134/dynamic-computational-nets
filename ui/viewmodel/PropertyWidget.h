@@ -43,6 +43,8 @@ class PropertyWidget : public QWidget
 
         void addSortColorData();
 
+        void applySortSettings();
+
     signals:
 
     public slots:
