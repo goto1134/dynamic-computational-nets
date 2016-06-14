@@ -28,7 +28,6 @@ class ProjectObject : public QObject
         explicit ProjectObject(QXmlStreamReader *aInputStream);
         void save(QXmlStreamWriter *aOutputStream) const;
         void load(QXmlStreamReader *aInputStream);
-        QList<QWidget *> *getPropertyWidgets();
         Type type() const;
         quint64 ID() const;
 

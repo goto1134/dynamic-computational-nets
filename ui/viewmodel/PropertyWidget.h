@@ -57,6 +57,10 @@ class PropertyWidget : public QWidget
 
         void addNetClassData();
 
+        void applyNetClassDataChanged();
+        
+        QLineEdit *getLineEdit(const bool &aEditable, const QString &aValue);
+        
     signals:
 
     public slots:

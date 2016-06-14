@@ -5,6 +5,7 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
+#include "../../../model/Place.h"
 
 const QString DELETE_ACTION_NAME = "Delete";
 const QString ADD_ONE_ACTION_NAME = "Add One";
@@ -14,17 +15,17 @@ const QString SUBTRACT_ONE_ACTION_NAME = "Subtract One";
 void NetObjectItem::setMyPolygon()
 {
     switch (mElementType) {
-        case Place:
+        case PlaceType:
             mPolygon << QPointF(-25, -25) << QPointF(25, -25)
                      << QPointF(25, 25) << QPointF(-25, 25)
                      << QPointF(-25, -25);
             break;
-        case TerminalTransition:
+        case TerminalTransitionType:
             mPolygon << QPointF(-10, -100) << QPointF(10, -100)
                      << QPointF(10, 100) << QPointF(-10, 100)
                      << QPointF(-10, -100);
             break;
-        case NonTerminalTransition:
+        case NonTerminalTransitionType:
             mPolygon << QPointF(-30, -100) << QPointF(30, -100)
                      << QPointF(30, 100) << QPointF(-30, 100)
                      << QPointF(-30, -100);
@@ -36,22 +37,27 @@ void NetObjectItem::setMyPolygon()
 void NetObjectItem::setTextItem(const QString& text)
 {
     mTextItem = new QGraphicsTextItem(text, this);
-    if(mElementType == Place)
+    if(mElementType == PlaceType)
     {
         mTextItem->setPos(pos().x()-10, pos().y()-10);
     }
-    else if(mElementType == NonTerminalTransition)
+    else if(mElementType == NonTerminalTransitionType)
     {
         mTextItem->setPos(pos().x()-9, pos().y()-90);
         mTextItem->setRotation(90);
     }
 }
 
-NetObjectItem::NetObjectItem(ElementType elementType, const QString& text, QMenu *contextMenu, QGraphicsItem *parent)
+NetObjectItem::NetObjectItem(Place *aPlace)
+    :NetObjectItem(PlaceType, QString::number(aPlace->resourceNumber()))
+{
+    setPos(aPlace->pos());
+}
+
+NetObjectItem::NetObjectItem(ElementType elementType, const QString& text, QGraphicsItem *parent)
     : QGraphicsPolygonItem(parent)
 {
     mElementType = elementType;
-    mContextMenu = contextMenu;
 
     QPainterPath path;
 
@@ -65,7 +71,6 @@ NetObjectItem::NetObjectItem(ElementType elementType, const QString& text, QMenu
 
 NetObjectItem::~NetObjectItem()
 {
-    delete mContextMenu;
     delete mTextItem;
     foreach(ArrowItem *arrow, mArrows)
     {
@@ -106,7 +111,7 @@ QPixmap NetObjectItem::image() const
     QPainter painter(&pixmap);
     painter.setPen(QPen(Qt::black, 8));
     painter.translate(125, 125);
-    if(mElementType == Place)
+    if(mElementType == PlaceType)
     {
         painter.drawEllipse(-125,-125,250,250);
     }
@@ -121,7 +126,7 @@ void NetObjectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 {
     setPen(QPen(Qt::black, 8));
     setBrush(QBrush(Qt::white));
-    if(mElementType == Place)
+    if(mElementType == PlaceType)
     {
         painter->setPen(QPen(Qt::black, 8));
         painter->setBrush(QBrush(Qt::white));
@@ -129,7 +134,7 @@ void NetObjectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     }
     else
     {
-        if(mElementType == TerminalTransition)
+        if(mElementType == TerminalTransitionType)
         {
             setBrush(QBrush(Qt::black));
         }
@@ -141,7 +146,7 @@ void NetObjectItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     QMenu menu;
     menu.addAction(DELETE_ACTION_NAME);
-    if(mElementType == Place)
+    if(mElementType == PlaceType)
     {
         menu.addAction(ADD_ONE_ACTION_NAME);
         menu.addAction(SUBTRACT_ONE_ACTION_NAME);

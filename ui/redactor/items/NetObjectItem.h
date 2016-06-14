@@ -19,6 +19,7 @@ class QPolygonF;
 QT_END_NAMESPACE
 
 class ArrowItem;
+class Place;
 
 //! [0]
 class NetObjectItem : public QGraphicsPolygonItem
@@ -27,12 +28,12 @@ class NetObjectItem : public QGraphicsPolygonItem
         enum { Type = UserType + 15 };
         enum ElementType
         {
-            Place = UserType,
-            TerminalTransition = UserType + 1,
-            NonTerminalTransition = UserType + 2
+            PlaceType = UserType,
+            TerminalTransitionType = UserType + 1,
+            NonTerminalTransitionType = UserType + 2
         };
-
-        NetObjectItem(ElementType elementType, const QString& text, QMenu *contextMenu, QGraphicsItem *parent = 0);
+        NetObjectItem(Place *aPlace);
+        NetObjectItem(ElementType elementType, const QString& text, QGraphicsItem *parent = 0);
         ~NetObjectItem();
 
         void removeArrow(ArrowItem *arrow);
@@ -51,7 +52,6 @@ class NetObjectItem : public QGraphicsPolygonItem
     private:
         ElementType mElementType;
         QPolygonF mPolygon;
-        QMenu *mContextMenu;
         QList<ArrowItem *> mArrows;
         QGraphicsTextItem *mTextItem;
 

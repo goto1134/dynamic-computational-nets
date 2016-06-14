@@ -17,25 +17,27 @@ class ObjectNetRedactor : public QGraphicsScene
         enum RedactorTool
         {
             Mouse,
-            Place,
-            NonTerminalTransition,
-            TerminalTransition,
-            Connection
+            PlaceTool,
+            NonTerminalTransitionTool,
+            TerminalTransitionTool,
+            ConnectionTool
         };
-        setObjectNet(ObjectNet *aObjectNet);
+        void setObjectNet(ObjectNet *aObjectNet);
+        void setTool(RedactorTool aTool);
 
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) Q_DECL_OVERRIDE;
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
         void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
     private:
+        void updatePlaces();
+        ObjectNet* mObjectNet;
         QVariant mRedactorTool;
         QGraphicsLineItem *line;
         bool mIsDrawing;
     signals:
 
     public slots:
-        void setTool(RedactorTool aTool);
         void setMouseTool();
         void setPlaceTool();
         void setTerminalTransitionTool();

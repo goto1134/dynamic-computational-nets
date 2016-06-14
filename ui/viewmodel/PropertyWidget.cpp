@@ -91,16 +91,21 @@ QSpinBox *PropertyWidget::getSpinBoxWithValue(int value)
     return spinBox;
 }
 
+QLineEdit *PropertyWidget::getLineEdit(const bool &aEditable,const QString &aValue)
+{
+    QLineEdit *lineEdit = new QLineEdit(aValue);
+    lineEdit->setEnabled(aEditable);
+    return lineEdit;
+}
+
 void PropertyWidget::updateData()
 {
     clear();
     ProjectObject::Type type = mObject->type();
-    QLineEdit *idLE = new QLineEdit(QString::number(mObject->ID()));
-    idLE->setEnabled(false);
-    QLineEdit *typeLE = new QLineEdit(QString::number(type));
-    typeLE->setEnabled(false);
-    mLayout->addWidget(new DataWidget("ID", idLE));
-    mLayout->addWidget(new DataWidget("type", typeLE));
+    QLineEdit *idLE = getLineEdit(false, QString::number(mObject->ID()));
+    addWidget(tr("ID"), idLE);
+    QLineEdit *typeLE = getLineEdit(false, QString::number(type));
+    addWidget(tr("type"), typeLE);
 
     //имя ProjectNamedObject
     if(type == ProjectObject::Sort
@@ -115,6 +120,11 @@ void PropertyWidget::updateData()
         else if(type == ProjectObject::NetClass)
         {
             addNetClassData();
+        }
+        else if(type == ProjectObject::Net)
+        {
+            ObjectNet *net = static_cast<ObjectNet *>(mObject);
+            addWidget(tr("Class ID"), getLineEdit(false, QString::number(net->netClassID())));
         }
     }
 
@@ -188,6 +198,22 @@ void PropertyWidget::addNetClassData()
     addWidget(tr("Output places"), mOutputSB);
 }
 
+void PropertyWidget::applyNetClassDataChanged()
+{
+    NetClass* netClass = static_cast<NetClass *>(mObject);
+    int inputPlaces = mInputSB->value();
+    if(inputPlaces != netClass->getInputPlaceNumber())
+    {
+        netClass->setInputPlaceNumber(inputPlaces);
+    }
+
+    int outputPlaces = mOutputSB->value();
+    if(outputPlaces != netClass->getOutputPlaceNumber())
+    {
+        netClass->setOutputPlaceNumber(outputPlaces);
+    }
+}
+
 void PropertyWidget::apply()
 {
     ProjectObject::Type type = mObject->type();
@@ -202,18 +228,7 @@ void PropertyWidget::apply()
         }
         else if(type == ProjectObject::NetClass)
         {
-            NetClass* netClass = static_cast<NetClass *>(mObject);
-            int inputPlaces = mInputSB->value();
-            if(inputPlaces != netClass->getInputPlaceNumber())
-            {
-                netClass->setInputPlaceNumber(inputPlaces);
-            }
-
-            int outputPlaces = mOutputSB->value();
-            if(outputPlaces != netClass->getOutputPlaceNumber())
-            {
-                netClass->setOutputPlaceNumber(outputPlaces);
-            }
+            applyNetClassDataChanged();
         }
     }
 

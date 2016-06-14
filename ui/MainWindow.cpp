@@ -135,20 +135,22 @@ void MainWindow::showProperties(const QModelIndex &aModelIndex)
         if(itemType == TreeItem::ObjectNet)
         {
             quint64 parentID = aModelIndex.model()->data(aModelIndex.parent(), Qt::UserRole + 1).toULongLong();
-            mPropertyWidget->setProjectObject(ProjectModel::getInstance().getNetClassByID(parentID)->getObjectNetByID(id));
+            ObjectNet *net = ProjectModel::getInstance().getNetClassByID(parentID)->getObjectNetByID(id);
+            mPropertyWidget->setProjectObject(net);
+            mNetRedactor->setObjectNet(net);
             mRedactorGroup->setEnabled(true);
         }
         else
         {
+            mRedactorGroup->setEnabled(false);
+            mNetRedactor->clear();
             if(itemType == TreeItem::Sort)
             {
                 mPropertyWidget->setProjectObject(ProjectModel::getInstance().getSortByID(id));
-                mRedactorGroup->setEnabled(false);
             }
             else if(itemType == TreeItem::Class)
             {
                 mPropertyWidget->setProjectObject(ProjectModel::getInstance().getNetClassByID(id));
-                mRedactorGroup->setEnabled(true);
             }
         }
     }
@@ -156,6 +158,7 @@ void MainWindow::showProperties(const QModelIndex &aModelIndex)
     {
         mRedactorGroup->setEnabled(false);
         mPropertyWidget->clear();
+        mNetRedactor->clear();
     }
     ui->treeView->update(aModelIndex);
 }

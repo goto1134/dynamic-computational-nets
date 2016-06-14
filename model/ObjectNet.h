@@ -19,6 +19,10 @@ class ObjectNet: public ProjectNamedObject
         void netClassPlaceRemoved(const quint64 &aID);
         quint64 netClassID() const;
 
+        QList<Place *> places();
+        Place *addPlace(const QPointF &aPoint);
+        void deletePlace(const quint64 &aID);
+
     private:
         quint64 mNetClassID;
         QMap<quint64, Place *> mPlaces;

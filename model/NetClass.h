@@ -21,6 +21,7 @@ class NetClass : public ProjectNamedObject
         void save(QXmlStreamWriter *aOutputStream) const;
 
         bool setNetName(const quint64 &aNetID, const QString &aNewName);
+        QList<Place *> places();
 
         int getInputPlaceNumber();
         int getOutputPlaceNumber();
@@ -28,7 +29,7 @@ class NetClass : public ProjectNamedObject
         void setOutputPlaceNumber(const int &aOutputNumber);
 
     private:
-        void setPlaceNumber(const int &aInputNumber, QMap<quint64, Place *> *aPlacesMap);
+        void setPlaceNumber(const int &aInputNumber, const bool &aInput, QMap<quint64, Place *> *aPlacesMap);
         void removePlace(quint64 &aID, QMap<quint64, Place *> *aPlacesMap);
 
         QMap<quint64, ObjectNet *> mObjectNets;

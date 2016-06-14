@@ -145,6 +145,13 @@ bool NetClass::setNetName(const quint64 &aNetID, const QString &aNewName)
     }
 }
 
+QList<Place *> NetClass::places()
+{
+    QList<Place *> places = mInputPlaces.values();
+    places.append(mOutputPlaces.values());
+    return places;
+}
+
 int NetClass::getInputPlaceNumber()
 {
     return mInputPlaces.count();
@@ -157,21 +164,21 @@ int NetClass::getOutputPlaceNumber()
 
 void NetClass::setInputPlaceNumber(const int &aInputNumber)
 {
-    setPlaceNumber(aInputNumber, &mInputPlaces);
+    setPlaceNumber(aInputNumber, true, &mInputPlaces);
 }
 
 void NetClass::setOutputPlaceNumber(const int &aOutputNumber)
 {
-    setPlaceNumber(aOutputNumber, &mOutputPlaces);
+    setPlaceNumber(aOutputNumber, false, &mOutputPlaces);
 }
 
-void NetClass::setPlaceNumber(const int &aInputNumber, QMap<quint64, Place *> *aPlacesMap)
+void NetClass::setPlaceNumber(const int &aInputNumber, const bool &aInput, QMap<quint64, Place *> *aPlacesMap)
 {
     if(aInputNumber > aPlacesMap->size())
     {
         while (aInputNumber > aPlacesMap->size())
         {
-            Place *place = new Place(ProjectModel::getInstance().generateID(), QPointF(-100,mInputPlaces.size() * 10));
+            Place *place = new Place(ProjectModel::getInstance().generateID(), QPointF(aInput ? -300 : 300, aPlacesMap->size() * 100));
             aPlacesMap->insert(place->ID(), place);
         }
     }

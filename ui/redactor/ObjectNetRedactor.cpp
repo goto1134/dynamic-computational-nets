@@ -3,17 +3,25 @@
 #include <QtGui>
 #include "items/NetObjectItem.h"
 #include "items/ArrowItem.h"
+#include "../../model/ObjectNet.h"
+#include "../../model/Place.h"
+
 
 ObjectNetRedactor::ObjectNetRedactor(QObject *aParent)
     : QGraphicsScene(aParent)
 {
+//    setSceneRect(-500,-500,1000,1000);
     mRedactorTool = Mouse;
     line = 0;
 }
 
-ObjectNetRedactor::setObjectNet(ObjectNet *aObjectNet)
+void ObjectNetRedactor::setObjectNet(ObjectNet *aObjectNet)
 {
     this->clear();
+    setMouseTool();
+    mObjectNet = aObjectNet;
+    updatePlaces();
+    update();
 }
 
 void ObjectNetRedactor::setTool(ObjectNetRedactor::RedactorTool aTool)
@@ -28,22 +36,22 @@ void ObjectNetRedactor::setMouseTool()
 
 void ObjectNetRedactor::setPlaceTool()
 {
-    mRedactorTool = Place;
+    mRedactorTool = PlaceTool;
 }
 
 void ObjectNetRedactor::setTerminalTransitionTool()
 {
-    mRedactorTool = TerminalTransition;
+    mRedactorTool = TerminalTransitionTool;
 }
 
 void ObjectNetRedactor::setNonTerminalTransitionTool()
 {
-    mRedactorTool = NonTerminalTransition;
+    mRedactorTool = NonTerminalTransitionTool;
 }
 
 void ObjectNetRedactor::setConnectionTool()
 {
-    mRedactorTool = Connection;
+    mRedactorTool = ConnectionTool;
 }
 
 void ObjectNetRedactor::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
@@ -51,25 +59,25 @@ void ObjectNetRedactor::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     //если нажали на левую кнопку мыши
     if(mouseEvent->button() == Qt::LeftButton)
     {
-        if(mRedactorTool == Place)
+        if(mRedactorTool == PlaceTool)
         {
-            NetObjectItem * item = new NetObjectItem(NetObjectItem::Place,"0",0);
+            NetObjectItem * item = new NetObjectItem(NetObjectItem::PlaceType,"0");
             item->setPos(mouseEvent->scenePos());
             addItem(item);
         }
-        else if(mRedactorTool == TerminalTransition)
+        else if(mRedactorTool == TerminalTransitionTool)
         {
-            NetObjectItem * item = new NetObjectItem(NetObjectItem::TerminalTransition,"",0);
+            NetObjectItem * item = new NetObjectItem(NetObjectItem::TerminalTransitionType,"");
             item->setPos(mouseEvent->scenePos());
             addItem(item);
         }
-        else if(mRedactorTool == NonTerminalTransition)
+        else if(mRedactorTool == NonTerminalTransitionTool)
         {
-            NetObjectItem * item = new NetObjectItem(NetObjectItem::NonTerminalTransition,"hui",0);
+            NetObjectItem * item = new NetObjectItem(NetObjectItem::NonTerminalTransitionType,"hui");
             item->setPos(mouseEvent->scenePos());
             addItem(item);
         }
-        else if(mRedactorTool == Connection)
+        else if(mRedactorTool == ConnectionTool)
         {
             mIsDrawing = true;
             line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(),mouseEvent->scenePos()));
@@ -90,7 +98,7 @@ void ObjectNetRedactor::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void ObjectNetRedactor::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    if (mRedactorTool == Connection
+    if (mRedactorTool == ConnectionTool
             && line != 0
             && mIsDrawing)
     {
@@ -104,9 +112,18 @@ void ObjectNetRedactor::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
     }
 }
 
+void ObjectNetRedactor::updatePlaces()
+{
+    foreach (Place *place, mObjectNet->places())
+    {
+        addItem(new NetObjectItem(place));
+        update();
+    }
+}
+
 void ObjectNetRedactor::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(mRedactorTool == Connection
+    if(mRedactorTool == ConnectionTool
             && line != 0
             && mIsDrawing)
     {
@@ -154,15 +171,15 @@ void ObjectNetRedactor::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             NetObjectItem *startItem = qgraphicsitem_cast<NetObjectItem *>(startItems.first());
             NetObjectItem *endItem = qgraphicsitem_cast<NetObjectItem *>(endItems.first());
             if(
-                    (startItem->elementType() == NetObjectItem::Place
-                     && ( endItem->elementType() == NetObjectItem::TerminalTransition
-                          || endItem->elementType() == NetObjectItem::NonTerminalTransition )
+                    (startItem->elementType() == NetObjectItem::PlaceType
+                     && ( endItem->elementType() == NetObjectItem::TerminalTransitionType
+                          || endItem->elementType() == NetObjectItem::NonTerminalTransitionType )
                      )
                     || (
-                        ( startItem->elementType() == NetObjectItem::TerminalTransition
-                          || startItem->elementType() == NetObjectItem::NonTerminalTransition
+                        ( startItem->elementType() == NetObjectItem::TerminalTransitionType
+                          || startItem->elementType() == NetObjectItem::NonTerminalTransitionType
                           )
-                        && endItem->elementType() == NetObjectItem::Place)
+                        && endItem->elementType() == NetObjectItem::PlaceType)
                     )
             {
                 ArrowItem *arrow = new ArrowItem(startItem, endItem);

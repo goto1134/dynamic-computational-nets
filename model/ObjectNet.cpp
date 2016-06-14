@@ -2,6 +2,8 @@
 #include "Place.h"
 #include "NonTerminalTransition.h"
 #include "Connection.h"
+#include "ProjectModel.h"
+#include "NetClass.h"
 
 const QString OBJECT_NET = "object_net";
 const QString TRANSITIONS_LABEL = "transitions";
@@ -154,4 +156,23 @@ void ObjectNet::netClassPlaceRemoved(const quint64 &aID)
 quint64 ObjectNet::netClassID() const
 {
     return mNetClassID;
+}
+
+QList<Place *> ObjectNet::places()
+{
+    QList<Place *> places = mPlaces.values();
+    places.append(ProjectModel::getInstance().getNetClassByID(mNetClassID)->places());
+    return places;
+}
+
+Place *ObjectNet::addPlace(const QPointF &aPoint)
+{
+    Place *place = new Place(ProjectModel::getInstance().generateID(), aPoint);
+    mPlaces.insert(place->ID(), place);
+    return place;
+}
+
+void ObjectNet::deletePlace(const quint64 &aID)
+{
+
 }
