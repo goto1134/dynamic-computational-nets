@@ -48,13 +48,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::setActionGroups(QWidget *parent)
 {
-    QActionGroup *actionGroup = new QActionGroup(parent);
-    actionGroup->addAction(ui->actionControlConnection);
-    actionGroup->addAction(ui->actionPlace);
-    actionGroup->addAction(ui->actionCoursor);
-    actionGroup->addAction(ui->actionTransition);
-    actionGroup->addAction(ui->actionRegularConnection);
-    actionGroup->addAction(ui->actionNonTerminalTransition);
+    mRedactorGroup = new QActionGroup(parent);
+    mRedactorGroup->addAction(ui->actionControlConnection);
+    mRedactorGroup->addAction(ui->actionPlace);
+    mRedactorGroup->addAction(ui->actionCoursor);
+    mRedactorGroup->addAction(ui->actionTransition);
+    mRedactorGroup->addAction(ui->actionRegularConnection);
+    mRedactorGroup->addAction(ui->actionNonTerminalTransition);
+    mRedactorGroup->setEnabled(false);
 }
 
 void MainWindow::setStretchFatrors()
@@ -135,22 +136,26 @@ void MainWindow::showProperties(const QModelIndex &aModelIndex)
         {
             quint64 parentID = aModelIndex.model()->data(aModelIndex.parent(), Qt::UserRole + 1).toULongLong();
             mPropertyWidget->setProjectObject(ProjectModel::getInstance().getNetClassByID(parentID)->getObjectNetByID(id));
+            mRedactorGroup->setEnabled(true);
         }
         else
         {
             if(itemType == TreeItem::Sort)
             {
                 mPropertyWidget->setProjectObject(ProjectModel::getInstance().getSortByID(id));
+                mRedactorGroup->setEnabled(false);
             }
             else if(itemType == TreeItem::Class)
             {
                 mPropertyWidget->setProjectObject(ProjectModel::getInstance().getNetClassByID(id));
-            }
-            else
-            {
-                mPropertyWidget->clear();
+                mRedactorGroup->setEnabled(true);
             }
         }
+    }
+    else
+    {
+        mRedactorGroup->setEnabled(false);
+        mPropertyWidget->clear();
     }
     ui->treeView->update(aModelIndex);
 }

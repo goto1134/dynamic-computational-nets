@@ -43,7 +43,7 @@ QList<quint64> NetClass::getObjectNetsIDs() const
     return mObjectNets.keys();
 }
 
-void NetClass::getPlaces(QString aTagName, QXmlStreamReader *aInputStream, QSet<Place *> *aPlacesSet)
+void NetClass::getPlaces(QString aTagName, QXmlStreamReader *aInputStream, QMap<quint64, Place *> *aPlacesMap)
 {
     if(aInputStream->readNextStartElement()
             && aInputStream->name() == aTagName)
@@ -53,7 +53,8 @@ void NetClass::getPlaces(QString aTagName, QXmlStreamReader *aInputStream, QSet<
             if(aInputStream->readNextStartElement()
                     && aInputStream->name() == PLACE_LABEL)
             {
-                aPlacesSet->insert(new Place(aInputStream));
+                Place *place = new Place(aInputStream);
+                aPlacesMap->insert(place->ID(), place);
             }
         }
         while(!(aInputStream->isEndElement()
@@ -118,16 +119,6 @@ void NetClass::save(QXmlStreamWriter *aOutputStream) const
     aOutputStream->writeEndElement();
 }
 
-void NetClass::addInputPlace(Place *aPlace)
-{
-    mInputPlaces.insert(aPlace);
-}
-
-void NetClass::addOutputPlace(Place *aPlace)
-{
-    mOutputPlaces.insert(aPlace);
-}
-
 bool NetClass::setNetName(const quint64 &aNetID, const QString &aNewName)
 {
     ProjectNamedObject *netWithID;
@@ -154,10 +145,62 @@ bool NetClass::setNetName(const quint64 &aNetID, const QString &aNewName)
     }
 }
 
-void NetClass::writePlaces(QXmlStreamWriter *aOutputStream, QSet<Place *> aPlacesSet, QString aTagName) const
+int NetClass::getInputPlaceNumber()
+{
+    return mInputPlaces.count();
+}
+
+int NetClass::getOutputPlaceNumber()
+{
+    mOutputPlaces.count();
+}
+
+void NetClass::setInputPlaceNumber(const int &aInputNumber)
+{
+    setPlaceNumber(aInputNumber, &mInputPlaces);
+}
+
+void NetClass::setOutputPlaceNumber(const int &aOutputNumber)
+{
+    setPlaceNumber(aOutputNumber, &mOutputPlaces);
+}
+
+void NetClass::setPlaceNumber(const int &aInputNumber, QMap<quint64, Place *> *aPlacesMap)
+{
+    if(aInputNumber > aPlacesMap->size())
+    {
+        while (aInputNumber > aPlacesMap->size())
+        {
+            Place *place = new Place(ProjectModel::getInstance().generateID(), QPointF(-100,mInputPlaces.size() * 10));
+            aPlacesMap->insert(place->ID(), place);
+        }
+    }
+    else if (int difference = aPlacesMap->size() - aInputNumber > 0)
+    {
+        QList<quint64> keyList = aPlacesMap->keys();
+        qSort(keyList);
+        while(difference != 0)
+        {
+            removePlace(keyList.last(), aPlacesMap);
+            keyList.removeLast();
+            difference--;
+        }
+    }
+}
+
+void NetClass::removePlace(quint64 &aID, QMap<quint64, Place *> *aPlacesMap)
+{
+    foreach (ObjectNet *net, mObjectNets.values())
+    {
+        net->netClassPlaceRemoved(aID);
+    }
+    aPlacesMap->remove(aID);
+}
+
+void NetClass::writePlaces(QXmlStreamWriter *aOutputStream, QMap<quint64, Place *> aPlacesMap, QString aTagName) const
 {
     aOutputStream->writeStartElement(aTagName);
-    foreach(Place *place, aPlacesSet)
+    foreach(Place *place, aPlacesMap.values())
     {
         place->save(aOutputStream);
     }

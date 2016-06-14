@@ -20,18 +20,23 @@ class NetClass : public ProjectNamedObject
         void load(QXmlStreamReader *aInputStream);
         void save(QXmlStreamWriter *aOutputStream) const;
 
-        void addInputPlace(Place *aPlace);
-        void addOutputPlace(Place *aPlace);
-
         bool setNetName(const quint64 &aNetID, const QString &aNewName);
 
-    private:
-        QMap<quint64, ObjectNet *> mObjectNets;
-        QSet<Place *> mInputPlaces;
-        QSet<Place *> mOutputPlaces;
+        int getInputPlaceNumber();
+        int getOutputPlaceNumber();
+        void setInputPlaceNumber(const int &aInputNumber);
+        void setOutputPlaceNumber(const int &aOutputNumber);
 
-        void writePlaces(QXmlStreamWriter *aOutputStream, QSet<Place *> aPlacesSet, QString aTagName) const;
-        void getPlaces(QString aTagName, QXmlStreamReader *aInputStream, QSet<Place *> *aPlacesSet);
+    private:
+        void setPlaceNumber(const int &aInputNumber, QMap<quint64, Place *> *aPlacesMap);
+        void removePlace(quint64 &aID, QMap<quint64, Place *> *aPlacesMap);
+
+        QMap<quint64, ObjectNet *> mObjectNets;
+        QMap<quint64, Place *> mInputPlaces;
+        QMap<quint64, Place *> mOutputPlaces;
+
+        void writePlaces(QXmlStreamWriter *aOutputStream, QMap<quint64, Place *> aPlacesMap, QString aTagName) const;
+        void getPlaces(QString aTagName, QXmlStreamReader *aInputStream, QMap<quint64, Place *> *aPlacesMap);
 };
 
 #endif // NETCLASS_H

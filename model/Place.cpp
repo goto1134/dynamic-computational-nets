@@ -2,8 +2,8 @@
 
 const QString SORT_ID = "sort";
 
-Place::Place(const quint64 &aID)
-    :ProjectObject(ProjectObject::PlaceType, aID)
+Place::Place(const quint64 &aID, const QPointF &aPoint)
+    :ProjectGraphicsObject(ProjectObject::PlaceType, aID, aPoint)
 {
     mResourceNumber = 0;
 }
@@ -59,7 +59,7 @@ void Place::load(QXmlStreamReader *aInputStream)
         }
         aInputStream->readNextStartElement();
 
-        ProjectObject::load(aInputStream);
+        ProjectGraphicsObject::load(aInputStream);
     }
     aInputStream->skipCurrentElement();
 }
@@ -76,7 +76,7 @@ void Place::save(QXmlStreamWriter *aOutputStream) const
             saveConnectionIDs(mOutputConnIDs, aOutputStream, OUTPUT_LABEL);
         }
         aOutputStream->writeEndElement();
-        ProjectObject::save(aOutputStream);
+        ProjectGraphicsObject::save(aOutputStream);
     }
     aOutputStream->writeEndElement();
 }
@@ -127,4 +127,15 @@ void Place::addInputConnectionID(const quint64 &connectionID)
 void Place::addOutputConnectionID(const quint64 &connectionID)
 {
     mOutputConnIDs.insert(connectionID);
+}
+
+void Place::removeInputConnectionID(const quint64 &connectionID)
+{
+    mInputConnIDs.remove(connectionID);
+}
+
+void Place::removeOutputConnectionID(const quint64 &connectionID)
+{
+    mOutputConnIDs.remove(connectionID);
+
 }

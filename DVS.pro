@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     model/NonTerminalTransition.cpp \
     model/ProjectModel.cpp \
     ui/viewmodel/DataWidget.cpp \
-    ui/viewmodel/PropertyWidget.cpp
+    ui/viewmodel/PropertyWidget.cpp \
+    model/ProjectGraphicsObject.cpp
 
 HEADERS  += \
     ui/viewmodel/ProjectTreeModel.h \
@@ -49,7 +50,8 @@ HEADERS  += \
     model/NonTerminalTransition.h \
     model/ProjectModel.h \
     ui/viewmodel/DataWidget.h \
-    ui/viewmodel/PropertyWidget.h
+    ui/viewmodel/PropertyWidget.h \
+    model/ProjectGraphicsObject.h
 
 FORMS    += \
     ui/mainwindow.ui

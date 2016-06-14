@@ -9,8 +9,6 @@ class ProjectNamedObject : public ProjectObject
 {
         Q_OBJECT
     public:
-        explicit ProjectNamedObject();
-        explicit ProjectNamedObject(const ProjectObject::Type &aType, const QString& aName);
         explicit ProjectNamedObject(const Type &aType, const QString &aName, const quint64 &aID);
         explicit ProjectNamedObject(QXmlStreamReader *aInputStream);
 
@@ -18,7 +16,8 @@ class ProjectNamedObject : public ProjectObject
         void save(QXmlStreamWriter *aOutputStream) const;
         QString name() const;
         void setName(const QString &aName);
-
+    protected:
+        explicit ProjectNamedObject();
     private:
         QString mName;
     signals:

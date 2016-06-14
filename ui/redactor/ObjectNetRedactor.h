@@ -6,6 +6,7 @@
 #include <QGraphicsSceneMouseEvent>
 
 class ConnectionItem;
+class ObjectNet;
 
 class ObjectNetRedactor : public QGraphicsScene
 {
@@ -21,6 +22,7 @@ class ObjectNetRedactor : public QGraphicsScene
             TerminalTransition,
             Connection
         };
+        setObjectNet(ObjectNet *aObjectNet);
 
     protected:
         void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) Q_DECL_OVERRIDE;

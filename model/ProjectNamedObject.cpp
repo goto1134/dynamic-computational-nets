@@ -9,12 +9,6 @@ ProjectNamedObject::ProjectNamedObject()
 
 }
 
-ProjectNamedObject::ProjectNamedObject(const Type &aType, const QString &aName)
-    :ProjectObject(aType)
-{
-    mName = aName;
-}
-
 ProjectNamedObject::ProjectNamedObject(const Type &aType, const QString &aName, const quint64 &aID)
     :ProjectObject(aType, aID)
 {

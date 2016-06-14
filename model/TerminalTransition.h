@@ -8,7 +8,6 @@ const QString TERMINAL_TRANSITION = "terminal_transition";
 class TerminalTransition : public ProjectObject
 {
     public:
-        explicit TerminalTransition();
         explicit TerminalTransition(const quint64 &aID);
         explicit TerminalTransition(QXmlStreamReader *aInputStream);
 
@@ -18,6 +17,7 @@ class TerminalTransition : public ProjectObject
         void addInputConnectionID(const quint64 &connectionID);
         void addOutputConnectionID(const quint64 &connectionID);
     protected:
+        explicit TerminalTransition();
         explicit TerminalTransition(const Type &aType, const quint64 &aID);
     private:
         QSet<quint64> mInputConnectionsIDs;

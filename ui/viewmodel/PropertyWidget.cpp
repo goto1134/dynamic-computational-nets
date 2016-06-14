@@ -64,19 +64,31 @@ void PropertyWidget::addNamedObjectData()
 {
     ProjectNamedObject *namedObject = static_cast<ProjectNamedObject *>(mObject);
     mNameLE = new QLineEdit(namedObject->name());
-    mLayout->addWidget(new DataWidget("name", mNameLE));
+    addWidget("name", mNameLE);
 }
 
 void PropertyWidget::addSortColorData()
 {
     ElementSort *sort = static_cast<ElementSort *>(mObject);
     QColor color = sort->color();
+
     mRedSlider = getColorSlider(color.red());
-    mLayout->addWidget(new DataWidget(tr("Red"), mRedSlider));
+    addWidget(tr("Red"), mRedSlider);
+
     mGreenSlider = getColorSlider(color.green());
-    mLayout->addWidget(new DataWidget(tr("Green"), mGreenSlider));
+    addWidget(tr("Green"), mGreenSlider);
+
     mBlueSlider = getColorSlider(color.blue());
-    mLayout->addWidget(new DataWidget(tr("Blue"), mBlueSlider));
+    addWidget(tr("Blue"), mBlueSlider);
+
+}
+
+QSpinBox *PropertyWidget::getSpinBoxWithValue(int value)
+{
+    QSpinBox *spinBox = new QSpinBox();
+    spinBox->setMinimum(0);
+    spinBox->setValue(value);
+    return spinBox;
 }
 
 void PropertyWidget::updateData()
@@ -100,6 +112,10 @@ void PropertyWidget::updateData()
         {
             addSortColorData();
         }
+        else if(type == ProjectObject::NetClass)
+        {
+            addNetClassData();
+        }
     }
 
     mApplyButton = new QPushButton(tr("Apply"));
@@ -109,6 +125,11 @@ void PropertyWidget::updateData()
     mLayout->addWidget(mApplyButton);
     mLayout->addWidget(mCanselButton);
     update();
+}
+
+void PropertyWidget::addWidget(const QString &aText, QWidget *aWidget)
+{
+    mLayout->addWidget(new DataWidget(aText, aWidget));
 }
 
 void PropertyWidget::applyNamedObjectDataChanged()
@@ -156,6 +177,17 @@ void PropertyWidget::applySortSettings()
     }
 }
 
+void PropertyWidget::addNetClassData()
+{
+    NetClass* netClass = static_cast<NetClass *>(mObject);
+
+    mInputSB = getSpinBoxWithValue(netClass->getInputPlaceNumber());
+    addWidget(tr("Input places"), mInputSB);
+
+    mOutputSB = getSpinBoxWithValue(netClass->getOutputPlaceNumber());
+    addWidget(tr("Output places"), mOutputSB);
+}
+
 void PropertyWidget::apply()
 {
     ProjectObject::Type type = mObject->type();
@@ -167,6 +199,21 @@ void PropertyWidget::apply()
         if(type == ProjectObject::Sort)
         {
             applySortSettings();
+        }
+        else if(type == ProjectObject::NetClass)
+        {
+            NetClass* netClass = static_cast<NetClass *>(mObject);
+            int inputPlaces = mInputSB->value();
+            if(inputPlaces != netClass->getInputPlaceNumber())
+            {
+                netClass->setInputPlaceNumber(inputPlaces);
+            }
+
+            int outputPlaces = mOutputSB->value();
+            if(outputPlaces != netClass->getOutputPlaceNumber())
+            {
+                netClass->setOutputPlaceNumber(outputPlaces);
+            }
         }
     }
 

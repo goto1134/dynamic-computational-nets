@@ -23,7 +23,6 @@ class ProjectObject : public QObject
             TTransition,
             NTTransition,
         };
-        explicit ProjectObject();
         explicit ProjectObject(const Type &aType);
         explicit ProjectObject(const Type &aType, const quint64 &aID);
         explicit ProjectObject(QXmlStreamReader *aInputStream);
@@ -35,6 +34,7 @@ class ProjectObject : public QObject
 
 
     protected:
+        explicit ProjectObject();
         void setID(const quint64 &aID);
         void setType(const Type &aType);
 

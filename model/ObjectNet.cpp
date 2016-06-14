@@ -39,7 +39,8 @@ void ObjectNet::load(QXmlStreamReader *aInputStream)
                    && aInputStream->name() == PLACE_LABEL)
             {
                 found = true;
-                mPlaces.insert(new Place(aInputStream));
+                Place* place = new Place(aInputStream);
+                mPlaces.insert(place->ID(), place);
             }
             if(found)
             {
@@ -54,7 +55,8 @@ void ObjectNet::load(QXmlStreamReader *aInputStream)
             while (aInputStream->readNextStartElement()
                    && aInputStream->name() == CONNECTION_LABEL)
             {
-                mConnections.insert(new Connection(aInputStream));
+                Connection *connection = new Connection(aInputStream);
+                mConnections.insert(connection->ID(), connection);
             }
             if(found)
             {
@@ -97,7 +99,7 @@ void ObjectNet::save(QXmlStreamWriter *aOutputStream) const
         aOutputStream->writeAttribute(CLASS_ID, QString::number(mNetClassID));
         aOutputStream->writeStartElement(PLACES_LABEL);
         {
-            foreach (Place *place, mPlaces)
+            foreach (Place *place, mPlaces.values())
             {
                 place->save(aOutputStream);
             }
@@ -105,7 +107,7 @@ void ObjectNet::save(QXmlStreamWriter *aOutputStream) const
         aOutputStream->writeEndElement();
         aOutputStream->writeStartElement(CONNECTIONS_LABEL);
         {
-            foreach (Connection *connection, mConnections)
+            foreach (Connection *connection, mConnections.values())
             {
                 connection->save(aOutputStream);
             }
@@ -126,6 +128,27 @@ void ObjectNet::save(QXmlStreamWriter *aOutputStream) const
         ProjectNamedObject::save(aOutputStream);
     }
     aOutputStream->writeEndElement();
+}
+
+void ObjectNet::netClassPlaceRemoved(const quint64 &aID)
+{
+    foreach (Connection *connection, mConnections.values())
+    {
+        if(connection->endID() == aID)
+        {
+            quint64 connectionID = connection->ID();
+            quint64 startID = connection->startID();
+            mConnections.remove(connectionID);
+            mPlaces.value(startID)->removeOutputConnectionID(connectionID);
+        }
+        else if(connection->startID() == aID)
+        {
+            quint64 connectionID = connection->ID();
+            quint64 endID = connection->endID();
+            mConnections.remove(connectionID);
+            mPlaces.value(endID)->removeInputConnectionID(connectionID);
+        }
+    }
 }
 
 quint64 ObjectNet::netClassID() const

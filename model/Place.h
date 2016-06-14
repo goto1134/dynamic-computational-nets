@@ -2,15 +2,15 @@
 #define PLACE_H
 
 #include <QSet>
-#include "ProjectObject.h"
+#include "ProjectGraphicsObject.h"
 
 class Connection;
 const QString PLACE_LABEL = "place";
 
-class Place : public ProjectObject
+class Place : public ProjectGraphicsObject
 {
     public:
-        explicit Place(const quint64 &aID);
+        explicit Place(const quint64 &aID, const QPointF &aPoint = QPointF());
         explicit Place(QXmlStreamReader *aInputStream);
 
         void load(QXmlStreamReader *aInputStream);
@@ -24,6 +24,9 @@ class Place : public ProjectObject
 
         void addInputConnectionID(const quint64 &connectionID);
         void addOutputConnectionID(const quint64 &connectionID);
+
+        void removeInputConnectionID(const quint64 &connectionID);
+        void removeOutputConnectionID(const quint64 &connectionID);
 
     private:
         quint64 mSortID;

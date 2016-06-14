@@ -10,6 +10,7 @@ class PropertyTableModel;
 class ProjectModel;
 class QModelIndex;
 class PropertyWidget;
+class QActionGroup;
 
 namespace Ui {
     class MainWindow;
@@ -32,6 +33,8 @@ class MainWindow : public QMainWindow
         ObjectNetRedactor *mNetRedactor;
         ProjectTreeModel *mTreeModel;
         PropertyWidget *mPropertyWidget;
+        QActionGroup *mRedactorGroup;
+
         void showContextMenuOnExistingItem(QModelIndex aModelIndex, QPoint aPoint);
         void createNetRedactor();
         void updateTreeModel();

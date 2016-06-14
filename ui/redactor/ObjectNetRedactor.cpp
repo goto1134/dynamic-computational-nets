@@ -11,6 +11,11 @@ ObjectNetRedactor::ObjectNetRedactor(QObject *aParent)
     line = 0;
 }
 
+ObjectNetRedactor::setObjectNet(ObjectNet *aObjectNet)
+{
+    this->clear();
+}
+
 void ObjectNetRedactor::setTool(ObjectNetRedactor::RedactorTool aTool)
 {
     mRedactorTool = aTool;

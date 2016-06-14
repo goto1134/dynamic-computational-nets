@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QPushButton>
 #include <QSlider>
+#include <QSpinBox>
 #include <QWidget>
 
 class ProjectObject;
@@ -22,6 +23,7 @@ class PropertyWidget : public QWidget
         void remove(QLayout* layout);
         void addTypeProperties();
         void updateData();
+        void addWidget(const QString &aText, QWidget * aWidget);
         ProjectObject* mObject;
 
         QVBoxLayout *mLayout;
@@ -32,6 +34,12 @@ class PropertyWidget : public QWidget
         QSlider *mRedSlider;
         QSlider *mGreenSlider;
         QSlider *mBlueSlider;
+
+        //Количества входных и выходных позиций
+        QSpinBox *mInputSB;
+        QSpinBox *mOutputSB;
+
+        //Кнопки
         QPushButton *mApplyButton;
         QPushButton *mCanselButton;
 
@@ -44,6 +52,10 @@ class PropertyWidget : public QWidget
         void addSortColorData();
 
         void applySortSettings();
+
+        QSpinBox * getSpinBoxWithValue(int value);
+
+        void addNetClassData();
 
     signals:
 

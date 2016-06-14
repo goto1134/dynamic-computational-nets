@@ -16,12 +16,13 @@ class ObjectNet: public ProjectNamedObject
 
         void load(QXmlStreamReader *aInputStream);
         void save(QXmlStreamWriter *aOutputStream) const;
+        void netClassPlaceRemoved(const quint64 &aID);
         quint64 netClassID() const;
 
     private:
         quint64 mNetClassID;
-        QSet<Place *> mPlaces;
-        QSet<Connection *> mConnections;
+        QMap<quint64, Place *> mPlaces;
+        QMap<quint64, Connection *> mConnections;
         QSet<TerminalTransition *> mTTransitions;
         QSet<NonTerminalTransition *> mNTTransitions;
 };
