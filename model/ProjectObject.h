@@ -9,8 +9,9 @@ const QString OUTPUT_LABEL = "output";
 const QString RESOURCE_NUMBER_LABEL = "resource_number";
 const QString CONNECTIONS_LABEL = "connections";
 
-class ProjectObject
+class ProjectObject : public QObject
 {
+        Q_OBJECT
     public:
         enum Type
         {

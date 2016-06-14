@@ -59,10 +59,10 @@ void MainWindow::setActionGroups(QWidget *parent)
 
 void MainWindow::setStretchFatrors()
 {
-    ui->graphicSplitter->setStretchFactor(0,5);
+    ui->graphicSplitter->setStretchFactor(0,17);
     mPropertyWidget = new PropertyWidget();
     ui->graphicSplitter->addWidget(mPropertyWidget);
-    ui->graphicSplitter->setStretchFactor(1,0);
+    ui->graphicSplitter->setStretchFactor(1,1);
     ui->projectSplitter->setStretchFactor(0,0);
     ui->projectSplitter->setStretchFactor(1,6);
 }

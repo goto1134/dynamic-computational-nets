@@ -23,6 +23,8 @@ class NetClass : public ProjectNamedObject
         void addInputPlace(Place *aPlace);
         void addOutputPlace(Place *aPlace);
 
+        bool setNetName(const quint64 &aNetID, const QString &aNewName);
+
     private:
         QMap<quint64, ObjectNet *> mObjectNets;
         QSet<Place *> mInputPlaces;

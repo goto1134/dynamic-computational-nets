@@ -2,10 +2,12 @@
 #define TREEITEM_H
 
 #include <QVariant>
+#include <QObject>
 #include <QList>
 
-class TreeItem
+class TreeItem : public QObject
 {
+        Q_OBJECT
     public:
         enum TreeItemType
         {
@@ -35,8 +37,6 @@ class TreeItem
         QVariant getImage() const;
         QVariant getTextColor() const;
 
-        void setItemName(QString aName);
-
         quint64 getObjectID() const;
         void setObjectID(const quint64 &objectID);
 
@@ -46,6 +46,8 @@ class TreeItem
         TreeItemType mItemType;
         TreeItem *mParentItem;
         quint64 mObjectID;
+    private slots:
+        void nameChanged(const QString &aNewName);
 };
 
 #endif // TREEITEM_H

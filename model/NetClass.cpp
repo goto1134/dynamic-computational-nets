@@ -11,6 +11,7 @@ const QString OBJECT_NETS_LABEL = "object_nets";
 NetClass::NetClass(const QString &aName, const quint64 &aID)
     :ProjectNamedObject(ProjectObject::NetClass, aName, aID)
 {
+
 }
 
 NetClass::NetClass(QXmlStreamReader *aInputStream)
@@ -125,6 +126,32 @@ void NetClass::addInputPlace(Place *aPlace)
 void NetClass::addOutputPlace(Place *aPlace)
 {
     mOutputPlaces.insert(aPlace);
+}
+
+bool NetClass::setNetName(const quint64 &aNetID, const QString &aNewName)
+{
+    ProjectNamedObject *netWithID;
+    foreach (ProjectNamedObject *objectNet, mObjectNets.values())
+    {
+        if(objectNet->name() == aNewName
+                && objectNet->ID()!= aNetID)
+        {
+            return false;
+        }
+        if(objectNet->ID() == aNetID)
+        {
+            netWithID = objectNet;
+        }
+    }
+    if(netWithID)
+    {
+        netWithID->setName(aNewName);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void NetClass::writePlaces(QXmlStreamWriter *aOutputStream, QSet<Place *> aPlacesSet, QString aTagName) const

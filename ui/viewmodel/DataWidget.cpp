@@ -9,6 +9,7 @@ DataWidget::DataWidget(const QString &aText, QWidget *aValueWidget, QWidget *par
 {
     mLayout = new QHBoxLayout;
     setLayout(mLayout);
-    mLayout->addWidget(new QLabel(aText));
-    mLayout->addWidget(aValueWidget);
+    QLabel *label = new QLabel(aText);
+    mLayout->addWidget(label, 1);
+    mLayout->addWidget(aValueWidget,5);
 }

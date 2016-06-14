@@ -18,20 +18,25 @@ TreeItem::TreeItem(quint64 aObjectID, TreeItem *aParentItem, TreeItem::TreeItemT
 {
     mItemType = aItemType;
     mParentItem = aParentItem;
+    ProjectNamedObject *namedObject;
     if(aItemType == Class)
     {
-        mItemName = ProjectModel::getInstance().getNetClassByID(aObjectID)->name();
+        namedObject = ProjectModel::getInstance().getNetClassByID(aObjectID);
     }
     else if(aItemType == Sort)
     {
-        mItemName = ProjectModel::getInstance().getSortByID(aObjectID)->name();
+        namedObject = ProjectModel::getInstance().getSortByID(aObjectID);
     }
     else if(aItemType == ObjectNet)
     {
-        mItemName = ProjectModel::getInstance()
+        namedObject = ProjectModel::getInstance()
                     .getNetClassByID(mParentItem->getObjectID())
-                    ->getObjectNetByID(aObjectID)
-                    ->name();
+                    ->getObjectNetByID(aObjectID);
+    }
+    if(namedObject)
+    {
+        mItemName = namedObject->name();
+        connect(namedObject, SIGNAL(nameChanged(QString)), this, SLOT(nameChanged(QString)));
     }
     mObjectID = aObjectID;
 }
@@ -115,11 +120,6 @@ QVariant TreeItem::getTextColor() const
     return QVariant();
 }
 
-void TreeItem::setItemName(QString aName)
-{
-    mItemName = aName;
-}
-
 quint64 TreeItem::getObjectID() const
 {
     return mObjectID;
@@ -128,4 +128,9 @@ quint64 TreeItem::getObjectID() const
 void TreeItem::setObjectID(const quint64 &objectID)
 {
     mObjectID = objectID;
+}
+
+void TreeItem::nameChanged(const QString &aNewName)
+{
+    mItemName = aNewName;
 }

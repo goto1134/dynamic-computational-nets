@@ -7,6 +7,7 @@ const QString PLACES_LABEL = "places";
 
 class ProjectNamedObject : public ProjectObject
 {
+        Q_OBJECT
     public:
         explicit ProjectNamedObject();
         explicit ProjectNamedObject(const ProjectObject::Type &aType, const QString& aName);
@@ -21,7 +22,7 @@ class ProjectNamedObject : public ProjectObject
     private:
         QString mName;
     signals:
-
+        nameChanged(const QString &aNewName);
     public slots:
 };
 

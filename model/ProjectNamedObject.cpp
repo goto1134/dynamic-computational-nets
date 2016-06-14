@@ -62,6 +62,7 @@ QString ProjectNamedObject::name() const
 void ProjectNamedObject::setName(const QString &aName)
 {
     mName = aName;
+    emit nameChanged(aName);
 }
 
 

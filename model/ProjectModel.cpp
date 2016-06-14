@@ -187,6 +187,58 @@ quint64 ProjectModel::createElementSort(QString aSortName)
     return id;
 }
 
+bool ProjectModel::setNetClassName(const quint64 &aID, const QString &aClassName)
+{
+    ProjectNamedObject *classWithID;
+    foreach (ProjectNamedObject *netClass, mClasses.values())
+    {
+        if(netClass->name() == aClassName
+                && netClass->ID()!= aID)
+        {
+            return false;
+        }
+        if(netClass->ID() == aID)
+        {
+            classWithID = netClass;
+        }
+    }
+    if(classWithID)
+    {
+        classWithID->setName(aClassName);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool ProjectModel::setSortName(const quint64 &aID, const QString &aSortName)
+{
+    ProjectNamedObject *sortWithID;
+    foreach (ProjectNamedObject *sort, mSorts.values())
+    {
+        if(sort->name() == aSortName
+                && sort->ID()!= aID)
+        {
+            return false;
+        }
+        if(sort->ID() == aID)
+        {
+            sortWithID = sort;
+        }
+    }
+    if(sortWithID)
+    {
+        sortWithID->setName(aSortName);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 QList<quint64> ProjectModel::getNetClassesIDs()
 {
     return mClasses.keys();
