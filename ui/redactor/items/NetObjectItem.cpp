@@ -6,11 +6,28 @@
 #include <QMenu>
 #include <QPainter>
 #include "../../../model/Place.h"
+#include "../../../model/ProjectModel.h"
+#include "../../../model/ElementSort.h"
+
 
 const QString DELETE_ACTION_NAME = "Delete";
 const QString ADD_ONE_ACTION_NAME = "Add One";
 const QString SUBTRACT_ONE_ACTION_NAME = "Subtract One";
 
+NetObjectItem::NetObjectItem(ElementType elementType, const QString& text, QGraphicsItem *parent)
+    : QGraphicsPolygonItem(parent)
+{
+    mElementType = elementType;
+
+    QPainterPath path;
+
+    setTextItem(text);
+
+    setMyPolygon();
+    setFlag(QGraphicsItem::ItemIsMovable, true);
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+    setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+}
 
 void NetObjectItem::setMyPolygon()
 {
@@ -34,6 +51,14 @@ void NetObjectItem::setMyPolygon()
     setPolygon(mPolygon);
 }
 
+NetObjectItem::NetObjectItem(Place *aPlace)
+    :NetObjectItem(PlaceType, QString::number(aPlace->resourceNumber()))
+{
+    setPos(aPlace->pos());
+    mGraphicsObject = aPlace;
+    connect(aPlace, SIGNAL(sortChanged(quint64)), this, SLOT(sortChanged(quint64)));
+}
+
 void NetObjectItem::setTextItem(const QString& text)
 {
     mTextItem = new QGraphicsTextItem(text, this);
@@ -48,25 +73,24 @@ void NetObjectItem::setTextItem(const QString& text)
     }
 }
 
-NetObjectItem::NetObjectItem(Place *aPlace)
-    :NetObjectItem(PlaceType, QString::number(aPlace->resourceNumber()))
+void NetObjectItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    setPos(aPlace->pos());
+   QGraphicsPolygonItem::mousePressEvent(event);
+   if(event->button() == Qt::LeftButton)
+   {
+       emit selected(mGraphicsObject->ID());
+   }
 }
 
-NetObjectItem::NetObjectItem(ElementType elementType, const QString& text, QGraphicsItem *parent)
-    : QGraphicsPolygonItem(parent)
+void NetObjectItem::resourceNumberChanged(const quint64 &aResourceNumber)
 {
-    mElementType = elementType;
+    mTextItem->setPlainText(QString::number(aResourceNumber));
+    update();
+}
 
-    QPainterPath path;
-
-    setTextItem(text);
-
-    setMyPolygon();
-    setFlag(QGraphicsItem::ItemIsMovable, true);
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-    setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+void NetObjectItem::sortChanged(const quint64 &aSortID)
+{
+    update();
 }
 
 NetObjectItem::~NetObjectItem()
@@ -104,31 +128,16 @@ void NetObjectItem::addArrow(ArrowItem *arrow)
     mArrows.append(arrow);
 }
 
-QPixmap NetObjectItem::image() const
-{
-    QPixmap pixmap(250, 250);
-    pixmap.fill(Qt::transparent);
-    QPainter painter(&pixmap);
-    painter.setPen(QPen(Qt::black, 8));
-    painter.translate(125, 125);
-    if(mElementType == PlaceType)
-    {
-        painter.drawEllipse(-125,-125,250,250);
-    }
-    else
-    {
-        painter.drawPolyline(mPolygon);
-    }
-    return pixmap;
-}
-
 void NetObjectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     setPen(QPen(Qt::black, 8));
     setBrush(QBrush(Qt::white));
     if(mElementType == PlaceType)
     {
-        painter->setPen(QPen(Qt::black, 8));
+        Place *place = static_cast<Place *>(mGraphicsObject);
+        QColor color = ProjectModel::getInstance().getSortByID(place->sortID())->color();
+        QPen pen(color, 8);
+        painter->setPen(pen);
         painter->setBrush(QBrush(Qt::white));
         painter->drawEllipse(mapFromItem(this, 0, 0), 25, 25);
     }
@@ -172,7 +181,8 @@ void NetObjectItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 QVariant NetObjectItem::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == QGraphicsItem::ItemPositionChange) {
-        foreach (ArrowItem *arrow, mArrows) {
+        foreach (ArrowItem *arrow, mArrows)
+        {
             arrow->updatePosition();
         }
     }

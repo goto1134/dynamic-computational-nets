@@ -9,8 +9,7 @@
 #include "../../model/ObjectNet.h"
 #include "../../model/ProjectObject.h"
 #include "../../model/ProjectModel.h"
-
-
+#include "../../model/Place.h"
 
 PropertyWidget::PropertyWidget()
 {
@@ -98,6 +97,17 @@ QLineEdit *PropertyWidget::getLineEdit(const bool &aEditable,const QString &aVal
     return lineEdit;
 }
 
+void PropertyWidget::addPlaceSortsData()
+{
+    Place *place = static_cast<Place *>(mObject);
+    mSortBox = new QComboBox();
+    foreach (quint64 sortID, ProjectModel::getInstance().getSortsIDs())
+    {
+        mSortBox->addItem(QIcon(),ProjectModel::getInstance().getSortByID(sortID)->name(), QVariant(sortID));
+    }
+    addWidget(tr("Sort"), mSortBox);
+}
+
 void PropertyWidget::updateData()
 {
     clear();
@@ -125,6 +135,13 @@ void PropertyWidget::updateData()
         {
             ObjectNet *net = static_cast<ObjectNet *>(mObject);
             addWidget(tr("Class ID"), getLineEdit(false, QString::number(net->netClassID())));
+        }
+    }
+    else
+    {
+        if(type == ProjectObject::PlaceType)
+        {
+            addPlaceSortsData();
         }
     }
 
@@ -214,6 +231,16 @@ void PropertyWidget::applyNetClassDataChanged()
     }
 }
 
+void PropertyWidget::applyPlaceDataChanged()
+{
+    Place *place = static_cast<Place *>(mObject);
+    quint64 sortID = mSortBox->currentData().toULongLong();
+    if(place->sortID() != sortID)
+    {
+        place->setSortID(sortID);
+    }
+}
+
 void PropertyWidget::apply()
 {
     ProjectObject::Type type = mObject->type();
@@ -229,6 +256,13 @@ void PropertyWidget::apply()
         else if(type == ProjectObject::NetClass)
         {
             applyNetClassDataChanged();
+        }
+    }
+    else
+    {
+        if(type == ProjectObject::PlaceType)
+        {
+            applyPlaceDataChanged();
         }
     }
 

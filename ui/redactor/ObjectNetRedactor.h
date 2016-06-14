@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
+#include <QObject>
 
 class ConnectionItem;
 class ObjectNet;
@@ -11,7 +12,6 @@ class ObjectNet;
 class ObjectNetRedactor : public QGraphicsScene
 {
         Q_OBJECT
-
     public:
         explicit ObjectNetRedactor(QObject *aParent = 0);
         enum RedactorTool
@@ -36,7 +36,7 @@ class ObjectNetRedactor : public QGraphicsScene
         QGraphicsLineItem *line;
         bool mIsDrawing;
     signals:
-
+        placeSelected(const quint64 &aClassID, const quint64 &aNetID, const quint64 &aObjectID);
     public slots:
         void setMouseTool();
         void setPlaceTool();
@@ -44,6 +44,8 @@ class ObjectNetRedactor : public QGraphicsScene
         void setNonTerminalTransitionTool();
         void setConnectionTool();
     private slots:
+        void placeSelected(const quint64 &aObjectID);
+
 };
 
 #endif // OBJECTNETREDACTOR_H

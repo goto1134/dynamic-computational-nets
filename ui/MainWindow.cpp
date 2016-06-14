@@ -163,6 +163,12 @@ void MainWindow::showProperties(const QModelIndex &aModelIndex)
     ui->treeView->update(aModelIndex);
 }
 
+void MainWindow::placeSelected(const quint64 &aClassID, const quint64 &aNetID, const quint64 &aObjectID)
+{
+    Place *place = ProjectModel::getInstance().getNetClassByID(aClassID)->getPlaceByID(aObjectID, aNetID);
+    mPropertyWidget->setProjectObject(place);
+}
+
 void MainWindow::addSort()
 {
     bool ok;
@@ -251,6 +257,7 @@ void MainWindow::loadProject()
 void MainWindow::createNetRedactor()
 {
     mNetRedactor = new ObjectNetRedactor(this);
+    connect(mNetRedactor, SIGNAL(placeSelected(quint64,quint64,quint64)), this, SLOT(placeSelected(quint64,quint64,quint64)));
     ui->graphicsView->setScene(mNetRedactor);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
     connect(ui->actionCoursor, SIGNAL(triggered()), mNetRedactor, SLOT(setMouseTool()));

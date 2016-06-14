@@ -1,6 +1,7 @@
 #ifndef PROPERTYWIDGET_H
 #define PROPERTYWIDGET_H
 
+#include <QComboBox>
 #include <QLineEdit>
 #include <QObject>
 #include <QPushButton>
@@ -43,6 +44,9 @@ class PropertyWidget : public QWidget
         QPushButton *mApplyButton;
         QPushButton *mCanselButton;
 
+        //Сорт позиции
+        QComboBox *mSortBox;
+
 
         void applyNamedObjectDataChanged();
         QSlider * getColorSlider(const short &aValue);
@@ -61,6 +65,10 @@ class PropertyWidget : public QWidget
         
         QLineEdit *getLineEdit(const bool &aEditable, const QString &aValue);
         
+        void addPlaceSortsData();
+
+        void applyPlaceDataChanged();
+
     signals:
 
     public slots:

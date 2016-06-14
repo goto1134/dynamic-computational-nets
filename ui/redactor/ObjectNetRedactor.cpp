@@ -53,6 +53,11 @@ void ObjectNetRedactor::setConnectionTool()
     mRedactorTool = ConnectionTool;
 }
 
+void ObjectNetRedactor::placeSelected(const quint64 &aObjectID)
+{
+    emit placeSelected(mObjectNet->netClassID(), mObjectNet->ID(), aObjectID);
+}
+
 void ObjectNetRedactor::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     //если нажали на левую кнопку мыши
@@ -115,7 +120,9 @@ void ObjectNetRedactor::updatePlaces()
 {
     foreach (Place *place, mObjectNet->places())
     {
-        addItem(new NetObjectItem(place));
+        NetObjectItem *item = new NetObjectItem(place);
+        addItem(item);
+        connect(item, SIGNAL(selected(quint64)), this, SLOT(placeSelected(quint64)));
         update();
     }
 }

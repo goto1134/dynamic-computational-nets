@@ -9,6 +9,7 @@ const QString PLACE_LABEL = "place";
 
 class Place : public ProjectGraphicsObject
 {
+        Q_OBJECT
     public:
         explicit Place(const quint64 &aID, const QPointF &aPoint = QPointF());
         explicit Place(QXmlStreamReader *aInputStream);
@@ -39,7 +40,8 @@ class Place : public ProjectGraphicsObject
         void getConnectionsIDs(QSet<quint64> *aConnectionSet, QXmlStreamReader *aInputStream, QString name);
 
     signals:
-
+        void sortChanged(const quint64 &aSort);
+        void resourceNumberChanged(const quint64 &aResourceNumber);
     public slots:
 
 };

@@ -152,6 +152,35 @@ QList<Place *> NetClass::places()
     return places;
 }
 
+Place *NetClass::getPlaceByID(const quint64 &aPlaceID, const quint64 &aNetID)
+{
+    if(aNetID != 0)
+    {
+        if(Place *place = mObjectNets.value(aNetID)->getPlaceByID(aPlaceID))
+        {
+            return place;
+        }
+    }
+    else
+    {
+        foreach (ObjectNet *net, mObjectNets)
+        {
+            if(Place *place = net->getPlaceByID(aPlaceID))
+            {
+                return place;
+            }
+        }
+    }
+    if(Place *place = mInputPlaces.value(aPlaceID, 0))
+    {
+        return place;
+    }
+    else
+    {
+        return mOutputPlaces.value(aPlaceID, 0);
+    }
+}
+
 int NetClass::getInputPlaceNumber()
 {
     return mInputPlaces.count();

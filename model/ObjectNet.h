@@ -20,6 +20,7 @@ class ObjectNet: public ProjectNamedObject
         quint64 netClassID() const;
 
         QList<Place *> places();
+        Place *getPlaceByID(const quint64 &aID);
         Place *addPlace(const QPointF &aPoint);
         void deletePlace(const quint64 &aID);
 

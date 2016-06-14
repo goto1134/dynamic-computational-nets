@@ -165,6 +165,11 @@ QList<Place *> ObjectNet::places()
     return places;
 }
 
+Place *ObjectNet::getPlaceByID(const quint64 &aID)
+{
+    return mPlaces.value(aID, 0);
+}
+
 Place *ObjectNet::addPlace(const QPointF &aPoint)
 {
     Place *place = new Place(ProjectModel::getInstance().generateID(), aPoint);

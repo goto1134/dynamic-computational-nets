@@ -23,6 +23,7 @@ class NetClass : public ProjectNamedObject
         bool setNetName(const quint64 &aNetID, const QString &aNewName);
         QList<Place *> places();
 
+        Place *getPlaceByID(const quint64 &aPlaceID, const quint64 &aNetID = 0);
         int getInputPlaceNumber();
         int getOutputPlaceNumber();
         void setInputPlaceNumber(const int &aInputNumber);

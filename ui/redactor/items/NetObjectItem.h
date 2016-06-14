@@ -1,6 +1,7 @@
 #ifndef NETOBJECTITEM_H
 #define NETOBJECTITEM_H
 
+#include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QList>
 
@@ -16,14 +17,16 @@ class QPainter;
 class QStyleOptionGraphicsItem;
 class QWidget;
 class QPolygonF;
+class ProjectGraphicsObject;
 QT_END_NAMESPACE
 
 class ArrowItem;
 class Place;
 
 //! [0]
-class NetObjectItem : public QGraphicsPolygonItem
+class NetObjectItem : public QObject, public QGraphicsPolygonItem
 {
+        Q_OBJECT
     public:
         enum { Type = UserType + 15 };
         enum ElementType
@@ -41,7 +44,6 @@ class NetObjectItem : public QGraphicsPolygonItem
         ElementType elementType() const { return mElementType; }
         QPolygonF polygon() const { return mPolygon; }
         void addArrow(ArrowItem *arrow);
-        QPixmap image() const;
         int type() const Q_DECL_OVERRIDE { return Type;}
 
     protected:
@@ -54,9 +56,17 @@ class NetObjectItem : public QGraphicsPolygonItem
         QPolygonF mPolygon;
         QList<ArrowItem *> mArrows;
         QGraphicsTextItem *mTextItem;
+        ProjectGraphicsObject *mGraphicsObject;
 
         void setMyPolygon();
         void setTextItem(const QString& text);
+        void initialize(const QString& text, ElementType elementType);
+        void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    signals:
+        selected(const quint64 &aID);
+    private slots:
+        void resourceNumberChanged(const quint64 &aResourceNumber);
+        void sortChanged(const quint64 &aSortID);
 };
 //! [0]
 

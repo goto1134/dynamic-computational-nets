@@ -6,6 +6,7 @@ Place::Place(const quint64 &aID, const QPointF &aPoint)
     :ProjectGraphicsObject(ProjectObject::PlaceType, aID, aPoint)
 {
     mResourceNumber = 0;
+    mSortID = 0;
 }
 
 Place::Place(QXmlStreamReader *aInputStream)
@@ -107,6 +108,7 @@ quint64 Place::sortID() const
 void Place::setSortID(const quint64 &sortID)
 {
     mSortID = sortID;
+    emit sortChanged(sortID);
 }
 
 quint64 Place::resourceNumber() const
@@ -117,6 +119,7 @@ quint64 Place::resourceNumber() const
 void Place::setResourceNumber(const quint64 &resourceNumber)
 {
     mResourceNumber = resourceNumber;
+    emit resourceNumberChanged(resourceNumber);
 }
 
 void Place::addInputConnectionID(const quint64 &connectionID)
