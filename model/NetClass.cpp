@@ -182,15 +182,14 @@ void NetClass::setPlaceNumber(const int &aInputNumber, const bool &aInput, QMap<
             aPlacesMap->insert(place->ID(), place);
         }
     }
-    else if (int difference = aPlacesMap->size() - aInputNumber > 0)
+    else if (aPlacesMap->size() - aInputNumber > 0)
     {
         QList<quint64> keyList = aPlacesMap->keys();
         qSort(keyList);
-        while(difference != 0)
+        while(aInputNumber != aPlacesMap->size())
         {
             removePlace(keyList.last(), aPlacesMap);
             keyList.removeLast();
-            difference--;
         }
     }
 }

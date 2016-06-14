@@ -10,7 +10,6 @@
 ObjectNetRedactor::ObjectNetRedactor(QObject *aParent)
     : QGraphicsScene(aParent)
 {
-//    setSceneRect(-500,-500,1000,1000);
     mRedactorTool = Mouse;
     line = 0;
 }
