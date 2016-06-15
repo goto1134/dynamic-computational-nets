@@ -5,9 +5,11 @@
 #include <QPen>
 #include <QPainter>
 
+#include <model/Connection.h>
+
 const qreal Pi = 3.14;
 
-ArrowItem::ArrowItem(NetObjectItem *startItem, NetObjectItem *endItem, QGraphicsItem *parent)
+ArrowItem::ArrowItem(NetObjectItem *startItem, NetObjectItem *endItem, Connection *aConnection, QGraphicsItem *parent)
     : QGraphicsLineItem(parent)
 {
     myStartItem = startItem;

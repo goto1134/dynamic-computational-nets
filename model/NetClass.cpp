@@ -38,6 +38,11 @@ ObjectNet *NetClass::getObjectNetByID(const quint64 &aID)
     return mObjectNets.value(aID, 0);
 }
 
+QList<ObjectNet *> NetClass::getObjectNets()
+{
+    return mObjectNets.values();
+}
+
 QList<quint64> NetClass::getObjectNetsIDs() const
 {
     return mObjectNets.keys();
@@ -163,6 +168,14 @@ Place *NetClass::getPlaceByID(const quint64 &aPlaceID, const quint64 &aNetID)
     }
     else
     {
+        if(Place *place = mInputPlaces.value(aPlaceID, 0))
+        {
+            return place;
+        }
+        else
+        {
+            return mOutputPlaces.value(aPlaceID, 0);
+        }
         foreach (ObjectNet *net, mObjectNets)
         {
             if(Place *place = net->getPlaceByID(aPlaceID))
@@ -170,14 +183,6 @@ Place *NetClass::getPlaceByID(const quint64 &aPlaceID, const quint64 &aNetID)
                 return place;
             }
         }
-    }
-    if(Place *place = mInputPlaces.value(aPlaceID, 0))
-    {
-        return place;
-    }
-    else
-    {
-        return mOutputPlaces.value(aPlaceID, 0);
     }
 }
 
@@ -207,7 +212,9 @@ void NetClass::setPlaceNumber(const int &aInputNumber, const bool &aInput, QMap<
     {
         while (aInputNumber > aPlacesMap->size())
         {
-            Place *place = new Place(ProjectModel::getInstance().generateID(), QPointF(aInput ? -300 : 300, aPlacesMap->size() * 100));
+            Place *place = new Place(ProjectModel::getInstance().generateID(),
+                                     QPointF(aInput ? -500 : 500, aPlacesMap->size() * 100),
+                                     aInput ? Place::Input : Place::Output);
             aPlacesMap->insert(place->ID(), place);
         }
     }

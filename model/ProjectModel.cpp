@@ -244,6 +244,11 @@ QList<quint64> ProjectModel::getNetClassesIDs()
     return mClasses.keys();
 }
 
+QList<NetClass *> ProjectModel::getNetClasses()
+{
+    return mClasses.values();
+}
+
 QList<quint64> ProjectModel::getSortsIDs()
 {
     return mSorts.keys();

@@ -1,12 +1,14 @@
 #include "Place.h"
 
 const QString SORT_ID = "sort";
+const QString PLACE_TYPE = "place_type";
 
-Place::Place(const quint64 &aID, const QPointF &aPoint)
+Place::Place(const quint64 &aID, const QPointF &aPoint, const Place::PlaceVariant &type)
     :ProjectGraphicsObject(ProjectObject::PlaceType, aID, aPoint)
 {
-    mResourceNumber = 0;
+    mResourceNumber = type == Input ? 1 : 0;
     mSortID = 0;
+    mPlaceType = type;
 }
 
 Place::Place(QXmlStreamReader *aInputStream)
@@ -50,6 +52,10 @@ void Place::load(QXmlStreamReader *aInputStream)
             {
                 mResourceNumber = attribute.value().toULongLong();
             }
+            else if(name == PLACE_TYPE)
+            {
+                mPlaceType = static_cast<Place::PlaceVariant>(attribute.value().toUInt());
+            }
         }
         if(aInputStream->readNextStartElement()
                 && aInputStream->name() == CONNECTIONS_LABEL)
@@ -71,6 +77,8 @@ void Place::save(QXmlStreamWriter *aOutputStream) const
     {
         aOutputStream->writeAttribute(SORT_ID, QString::number(mSortID));
         aOutputStream->writeAttribute(RESOURCE_NUMBER_LABEL, QString::number(mResourceNumber));
+        aOutputStream->writeAttribute(PLACE_TYPE, QString::number(mPlaceType));
+
         aOutputStream->writeStartElement(CONNECTIONS_LABEL);
         {
             saveConnectionIDs(mInputConnIDs, aOutputStream, INPUT_LABEL);
@@ -141,4 +149,14 @@ void Place::removeOutputConnectionID(const quint64 &connectionID)
 {
     mOutputConnIDs.remove(connectionID);
 
+}
+
+Place::PlaceVariant Place::getPlaceType() const
+{
+    return mPlaceType;
+}
+
+void Place::setPlaceType(const PlaceVariant &placeType)
+{
+    mPlaceType = placeType;
 }

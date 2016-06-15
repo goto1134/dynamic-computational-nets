@@ -6,15 +6,21 @@
 #include <QMenu>
 #include <QPainter>
 #include "../../../model/Place.h"
+#include "../../../model/NonTerminalTransition.h"
+
 #include "../../../model/ProjectModel.h"
 #include "../../../model/ElementSort.h"
+#include "../../../model/NetClass.h"
+#include "../../../model/ObjectNet.h"
 
 
 const QString DELETE_ACTION_NAME = "Delete";
 const QString ADD_ONE_ACTION_NAME = "Add One";
 const QString SUBTRACT_ONE_ACTION_NAME = "Subtract One";
 
-NetObjectItem::NetObjectItem(ElementType elementType, const QString& text, QGraphicsItem *parent)
+NetObjectItem::NetObjectItem(ElementType elementType,
+                             const QString& text,
+                             QGraphicsItem *parent)
     : QGraphicsPolygonItem(parent)
 {
     mElementType = elementType;
@@ -31,7 +37,8 @@ NetObjectItem::NetObjectItem(ElementType elementType, const QString& text, QGrap
 
 void NetObjectItem::setMyPolygon()
 {
-    switch (mElementType) {
+    switch (mElementType)
+    {
         case PlaceType:
             mPolygon << QPointF(-25, -25) << QPointF(25, -25)
                      << QPointF(25, 25) << QPointF(-25, 25)
@@ -54,9 +61,34 @@ void NetObjectItem::setMyPolygon()
 NetObjectItem::NetObjectItem(Place *aPlace)
     :NetObjectItem(PlaceType, QString::number(aPlace->resourceNumber()))
 {
-    setPos(aPlace->pos());
-    mGraphicsObject = aPlace;
+    initialize(aPlace);
     connect(aPlace, SIGNAL(sortChanged(quint64)), this, SLOT(sortChanged(quint64)));
+    connect(aPlace,SIGNAL(resourceNumberChanged(quint64)), this, SLOT(resourceNumberChanged(quint64)));
+}
+
+NetObjectItem::NetObjectItem(TerminalTransition *aTransition)
+    :NetObjectItem(TerminalTransitionType, "")
+{
+    initialize(aTransition);
+}
+
+NetObjectItem::NetObjectItem(NonTerminalTransition *aTransition)
+    :NetObjectItem(NonTerminalTransitionType, "")
+{
+    initialize(aTransition);
+    quint64 classID = aTransition->classID();
+    quint64 netID = aTransition->netID();
+    netChanged(classID, netID);
+    QFont font = mTextItem->font();
+    font.setPointSize(14);
+    mTextItem->setFont(font);
+    connect(aTransition, SIGNAL(netChanged(quint64,quint64)), this, SLOT(netChanged(quint64,quint64)));
+}
+
+void NetObjectItem::initialize(ProjectGraphicsObject *aGraphicsObject)
+{
+    mGraphicsObject = aGraphicsObject;
+    setPos(aGraphicsObject->pos());
 }
 
 void NetObjectItem::setTextItem(const QString& text)
@@ -68,18 +100,18 @@ void NetObjectItem::setTextItem(const QString& text)
     }
     else if(mElementType == NonTerminalTransitionType)
     {
-        mTextItem->setPos(pos().x()-9, pos().y()-90);
+        mTextItem->setPos(pos().x()-2, pos().y()-90);
         mTextItem->setRotation(90);
     }
 }
 
 void NetObjectItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-   QGraphicsPolygonItem::mousePressEvent(event);
-   if(event->button() == Qt::LeftButton)
-   {
-       emit selected(mGraphicsObject->ID());
-   }
+    QGraphicsPolygonItem::mousePressEvent(event);
+    if(event->button() == Qt::LeftButton)
+    {
+        emit selected(mGraphicsObject->ID());
+    }
 }
 
 void NetObjectItem::resourceNumberChanged(const quint64 &aResourceNumber)
@@ -91,6 +123,17 @@ void NetObjectItem::resourceNumberChanged(const quint64 &aResourceNumber)
 void NetObjectItem::sortChanged(const quint64 &aSortID)
 {
     update();
+}
+
+void NetObjectItem::netChanged(const quint64 &aClassID, const quint64 &aNetID)
+{
+    if(NetClass *netClass = ProjectModel::getInstance().getNetClassByID(aClassID))
+    {
+        if(ObjectNet *net = netClass->getObjectNetByID(aNetID))
+        {
+            mTextItem->setPlainText(netClass->name() + " : " + net->name());
+        }
+    }
 }
 
 NetObjectItem::~NetObjectItem()
@@ -120,6 +163,14 @@ void NetObjectItem::removeArrows()
         arrow->endItem()->removeArrow(arrow);
         scene()->removeItem(arrow);
         delete arrow;
+    }
+}
+
+quint64 NetObjectItem::ID()
+{
+    if(mGraphicsObject)
+    {
+        return mGraphicsObject->ID();
     }
 }
 
@@ -154,11 +205,20 @@ void NetObjectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 void NetObjectItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     QMenu menu;
-    menu.addAction(DELETE_ACTION_NAME);
     if(mElementType == PlaceType)
     {
+        Place *place = static_cast<Place *>(mGraphicsObject);
+        if(place->type() == Place::Common)
+        {
+            menu.addAction(DELETE_ACTION_NAME);
+
+        }
         menu.addAction(ADD_ONE_ACTION_NAME);
         menu.addAction(SUBTRACT_ONE_ACTION_NAME);
+    }
+    else
+    {
+        menu.addAction(DELETE_ACTION_NAME);
     }
     QAction *a = menu.exec(event->screenPos());
     if(a)
@@ -180,7 +240,12 @@ void NetObjectItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 
 QVariant NetObjectItem::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    if (change == QGraphicsItem::ItemPositionChange) {
+    if (change == QGraphicsItem::ItemPositionChange)
+    {
+        if(mGraphicsObject)
+        {
+            mGraphicsObject->setPos(value.toPointF());
+        }
         foreach (ArrowItem *arrow, mArrows)
         {
             arrow->updatePosition();

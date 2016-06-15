@@ -39,6 +39,8 @@ class PropertyWidget : public QWidget
         //Количества входных и выходных позиций
         QSpinBox *mInputSB;
         QSpinBox *mOutputSB;
+        //Количество ресурсов
+        QSpinBox *mResourceNumber;
 
         //Кнопки
         QPushButton *mApplyButton;
@@ -46,6 +48,9 @@ class PropertyWidget : public QWidget
 
         //Сорт позиции
         QComboBox *mSortBox;
+
+        QComboBox *mClassBox;
+        QComboBox *mNetBox;
 
 
         void applyNamedObjectDataChanged();
@@ -69,11 +74,16 @@ class PropertyWidget : public QWidget
 
         void applyPlaceDataChanged();
 
+        void addNTTransitionData();
+
+        void aplyNTTransitionData();
+
     signals:
 
     public slots:
         void apply();
         void cansel();
+        void addNewClassData(int aClassIndex);
 };
 
 #endif // PROPERTYWIDGET_H

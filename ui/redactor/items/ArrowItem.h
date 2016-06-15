@@ -12,6 +12,7 @@ class QGraphicsScene;
 class QRectF;
 class QGraphicsSceneMouseEvent;
 class QPainterPath;
+class Connection;
 QT_END_NAMESPACE
 
 //! [0]
@@ -20,7 +21,7 @@ class ArrowItem : public QGraphicsLineItem
     public:
         enum { Type = UserType + 4 };
 
-        ArrowItem(NetObjectItem *startItem, NetObjectItem *endItem, QGraphicsItem *parent = 0);
+        ArrowItem(NetObjectItem *startItem, NetObjectItem *endItem, Connection *aConnection, QGraphicsItem *parent = 0);
         ~ArrowItem();
 
         int type() const Q_DECL_OVERRIDE { return Type; }

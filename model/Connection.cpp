@@ -4,15 +4,30 @@ const QString START_ID = "start";
 const QString END_ID = "end";
 const QString TIME_LABEL = "time";
 const QString CONTROL_LABEL = "isControl";
+const QString CONNECTION_TYPE = "connection_type";
 
 
-Connection::Connection(const quint64 &aID)
-    :ProjectObject(ProjectObject::ConnectionType, aID)
+Connection::Connection(const quint64 &aID,
+                       const quint64 &aStartID,
+                       const quint64 &aEndID,
+                       const Connection::ConnectionVariant &aType)
+:ProjectObject(ProjectObject::ConnectionType, aID)
 {
-    mResources = 0;
-    mTime = 0;
+    mResources = 1;
+    mTime = 1;
     mIsControl = false;
+    mStartID = aStartID;
+    mEndID = aEndID;
+    mConnectionType = aType;
 }
+
+//Connection::Connection(const quint64 &aID)
+//    :ProjectObject(ProjectObject::ConnectionType, aID)
+//{
+//    mResources = 0;
+//    mTime = 0;
+//    mIsControl = false;
+//}
 
 Connection::Connection(QXmlStreamReader *aInputStream)
 {
@@ -47,6 +62,10 @@ void Connection::load(QXmlStreamReader *aInputStream)
             {
                 mIsControl = attribute.value().toUInt();
             }
+            else if(name == CONNECTION_TYPE)
+            {
+                mConnectionType = static_cast<ConnectionVariant>(attribute.value().toUInt());
+            }
         }
         aInputStream->readNextStartElement();
         ProjectObject::load(aInputStream);
@@ -63,6 +82,7 @@ void Connection::save(QXmlStreamWriter *aOutputStream) const
         aOutputStream->writeAttribute(TIME_LABEL, QString::number(mTime));
         aOutputStream->writeAttribute(RESOURCE_NUMBER_LABEL, QString::number(mResources));
         aOutputStream->writeAttribute(CONTROL_LABEL, QString::number(mIsControl));
+        aOutputStream->writeAttribute(CONNECTION_TYPE, QString::number(mConnectionType));
         ProjectObject::save(aOutputStream);
     }
     aOutputStream->writeEndElement();
@@ -116,4 +136,9 @@ bool Connection::isControl() const
 void Connection::setIsControl(bool isControl)
 {
     mIsControl = isControl;
+}
+
+Connection::ConnectionVariant Connection::connectionType() const
+{
+    return mConnectionType;
 }

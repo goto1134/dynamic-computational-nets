@@ -6,8 +6,8 @@ TerminalTransition::TerminalTransition()
 
 }
 
-TerminalTransition::TerminalTransition(const quint64 &aID)
-    :ProjectObject(ProjectObject::TTransition, aID)
+TerminalTransition::TerminalTransition(const quint64 &aID, const QPointF &aPoint)
+    :ProjectGraphicsObject(ProjectObject::TTransition, aID, aPoint)
 {
 
 }
@@ -31,7 +31,7 @@ void TerminalTransition::load(QXmlStreamReader *aInputStream)
         }
     }
     aInputStream->readNextStartElement();
-    ProjectObject::load(aInputStream);
+    ProjectGraphicsObject::load(aInputStream);
     aInputStream->skipCurrentElement();
 }
 
@@ -45,7 +45,7 @@ void TerminalTransition::save(QXmlStreamWriter *aOutputStream) const
             saveConnectionIDs(mOutputConnectionsIDs, aOutputStream, OUTPUT_LABEL);
         }
         aOutputStream->writeEndElement();
-        ProjectObject::save(aOutputStream);
+        ProjectGraphicsObject::save(aOutputStream);
     }
     aOutputStream->writeEndElement();
 }
@@ -60,8 +60,8 @@ void TerminalTransition::addOutputConnectionID(const quint64 &connectionID)
     mOutputConnectionsIDs.insert(connectionID);
 }
 
-TerminalTransition::TerminalTransition(const ProjectObject::Type &aType, const quint64 &aID)
-    :ProjectObject(aType, aID)
+TerminalTransition::TerminalTransition(const ProjectObject::Type &aType, const quint64 &aID, const QPointF &aPoint)
+    :ProjectGraphicsObject(aType, aID, aPoint)
 {
 
 }

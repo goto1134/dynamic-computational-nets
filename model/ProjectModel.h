@@ -45,6 +45,7 @@ class ProjectModel
         bool setSortName(const quint64 &aID, const QString &aSortName);
 
         QList<quint64> getNetClassesIDs();
+        QList<NetClass *> getNetClasses();
         QList<quint64> getSortsIDs();
 
         QString getName() const;

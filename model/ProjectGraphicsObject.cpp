@@ -1,4 +1,6 @@
 #include "ProjectGraphicsObject.h"
+#include <QDebug>
+#include <QPointF>
 
 const QString GRAPHICS_OBJECT = "graphics_object";
 const QString POS_X = "pos_x";

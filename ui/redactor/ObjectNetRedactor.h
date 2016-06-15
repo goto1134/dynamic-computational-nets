@@ -8,6 +8,7 @@
 
 class ConnectionItem;
 class ObjectNet;
+class NetObjectItem;
 
 class ObjectNetRedactor : public QGraphicsScene
 {
@@ -34,9 +35,13 @@ class ObjectNetRedactor : public QGraphicsScene
         ObjectNet* mObjectNet;
         QVariant mRedactorTool;
         QGraphicsLineItem *line;
+        QMap<quint64, NetObjectItem *> mNetObjectItems;
         bool mIsDrawing;
+        void updateTransitions();
+        void addNetItem(NetObjectItem *aItem);
     signals:
         placeSelected(const quint64 &aClassID, const quint64 &aNetID, const quint64 &aObjectID);
+        transitionSelected(const quint64 &aClassID, const quint64 &aNetID, const quint64 &aObjectID);
     public slots:
         void setMouseTool();
         void setPlaceTool();
@@ -45,6 +50,7 @@ class ObjectNetRedactor : public QGraphicsScene
         void setConnectionTool();
     private slots:
         void placeSelected(const quint64 &aObjectID);
+        void transitionSelected(const quint64 &aObjectID);
 
 };
 

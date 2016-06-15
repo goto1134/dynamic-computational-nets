@@ -22,6 +22,8 @@ QT_END_NAMESPACE
 
 class ArrowItem;
 class Place;
+class TerminalTransition;
+class NonTerminalTransition;
 
 //! [0]
 class NetObjectItem : public QObject, public QGraphicsPolygonItem
@@ -36,6 +38,8 @@ class NetObjectItem : public QObject, public QGraphicsPolygonItem
             NonTerminalTransitionType = UserType + 2
         };
         NetObjectItem(Place *aPlace);
+        NetObjectItem(TerminalTransition *aTransition);
+        NetObjectItem(NonTerminalTransition *aTransition);
         NetObjectItem(ElementType elementType, const QString& text, QGraphicsItem *parent = 0);
         ~NetObjectItem();
 
@@ -43,6 +47,7 @@ class NetObjectItem : public QObject, public QGraphicsPolygonItem
         void removeArrows();
         ElementType elementType() const { return mElementType; }
         QPolygonF polygon() const { return mPolygon; }
+        quint64 ID();
         void addArrow(ArrowItem *arrow);
         int type() const Q_DECL_OVERRIDE { return Type;}
 
@@ -62,11 +67,14 @@ class NetObjectItem : public QObject, public QGraphicsPolygonItem
         void setTextItem(const QString& text);
         void initialize(const QString& text, ElementType elementType);
         void mousePressEvent(QGraphicsSceneMouseEvent *event);
+        void initialize(ProjectGraphicsObject *aGraphicsObject);
+
     signals:
         selected(const quint64 &aID);
     private slots:
         void resourceNumberChanged(const quint64 &aResourceNumber);
         void sortChanged(const quint64 &aSortID);
+        void netChanged(const quint64 &aClassID, const quint64 &aNetID);
 };
 //! [0]
 

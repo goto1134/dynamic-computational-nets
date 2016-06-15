@@ -5,6 +5,7 @@
 #include "items/ArrowItem.h"
 #include "../../model/ObjectNet.h"
 #include "../../model/Place.h"
+#include <model/Connection.h>
 
 
 ObjectNetRedactor::ObjectNetRedactor(QObject *aParent)
@@ -14,13 +15,61 @@ ObjectNetRedactor::ObjectNetRedactor(QObject *aParent)
     line = 0;
 }
 
+
 void ObjectNetRedactor::setObjectNet(ObjectNet *aObjectNet)
 {
     this->clear();
     setMouseTool();
     mObjectNet = aObjectNet;
     updatePlaces();
+    updateTransitions();
+    foreach(Connection *connection, aObjectNet->connections())
+    {
+        NetObjectItem *startItem = mNetObjectItems.value(connection->startID());
+        NetObjectItem *endItem = mNetObjectItems.value(connection->endID());
+
+        ArrowItem *arrow = new ArrowItem(startItem,
+                                        endItem,
+                                        connection);
+        startItem->addArrow(arrow);
+        endItem->addArrow(arrow);
+        addItem(arrow);
+        arrow->setZValue(-1000.0);
+        arrow->updatePosition();
+    }
     update();
+}
+
+void ObjectNetRedactor::updatePlaces()
+{
+    foreach (Place *place, mObjectNet->places())
+    {
+        NetObjectItem *item = new NetObjectItem(place);
+        addNetItem(item);
+        connect(item, SIGNAL(selected(quint64)), this, SLOT(placeSelected(quint64)));
+    }
+}
+
+void ObjectNetRedactor::updateTransitions()
+{
+    foreach (TerminalTransition *transition, mObjectNet->transitions())
+    {
+        NetObjectItem *item = new NetObjectItem(transition);
+        addNetItem(item);
+        connect(item, SIGNAL(selected(quint64)), this, SLOT(transitionSelected(quint64)));
+    }
+    foreach (NonTerminalTransition *transition, mObjectNet->nonTerminalTransitions())
+    {
+        NetObjectItem *item = new NetObjectItem(transition);
+        addNetItem(item);
+        connect(item, SIGNAL(selected(quint64)), this, SLOT(transitionSelected(quint64)));
+    }
+}
+
+void ObjectNetRedactor::addNetItem(NetObjectItem *aItem)
+{
+    mNetObjectItems.insert(aItem->ID(), aItem);
+    QGraphicsScene::addItem(aItem);
 }
 
 void ObjectNetRedactor::setTool(ObjectNetRedactor::RedactorTool aTool)
@@ -58,6 +107,11 @@ void ObjectNetRedactor::placeSelected(const quint64 &aObjectID)
     emit placeSelected(mObjectNet->netClassID(), mObjectNet->ID(), aObjectID);
 }
 
+void ObjectNetRedactor::transitionSelected(const quint64 &aObjectID)
+{
+    emit transitionSelected(mObjectNet->netClassID(), mObjectNet->ID(), aObjectID);
+}
+
 void ObjectNetRedactor::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     //если нажали на левую кнопку мыши
@@ -65,21 +119,24 @@ void ObjectNetRedactor::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     {
         if(mRedactorTool == PlaceTool)
         {
-            NetObjectItem * item = new NetObjectItem(NetObjectItem::PlaceType,"0");
-            item->setPos(mouseEvent->scenePos());
-            addItem(item);
+            Place *place = mObjectNet->addPlace(mouseEvent->scenePos());
+            NetObjectItem *item = new NetObjectItem(place);
+            addNetItem(item);
+            connect(item, SIGNAL(selected(quint64)), this, SLOT(placeSelected(quint64)));
         }
         else if(mRedactorTool == TerminalTransitionTool)
         {
-            NetObjectItem * item = new NetObjectItem(NetObjectItem::TerminalTransitionType,"");
-            item->setPos(mouseEvent->scenePos());
-            addItem(item);
+            TerminalTransition *transition = mObjectNet->addTransition(mouseEvent->scenePos());
+            NetObjectItem *item = new NetObjectItem(transition);
+            addNetItem(item);
+            connect(item, SIGNAL(selected(quint64)), this, SLOT(transitionSelected(quint64)));
         }
         else if(mRedactorTool == NonTerminalTransitionTool)
         {
-            NetObjectItem * item = new NetObjectItem(NetObjectItem::NonTerminalTransitionType,"hui");
-            item->setPos(mouseEvent->scenePos());
-            addItem(item);
+            NonTerminalTransition *transition = mObjectNet->addNonTerminalTransition(mouseEvent->scenePos());
+            NetObjectItem *item = new NetObjectItem(transition);
+            addNetItem(item);
+            connect(item, SIGNAL(selected(quint64)), this, SLOT(transitionSelected(quint64)));
         }
         else if(mRedactorTool == ConnectionTool)
         {
@@ -113,17 +170,6 @@ void ObjectNetRedactor::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
     else if (mRedactorTool == Mouse)
     {
         QGraphicsScene::mouseMoveEvent(mouseEvent);
-    }
-}
-
-void ObjectNetRedactor::updatePlaces()
-{
-    foreach (Place *place, mObjectNet->places())
-    {
-        NetObjectItem *item = new NetObjectItem(place);
-        addItem(item);
-        connect(item, SIGNAL(selected(quint64)), this, SLOT(placeSelected(quint64)));
-        update();
     }
 }
 
@@ -188,7 +234,8 @@ void ObjectNetRedactor::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                         && endItem->elementType() == NetObjectItem::PlaceType)
                     )
             {
-                ArrowItem *arrow = new ArrowItem(startItem, endItem);
+                Connection *connection = mObjectNet->addConnection(startItem->ID(), endItem->ID());
+                ArrowItem *arrow = new ArrowItem(startItem, endItem, connection);
                 arrow->setColor(Qt::black);
                 startItem->addArrow(arrow);
                 endItem->addArrow(arrow);

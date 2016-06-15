@@ -16,6 +16,7 @@ class NetClass : public ProjectNamedObject
 
         quint64 createObjectNet(QString aNetName);
         ObjectNet* getObjectNetByID(const quint64 &aID);
+        QList<ObjectNet*> getObjectNets();
         QList<quint64> getObjectNetsIDs() const;
         void load(QXmlStreamReader *aInputStream);
         void save(QXmlStreamWriter *aOutputStream) const;

@@ -11,7 +11,14 @@ class Place : public ProjectGraphicsObject
 {
         Q_OBJECT
     public:
-        explicit Place(const quint64 &aID, const QPointF &aPoint = QPointF());
+        enum PlaceVariant
+        {
+            Input,
+            Output,
+            Common
+        };
+
+        explicit Place(const quint64 &aID, const QPointF &aPoint = QPointF(), const PlaceVariant &type = Common);
         explicit Place(QXmlStreamReader *aInputStream);
 
         void load(QXmlStreamReader *aInputStream);
@@ -29,11 +36,15 @@ class Place : public ProjectGraphicsObject
         void removeInputConnectionID(const quint64 &connectionID);
         void removeOutputConnectionID(const quint64 &connectionID);
 
+        PlaceVariant getPlaceType() const;
+        void setPlaceType(const PlaceVariant &placeType);
+
     private:
         quint64 mSortID;
         QSet<quint64> mInputConnIDs;
         QSet<quint64> mOutputConnIDs;
         quint64 mResourceNumber;
+        PlaceVariant mPlaceType;
 
         void saveConnectionIDs(QSet<quint64> source, QXmlStreamWriter *aOutputStream, QString name) const;
 

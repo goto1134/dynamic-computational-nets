@@ -169,6 +169,15 @@ void MainWindow::placeSelected(const quint64 &aClassID, const quint64 &aNetID, c
     mPropertyWidget->setProjectObject(place);
 }
 
+void MainWindow::transitionSelected(const quint64 &aClassID, const quint64 &aNetID, const quint64 &aObjectID)
+{
+    TerminalTransition *transition = ProjectModel::getInstance()
+                                     .getNetClassByID(aClassID)
+                                     ->getObjectNetByID(aNetID)
+                                     ->getTransitionByID(aObjectID);
+    mPropertyWidget->setProjectObject(transition);
+}
+
 void MainWindow::addSort()
 {
     bool ok;
@@ -258,6 +267,7 @@ void MainWindow::createNetRedactor()
 {
     mNetRedactor = new ObjectNetRedactor(this);
     connect(mNetRedactor, SIGNAL(placeSelected(quint64,quint64,quint64)), this, SLOT(placeSelected(quint64,quint64,quint64)));
+    connect(mNetRedactor, SIGNAL(transitionSelected(quint64,quint64,quint64)), this, SLOT(transitionSelected(quint64,quint64,quint64)));
     ui->graphicsView->setScene(mNetRedactor);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
     connect(ui->actionCoursor, SIGNAL(triggered()), mNetRedactor, SLOT(setMouseTool()));

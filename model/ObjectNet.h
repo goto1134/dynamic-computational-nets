@@ -10,6 +10,7 @@ class Connection;
 
 class ObjectNet: public ProjectNamedObject
 {
+       Q_OBJECT
     public:
         explicit ObjectNet(const QString &aName, const quint64 &aID, const quint64 &aNetClassID);
         explicit ObjectNet(QXmlStreamReader *aInputStream);
@@ -20,16 +21,22 @@ class ObjectNet: public ProjectNamedObject
         quint64 netClassID() const;
 
         QList<Place *> places();
+        QList<TerminalTransition *> transitions();
+        QList<NonTerminalTransition *> nonTerminalTransitions();
+        TerminalTransition *getTransitionByID(const quint64 &aID);
+        QList<Connection *> connections();
         Place *getPlaceByID(const quint64 &aID);
         Place *addPlace(const QPointF &aPoint);
+        TerminalTransition *addTransition(const QPointF &aPoint);
+        NonTerminalTransition *addNonTerminalTransition(const QPointF &aPoint);
+        Connection *addConnection(const quint64 &aStartID, const quint64 &aEndID);
         void deletePlace(const quint64 &aID);
-
     private:
         quint64 mNetClassID;
         QMap<quint64, Place *> mPlaces;
         QMap<quint64, Connection *> mConnections;
-        QSet<TerminalTransition *> mTTransitions;
-        QSet<NonTerminalTransition *> mNTTransitions;
+        QMap<quint64, TerminalTransition *> mTTransitions;
+        QMap<quint64, NonTerminalTransition *> mNTTransitions;
 };
 
 #endif // OBJECTNET_H

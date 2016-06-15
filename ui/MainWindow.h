@@ -42,6 +42,7 @@ class MainWindow : public QMainWindow
         void showProperties(const QModelIndex &aModelIndex);
     private slots:
         void placeSelected(const quint64 &aClassID, const quint64 &aNetID, const quint64 &aObjectID);
+        void transitionSelected(const quint64 &aClassID, const quint64 &aNetID, const quint64 &aObjectID);
         void createNewProject();
         void showContextMenu(QPoint aPoint);
         void addSort();

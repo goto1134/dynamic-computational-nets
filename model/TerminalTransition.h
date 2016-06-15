@@ -1,14 +1,14 @@
 #ifndef TERMINALTRANSITION_H
 #define TERMINALTRANSITION_H
 
-#include "ProjectObject.h"
+#include "ProjectGraphicsObject.h"
 
 const QString TERMINAL_TRANSITION = "terminal_transition";
 
-class TerminalTransition : public ProjectObject
+class TerminalTransition : public ProjectGraphicsObject
 {
     public:
-        explicit TerminalTransition(const quint64 &aID);
+        explicit TerminalTransition(const quint64 &aID, const QPointF &aPoint);
         explicit TerminalTransition(QXmlStreamReader *aInputStream);
 
         void load(QXmlStreamReader *aInputStream);
@@ -18,7 +18,7 @@ class TerminalTransition : public ProjectObject
         void addOutputConnectionID(const quint64 &connectionID);
     protected:
         explicit TerminalTransition();
-        explicit TerminalTransition(const Type &aType, const quint64 &aID);
+        explicit TerminalTransition(const Type &aType, const quint64 &aID, const QPointF &aPoint);
     private:
         QSet<quint64> mInputConnectionsIDs;
         QSet<quint64> mOutputConnectionsIDs;

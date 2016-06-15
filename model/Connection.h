@@ -8,6 +8,13 @@ const QString CONNECTION_LABEL = "connection";
 class Connection : public ProjectObject
 {
     public:
+        enum ConnectionVariant
+        {
+            Control,
+            FromPlace,
+            FromTransition
+        };
+        explicit Connection(const quint64 &aID, const quint64 &aStartID, const quint64 &aEndID, const ConnectionVariant &type);
         explicit Connection(const quint64 &aID);
         explicit Connection(QXmlStreamReader *aInputStream);
 
@@ -29,13 +36,18 @@ class Connection : public ProjectObject
         bool isControl() const;
         void setIsControl(bool isControl);
 
+        ConnectionVariant connectionType() const;
+
     private:
         quint64 mStartID;
         quint64 mEndID;
         quint32 mResources;
         quint32 mTime;
+        ConnectionVariant mConnectionType;
         bool mIsControl;
     signals:
+        resourceNumberChanged(const quint64 &aResourceNumber);
+        timeChanged(const quint64 &aTime);
 
     public slots:
 };

@@ -10,6 +10,7 @@
 #include "../../model/ProjectObject.h"
 #include "../../model/ProjectModel.h"
 #include "../../model/Place.h"
+#include <model/NonTerminalTransition.h>
 
 PropertyWidget::PropertyWidget()
 {
@@ -45,7 +46,6 @@ void PropertyWidget::remove(QLayout* layout)
         {
             delete child->widget();
         }
-
         delete child;
     }
 }
@@ -100,12 +100,44 @@ QLineEdit *PropertyWidget::getLineEdit(const bool &aEditable,const QString &aVal
 void PropertyWidget::addPlaceSortsData()
 {
     Place *place = static_cast<Place *>(mObject);
+
+    QLineEdit *typeLE = getLineEdit(false, QString::number(place->getPlaceType()));
+    addWidget(tr("Place type"), typeLE);
+    mResourceNumber = getSpinBoxWithValue(place->resourceNumber());
+    if(place->getPlaceType() != Place::Common)
+    {
+        mResourceNumber->setEnabled(false);
+    }
+    addWidget(tr("Resources"), mResourceNumber);
     mSortBox = new QComboBox();
     foreach (quint64 sortID, ProjectModel::getInstance().getSortsIDs())
     {
         mSortBox->addItem(QIcon(),ProjectModel::getInstance().getSortByID(sortID)->name(), QVariant(sortID));
     }
+    mSortBox->setCurrentIndex(mSortBox->findData(QVariant(place->sortID())));
     addWidget(tr("Sort"), mSortBox);
+}
+
+void PropertyWidget::addNTTransitionData()
+{
+    NonTerminalTransition *transition = static_cast<NonTerminalTransition *>(mObject);
+    mClassBox = new QComboBox();
+    mNetBox = new QComboBox();
+    connect(mClassBox, SIGNAL(currentIndexChanged(int)), this, SLOT(addNewClassData(int)));
+    foreach (NetClass *netClass, ProjectModel::getInstance().getNetClasses())
+    {
+        mClassBox->addItem(QIcon(),netClass->name(),QVariant(netClass->ID()));
+    }
+    if(transition->classID() != 0)
+    {
+        mClassBox->setCurrentIndex(mClassBox->findData(QVariant(transition->classID())));
+    }
+    if(transition->netID() != 0)
+    {
+        mNetBox->setCurrentIndex(mNetBox->findData(QVariant(transition->netID())));
+    }
+    addWidget(tr("Class"), mClassBox);
+    addWidget(tr("Net"), mNetBox);
 }
 
 void PropertyWidget::updateData()
@@ -142,6 +174,10 @@ void PropertyWidget::updateData()
         if(type == ProjectObject::PlaceType)
         {
             addPlaceSortsData();
+        }
+        else if(type == ProjectObject::NTTransition)
+        {
+            addNTTransitionData();
         }
     }
 
@@ -239,6 +275,27 @@ void PropertyWidget::applyPlaceDataChanged()
     {
         place->setSortID(sortID);
     }
+    quint64 resourceNumber = mResourceNumber->value();
+    if(place->getPlaceType() == Place::Common
+            && place->resourceNumber() != resourceNumber)
+    {
+        place->setResourceNumber(resourceNumber);
+    }
+}
+
+void PropertyWidget::aplyNTTransitionData()
+{
+    NonTerminalTransition *transition = static_cast<NonTerminalTransition *>(mObject);
+    quint64 classID = mClassBox->currentData().toULongLong();
+    quint64 netID = mNetBox->currentData().toULongLong();
+    if(classID != transition->classID())
+    {
+        transition->setNetID(classID, netID);
+    }
+    else if(netID != transition->netID())
+    {
+        transition->setNetID(netID);
+    }
 }
 
 void PropertyWidget::apply()
@@ -264,6 +321,10 @@ void PropertyWidget::apply()
         {
             applyPlaceDataChanged();
         }
+        else if(type == ProjectObject::NTTransition)
+        {
+            aplyNTTransitionData();
+        }
     }
 
 }
@@ -271,5 +332,18 @@ void PropertyWidget::apply()
 void PropertyWidget::cansel()
 {
     updateData();
+}
+
+void PropertyWidget::addNewClassData(int aClassIndex)
+{
+    if(aClassIndex > -1)
+    {
+        mNetBox->clear();
+        quint64 classID = mClassBox->itemData(aClassIndex).toULongLong();
+        foreach(ObjectNet *net, ProjectModel::getInstance().getNetClassByID(classID)->getObjectNets())
+        {
+            mNetBox->addItem(QIcon(),net->name(), QVariant(net->ID()));
+        }
+    }
 }
 

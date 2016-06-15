@@ -36,57 +36,56 @@ void ObjectNet::load(QXmlStreamReader *aInputStream)
                 && aInputStream->name() == PLACES_LABEL
                 && !aInputStream->isEndElement())
         {
-            bool found = false;
-            while (aInputStream->readNextStartElement()
-                   && aInputStream->name() == PLACE_LABEL)
+            do
             {
-                found = true;
-                Place* place = new Place(aInputStream);
-                mPlaces.insert(place->ID(), place);
+                if(aInputStream->readNextStartElement()
+                        && aInputStream->name() == PLACE_LABEL)
+                {
+                    Place *place = new Place(aInputStream);
+                    mPlaces.insert(place->ID(), place);
+                }
             }
-            if(found)
-            {
-                aInputStream->skipCurrentElement();
-            }
+            while(!(aInputStream->isEndElement()
+                    && aInputStream->name() == PLACES_LABEL));
         }
         if(aInputStream->readNextStartElement()
                 && aInputStream->name() == CONNECTIONS_LABEL
                 && !aInputStream->isEndElement())
         {
-            bool found = false;
-            while (aInputStream->readNextStartElement()
-                   && aInputStream->name() == CONNECTION_LABEL)
+            do
             {
-                Connection *connection = new Connection(aInputStream);
-                mConnections.insert(connection->ID(), connection);
+                if(aInputStream->readNextStartElement()
+                        && aInputStream->name() == CONNECTION_LABEL)
+                {
+                    Connection *connection = new Connection(aInputStream);
+                    mConnections.insert(connection->ID(), connection);
+                }
             }
-            if(found)
-            {
-                aInputStream->skipCurrentElement();
-            }
+            while(!(aInputStream->isEndElement()
+                    && aInputStream->name() == CONNECTIONS_LABEL));
         }
         if(aInputStream->readNextStartElement()
                 && aInputStream->name() == TRANSITIONS_LABEL
                 && !aInputStream->isEndElement())
         {
-            bool found = false;
-            while (aInputStream->readNextStartElement())
+            do
             {
-                if(aInputStream->name() == TERMINAL_TRANSITION)
+                if(aInputStream->readNextStartElement())
                 {
-                    found = true;
-                    mTTransitions.insert(new TerminalTransition(aInputStream));
-                }
-                else if(aInputStream->name() == NON_TERMINAL_TRANSITION)
-                {
-                    found = true;
-                    mNTTransitions.insert(new NonTerminalTransition(aInputStream));
+                    if(aInputStream->name() == TERMINAL_TRANSITION)
+                    {
+                        TerminalTransition *transition = new TerminalTransition(aInputStream);
+                        mTTransitions.insert(transition->ID(), transition);
+                    }
+                    else if(aInputStream->name() == NON_TERMINAL_TRANSITION)
+                    {
+                        NonTerminalTransition *transition = new NonTerminalTransition(aInputStream);
+                        mNTTransitions.insert(transition->ID(), transition);
+                    }
                 }
             }
-            if(found)
-            {
-                aInputStream->skipCurrentElement();
-            }
+            while(!(aInputStream->isEndElement()
+                    && aInputStream->name() == TRANSITIONS_LABEL));
         }
     }
     aInputStream->readNextStartElement();
@@ -117,11 +116,11 @@ void ObjectNet::save(QXmlStreamWriter *aOutputStream) const
         aOutputStream->writeEndElement();
         aOutputStream->writeStartElement(TRANSITIONS_LABEL);
         {
-            foreach (TerminalTransition *transition, mTTransitions)
+            foreach (TerminalTransition *transition, mTTransitions.values())
             {
                 transition->save(aOutputStream);
             }
-            foreach (NonTerminalTransition *transition, mNTTransitions)
+            foreach (NonTerminalTransition *transition, mNTTransitions.values())
             {
                 transition->save(aOutputStream);
             }
@@ -165,9 +164,44 @@ QList<Place *> ObjectNet::places()
     return places;
 }
 
+QList<TerminalTransition *> ObjectNet::transitions()
+{
+    QList<TerminalTransition *> transitions = mTTransitions.values();
+    return transitions;
+}
+
+QList<NonTerminalTransition *> ObjectNet::nonTerminalTransitions()
+{
+    QList<NonTerminalTransition *> transitions = mNTTransitions.values();
+    return transitions;
+}
+
+TerminalTransition *ObjectNet::getTransitionByID(const quint64 &aID)
+{
+    if(TerminalTransition *transition = mTTransitions.value(aID, 0))
+    {
+        return transition;
+    }
+    else
+    {
+        return mNTTransitions.value(aID,0);
+    }
+}
+
+QList<Connection *> ObjectNet::connections()
+{
+    QList<Connection *> connections = mConnections.values();
+    return connections;
+}
+
 Place *ObjectNet::getPlaceByID(const quint64 &aID)
 {
-    return mPlaces.value(aID, 0);
+    Place *place;
+    if(!(place= mPlaces.value(aID, 0)))
+    {
+        place = ProjectModel::getInstance().getNetClassByID(mNetClassID)->getPlaceByID(aID);
+    }
+    return place;
 }
 
 Place *ObjectNet::addPlace(const QPointF &aPoint)
@@ -175,6 +209,56 @@ Place *ObjectNet::addPlace(const QPointF &aPoint)
     Place *place = new Place(ProjectModel::getInstance().generateID(), aPoint);
     mPlaces.insert(place->ID(), place);
     return place;
+}
+
+TerminalTransition *ObjectNet::addTransition(const QPointF &aPoint)
+{
+    TerminalTransition *transition = new TerminalTransition(ProjectModel::getInstance().generateID(), aPoint);
+    mTTransitions.insert(transition->ID(), transition);
+    return transition;
+}
+
+NonTerminalTransition *ObjectNet::addNonTerminalTransition(const QPointF &aPoint)
+{
+    NonTerminalTransition *transition = new NonTerminalTransition(ProjectModel::getInstance().generateID(), aPoint);
+    mNTTransitions.insert(transition->ID(), transition);
+    return transition;
+}
+
+Connection *ObjectNet::addConnection(const quint64 &aStartID, const quint64 &aEndID)
+{
+    Connection *connection = new Connection(ProjectModel::getInstance().generateID(),
+                                            aStartID,
+                                            aEndID,
+                                            getPlaceByID(aStartID)
+                                            ? Connection::FromPlace
+                                            : Connection::FromTransition);
+    mConnections.insert(connection->ID(), connection);
+    if(connection->connectionType() == Connection::FromPlace)
+    {
+        getPlaceByID(connection->startID())->addOutputConnectionID(connection->ID());
+        if(TerminalTransition *transition = mTTransitions.value(aEndID,0))
+        {
+            transition->addInputConnectionID(connection->ID());
+        }
+        else
+        {
+            mNTTransitions.value(aEndID)->addInputConnectionID(connection->ID());
+        }
+    }
+    else
+    {
+        getPlaceByID(aEndID)->addInputConnectionID(connection->ID());
+        if(TerminalTransition *transition = mTTransitions.value(aStartID,0))
+        {
+            transition->addOutputConnectionID(connection->ID());
+        }
+        else
+        {
+            mNTTransitions.value(aStartID)->addOutputConnectionID(connection->ID());
+        }
+    }
+    return connection;
 }
 
 void ObjectNet::deletePlace(const quint64 &aID)
