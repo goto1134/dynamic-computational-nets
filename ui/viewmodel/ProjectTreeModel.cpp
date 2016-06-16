@@ -2,7 +2,7 @@
 #include <QDebug>
 #include <QColor>
 
-#include "../../model/ProjectModel.h"
+#include <model/ProjectModel.h>
 
 ProjectTreeModel::ProjectTreeModel(QObject *aParent)
     : QAbstractItemModel(aParent)

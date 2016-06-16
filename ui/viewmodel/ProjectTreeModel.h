@@ -1,12 +1,12 @@
 #ifndef PROJECTTREEMODEL_H
 #define PROJECTTREEMODEL_H
 
-#include <QObject>
 #include <QAbstractItemModel>
 
+#include <model/ElementSort.h>
+#include <model/NetClass.h>
+
 #include "TreeItem.h"
-#include "model/ElementSort.h"
-#include "model/NetClass.h"
 
 class ProjectTreeModel : public QAbstractItemModel
 {
@@ -29,8 +29,8 @@ class ProjectTreeModel : public QAbstractItemModel
 
     private:
 
-        QMap<QString, ElementSort*> mElementSorts;
-        QMap<QString, NetClass*> mNetClasses;
+        QMap<QString, ElementSort *> mElementSorts;
+        QMap<QString, NetClass *> mNetClasses;
         TreeItem *mRootItem;
         TreeItem *mSortParent;
         TreeItem *mObjectNetsParent;

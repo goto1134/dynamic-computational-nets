@@ -1,12 +1,13 @@
 #ifndef TERMINALTRANSITION_H
 #define TERMINALTRANSITION_H
 
-#include "ProjectGraphicsObject.h"
+#include <model/base/ProjectGraphicsObject.h>
 
 const QString TERMINAL_TRANSITION = "terminal_transition";
 
 class TerminalTransition : public ProjectGraphicsObject
 {
+        Q_OBJECT
     public:
         explicit TerminalTransition(const quint64 &aID, const QPointF &aPoint);
         explicit TerminalTransition(QXmlStreamReader *aInputStream);

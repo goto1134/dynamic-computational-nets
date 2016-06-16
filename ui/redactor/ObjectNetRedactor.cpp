@@ -36,6 +36,7 @@ void ObjectNetRedactor::setObjectNet(ObjectNet *aObjectNet)
         addItem(arrow);
         arrow->setZValue(-1000.0);
         arrow->updatePosition();
+        connect(arrow, SIGNAL(selected(quint64)), this, SLOT(connectionSelected(quint64)));
     }
     update();
 }
@@ -110,6 +111,11 @@ void ObjectNetRedactor::placeSelected(const quint64 &aObjectID)
 void ObjectNetRedactor::transitionSelected(const quint64 &aObjectID)
 {
     emit transitionSelected(mObjectNet->netClassID(), mObjectNet->ID(), aObjectID);
+}
+
+void ObjectNetRedactor::connectionSelected(const quint64 &aObjectID)
+{
+    emit connectionSelected(mObjectNet->netClassID(), mObjectNet->ID(), aObjectID);
 }
 
 void ObjectNetRedactor::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
@@ -242,6 +248,7 @@ void ObjectNetRedactor::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 arrow->setZValue(-1000.0);
                 addItem(arrow);
                 arrow->updatePosition();
+                connect(arrow, SIGNAL(selected(quint64)), this, SLOT(connectionSelected(quint64)));
             }
         }
     }

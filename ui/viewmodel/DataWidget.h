@@ -1,8 +1,7 @@
 #ifndef DATAWIDGET_H
 #define DATAWIDGET_H
 
-#include <QObject>
-#include <QLabel>
+#include <QWidget>
 #include <QHBoxLayout>
 
 class DataWidget : public QWidget

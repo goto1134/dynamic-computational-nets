@@ -172,6 +172,7 @@ quint64 NetObjectItem::ID()
     {
         return mGraphicsObject->ID();
     }
+    return 0;
 }
 
 void NetObjectItem::addArrow(ArrowItem *arrow)

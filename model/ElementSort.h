@@ -3,10 +3,11 @@
 
 #include <QtCore>
 #include <QColor>
-#include "ProjectNamedObject.h"
+#include <model/base/ProjectNamedObject.h>
 
 class ElementSort : public ProjectNamedObject
 {
+        Q_OBJECT
     public:
         explicit ElementSort(const QString &aName, const quint64 &aID, const QColor &aColor = QColor(Qt::black));
         explicit ElementSort(QXmlStreamReader *aInputStream);

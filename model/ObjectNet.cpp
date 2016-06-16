@@ -261,6 +261,11 @@ Connection *ObjectNet::addConnection(const quint64 &aStartID, const quint64 &aEn
     return connection;
 }
 
+Connection *ObjectNet::getConnectionByID(const quint64 &aID)
+{
+    return mConnections.value(aID, 0);
+}
+
 void ObjectNet::deletePlace(const quint64 &aID)
 {
 

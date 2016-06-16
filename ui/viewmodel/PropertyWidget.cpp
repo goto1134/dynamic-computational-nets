@@ -2,15 +2,17 @@
 #include "DataWidget.h"
 
 #include <QErrorMessage>
-#include <QLineEdit>
 #include <QVBoxLayout>
-#include "../../model/ElementSort.h"
-#include "../../model/NetClass.h"
-#include "../../model/ObjectNet.h"
-#include "../../model/ProjectObject.h"
-#include "../../model/ProjectModel.h"
-#include "../../model/Place.h"
+
+#include <model/Connection.h>
+#include <model/ElementSort.h>
 #include <model/NonTerminalTransition.h>
+#include <model/Place.h>
+#include <model/ProjectModel.h>
+#include <model/NetClass.h>
+#include <model/ObjectNet.h>
+
+#include <model/base/ProjectObject.h>
 
 PropertyWidget::PropertyWidget()
 {
@@ -179,6 +181,14 @@ void PropertyWidget::updateData()
         {
             addNTTransitionData();
         }
+        else if(type == ProjectObject::ConnectionType)
+        {
+            Connection *connection = static_cast<Connection *>(mObject);
+            mResourceNumber = getSpinBoxWithValue(connection->resources());
+            addWidget(tr("Resources"), mResourceNumber);
+            mTimeValue = getSpinBoxWithValue(connection->time());
+            addWidget(tr("Time"), mTimeValue);
+        }
     }
 
     mApplyButton = new QPushButton(tr("Apply"));
@@ -324,6 +334,20 @@ void PropertyWidget::apply()
         else if(type == ProjectObject::NTTransition)
         {
             aplyNTTransitionData();
+        }
+        else if(type == ProjectObject::ConnectionType)
+        {
+            Connection *connection = static_cast<Connection *>(mObject);
+            int resourceNumber = mResourceNumber->value();
+            if(resourceNumber != connection->resources())
+            {
+                connection->setResources(resourceNumber);
+            }
+            int time = mTimeValue->value();
+            if(time != connection->time())
+            {
+                connection->setTime(time);
+            }
         }
     }
 

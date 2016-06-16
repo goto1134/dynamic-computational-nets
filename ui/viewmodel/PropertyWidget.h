@@ -3,15 +3,14 @@
 
 #include <QComboBox>
 #include <QLineEdit>
-#include <QObject>
 #include <QPushButton>
 #include <QSlider>
 #include <QSpinBox>
 #include <QWidget>
 
-class ProjectObject;
 class QLayout;
 class QVBoxLayout;
+class ProjectObject;
 
 class PropertyWidget : public QWidget
 {
@@ -41,6 +40,7 @@ class PropertyWidget : public QWidget
         QSpinBox *mOutputSB;
         //Количество ресурсов
         QSpinBox *mResourceNumber;
+        QSpinBox *mTimeValue;
 
         //Кнопки
         QPushButton *mApplyButton;
@@ -49,6 +49,7 @@ class PropertyWidget : public QWidget
         //Сорт позиции
         QComboBox *mSortBox;
 
+        //Выбор класса
         QComboBox *mClassBox;
         QComboBox *mNetBox;
 
@@ -80,7 +81,7 @@ class PropertyWidget : public QWidget
 
     signals:
 
-    public slots:
+    private slots:
         void apply();
         void cansel();
         void addNewClassData(int aClassIndex);

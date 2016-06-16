@@ -1,12 +1,13 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include "ProjectObject.h"
+#include <model/base/ProjectObject.h>
 
 const QString CONNECTION_LABEL = "connection";
 
 class Connection : public ProjectObject
 {
+        Q_OBJECT
     public:
         enum ConnectionVariant
         {
@@ -46,9 +47,7 @@ class Connection : public ProjectObject
         ConnectionVariant mConnectionType;
         bool mIsControl;
     signals:
-        resourceNumberChanged(const quint64 &aResourceNumber);
-        timeChanged(const quint64 &aTime);
-
+        dataChanged();
     public slots:
 };
 

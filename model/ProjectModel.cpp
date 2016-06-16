@@ -1,6 +1,6 @@
-#include "ProjectModel.h"
-#include "NetClass.h"
 #include "ElementSort.h"
+#include "NetClass.h"
+#include "ProjectModel.h"
 #include <QDebug>
 
 ///

@@ -2,10 +2,10 @@
 #include <QtAlgorithms>
 #include <QIcon>
 
-#include "../../model/ProjectModel.h"
-#include "../../model/ObjectNet.h"
-#include "../../model/ElementSort.h"
-#include "../../model/NetClass.h"
+#include <model/ProjectModel.h>
+#include <model/ElementSort.h>
+#include <model/NetClass.h>
+#include <model/ObjectNet.h>
 
 TreeItem::TreeItem(QString aName, TreeItem *aParentItem, TreeItemType aItemType)
 {

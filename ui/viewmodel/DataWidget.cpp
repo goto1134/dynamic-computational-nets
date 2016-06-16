@@ -1,8 +1,6 @@
 #include "DataWidget.h"
 
-#include <QCheckBox>
-#include <QComboBox>
-#include <QSlider>
+#include <QLabel>
 
 DataWidget::DataWidget(const QString &aText, QWidget *aValueWidget, QWidget *parent)
     : QWidget(parent)

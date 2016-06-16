@@ -184,6 +184,7 @@ Place *NetClass::getPlaceByID(const quint64 &aPlaceID, const quint64 &aNetID)
             }
         }
     }
+    return 0;
 }
 
 int NetClass::getInputPlaceNumber()
@@ -193,7 +194,7 @@ int NetClass::getInputPlaceNumber()
 
 int NetClass::getOutputPlaceNumber()
 {
-    mOutputPlaces.count();
+    return mOutputPlaces.count();
 }
 
 void NetClass::setInputPlaceNumber(const int &aInputNumber)

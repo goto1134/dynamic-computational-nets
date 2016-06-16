@@ -20,7 +20,6 @@ class TreeItem : public QObject
             Axiom = 6
         };
 
-
         explicit TreeItem(QString aName, TreeItem *aParentItem = 0, TreeItemType aItemType = Service);
         explicit TreeItem(quint64 aObjectID, TreeItem *aParentItem, TreeItemType aItemType);
         ~TreeItem();

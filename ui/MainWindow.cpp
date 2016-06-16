@@ -4,23 +4,21 @@
 #include <QTreeView>
 #include <QInputDialog>
 #include <QFileDialog>
+#include <QAbstractItemModel>
 
 #include "MainWindow.h"
 
-#include "model/ProjectNamedObject.h"
-#include "viewmodel/ProjectTreeModel.h"
-#include "redactor/ObjectNetRedactor.h"
-#include "model/ElementSort.h"
-#include "model/Place.h"
-#include "model/NetClass.h"
-#include "model/Connection.h"
-#include "model/TerminalTransition.h"
-#include "model/NonTerminalTransition.h"
-#include "model/ObjectNet.h"
-#include "model/ProjectModel.h"
-#include "viewmodel/DataWidget.h"
-#include "viewmodel/PropertyWidget.h"
+#include <ui/viewmodel/ProjectTreeModel.h>
+#include <ui/viewmodel/PropertyWidget.h>
+#include <ui/viewmodel/TreeItem.h>
+#include <ui/redactor/ObjectNetRedactor.h>
 
+#include <model/ProjectModel.h>
+#include <model/Connection.h>
+#include <model/ObjectNet.h>
+#include <model/NetClass.h>
+#include <model/Place.h>
+#include <model/NonTerminalTransition.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -78,7 +76,6 @@ void MainWindow::createNewProject()
     if (ok && !text.isEmpty())
     {
         ProjectModel::newProject(text);
-        //        mTreeModel = new ProjectTreeModel(text);
         updateTreeModel();
     }
 }
@@ -178,6 +175,15 @@ void MainWindow::transitionSelected(const quint64 &aClassID, const quint64 &aNet
     mPropertyWidget->setProjectObject(transition);
 }
 
+void MainWindow::connectionSelected(const quint64 &aClassID, const quint64 &aNetID, const quint64 &aObjectID)
+{
+    Connection *connection = ProjectModel::getInstance()
+                             .getNetClassByID(aClassID)
+                             ->getObjectNetByID(aNetID)
+                             ->getConnectionByID(aObjectID);
+    mPropertyWidget->setProjectObject(connection);
+}
+
 void MainWindow::addSort()
 {
     bool ok;
@@ -268,6 +274,8 @@ void MainWindow::createNetRedactor()
     mNetRedactor = new ObjectNetRedactor(this);
     connect(mNetRedactor, SIGNAL(placeSelected(quint64,quint64,quint64)), this, SLOT(placeSelected(quint64,quint64,quint64)));
     connect(mNetRedactor, SIGNAL(transitionSelected(quint64,quint64,quint64)), this, SLOT(transitionSelected(quint64,quint64,quint64)));
+    connect(mNetRedactor, SIGNAL(connectionSelected(quint64,quint64,quint64)), this, SLOT(connectionSelected(quint64,quint64,quint64)));
+
     ui->graphicsView->setScene(mNetRedactor);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
     connect(ui->actionCoursor, SIGNAL(triggered()), mNetRedactor, SLOT(setMouseTool()));

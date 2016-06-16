@@ -21,14 +21,6 @@ Connection::Connection(const quint64 &aID,
     mConnectionType = aType;
 }
 
-//Connection::Connection(const quint64 &aID)
-//    :ProjectObject(ProjectObject::ConnectionType, aID)
-//{
-//    mResources = 0;
-//    mTime = 0;
-//    mIsControl = false;
-//}
-
 Connection::Connection(QXmlStreamReader *aInputStream)
 {
     load(aInputStream);
@@ -116,6 +108,7 @@ int Connection::resources() const
 void Connection::setResources(int resources)
 {
     mResources = resources;
+    emit dataChanged();
 }
 
 int Connection::time() const
@@ -126,6 +119,7 @@ int Connection::time() const
 void Connection::setTime(int time)
 {
     mTime = time;
+    emit dataChanged();
 }
 
 bool Connection::isControl() const

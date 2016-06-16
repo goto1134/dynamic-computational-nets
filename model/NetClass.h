@@ -2,7 +2,8 @@
 #define NETCLASS_H
 
 #include <QMap>
-#include "ProjectNamedObject.h"
+
+#include <model/base/ProjectNamedObject.h>
 
 class Place;
 class ObjectNet;
@@ -10,6 +11,7 @@ class ObjectNet;
 
 class NetClass : public ProjectNamedObject
 {
+        Q_OBJECT
     public:
         explicit NetClass(const QString& aName, const quint64 &aID);
         explicit NetClass(QXmlStreamReader *aInputStream);

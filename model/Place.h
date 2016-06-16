@@ -2,7 +2,8 @@
 #define PLACE_H
 
 #include <QSet>
-#include "ProjectGraphicsObject.h"
+
+#include <model/base/ProjectGraphicsObject.h>
 
 class Connection;
 const QString PLACE_LABEL = "place";
