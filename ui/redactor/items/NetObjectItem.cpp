@@ -62,7 +62,7 @@ NetObjectItem::NetObjectItem(Place *aPlace)
     :NetObjectItem(PlaceType, QString::number(aPlace->resourceNumber()))
 {
     initialize(aPlace);
-    connect(aPlace, SIGNAL(sortChanged(quint64)), this, SLOT(sortChanged(quint64)));
+    connect(aPlace, SIGNAL(sortChanged()), this, SLOT(sortChanged()));
     connect(aPlace,SIGNAL(resourceNumberChanged(quint64)), this, SLOT(resourceNumberChanged(quint64)));
 }
 
@@ -120,7 +120,7 @@ void NetObjectItem::resourceNumberChanged(const quint64 &aResourceNumber)
     update();
 }
 
-void NetObjectItem::sortChanged(const quint64 &aSortID)
+void NetObjectItem::sortChanged()
 {
     update();
 }

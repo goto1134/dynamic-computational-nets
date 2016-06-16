@@ -126,7 +126,7 @@ void NetClass::save(QXmlStreamWriter *aOutputStream) const
 
 bool NetClass::setNetName(const quint64 &aNetID, const QString &aNewName)
 {
-    ProjectNamedObject *netWithID;
+    ProjectNamedObject *netWithID = 0;
     foreach (ProjectNamedObject *objectNet, mObjectNets.values())
     {
         if(objectNet->name() == aNewName

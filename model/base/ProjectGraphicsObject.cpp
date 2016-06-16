@@ -17,7 +17,7 @@ void ProjectGraphicsObject::load(QXmlStreamReader *aInputStream)
     if (aInputStream->isStartElement()
             && aInputStream->name() == GRAPHICS_OBJECT)
     {
-        qreal x,y;
+        qreal x = 0,y = 0;
         foreach (QXmlStreamAttribute attribute, aInputStream->attributes())
         {
             if(attribute.name() == POS_X)

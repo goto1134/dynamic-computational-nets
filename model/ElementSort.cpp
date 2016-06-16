@@ -34,7 +34,7 @@ void ElementSort::load(QXmlStreamReader *aInputStream)
         if(aInputStream->readNextStartElement()
                 && aInputStream->name() == COLOR_LABEL)
         {
-            ushort r,g,b;
+            ushort r = 0,g = 0,b = 0;
             foreach (QXmlStreamAttribute attribute, aInputStream->attributes())
             {
                 if(attribute.name() == R_LABEL)

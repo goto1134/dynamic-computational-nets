@@ -73,7 +73,7 @@ class NetObjectItem : public QObject, public QGraphicsPolygonItem
         selected(const quint64 &aID);
     private slots:
         void resourceNumberChanged(const quint64 &aResourceNumber);
-        void sortChanged(const quint64 &aSortID);
+        void sortChanged();
         void netChanged(const quint64 &aClassID, const quint64 &aNetID);
 };
 //! [0]

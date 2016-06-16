@@ -116,7 +116,7 @@ quint64 Place::sortID() const
 void Place::setSortID(const quint64 &sortID)
 {
     mSortID = sortID;
-    emit sortChanged(sortID);
+    emit sortChanged();
 }
 
 quint64 Place::resourceNumber() const

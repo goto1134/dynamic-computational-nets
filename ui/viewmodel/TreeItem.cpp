@@ -18,7 +18,7 @@ TreeItem::TreeItem(quint64 aObjectID, TreeItem *aParentItem, TreeItem::TreeItemT
 {
     mItemType = aItemType;
     mParentItem = aParentItem;
-    ProjectNamedObject *namedObject;
+    ProjectNamedObject *namedObject = 0;
     if(aItemType == Class)
     {
         namedObject = ProjectModel::getInstance().getNetClassByID(aObjectID);

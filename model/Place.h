@@ -52,7 +52,7 @@ class Place : public ProjectGraphicsObject
         void getConnectionsIDs(QSet<quint64> *aConnectionSet, QXmlStreamReader *aInputStream, QString name);
 
     signals:
-        void sortChanged(const quint64 &aSort);
+        void sortChanged();
         void resourceNumberChanged(const quint64 &aResourceNumber);
     public slots:
 

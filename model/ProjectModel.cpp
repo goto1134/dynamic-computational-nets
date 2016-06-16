@@ -189,7 +189,7 @@ quint64 ProjectModel::createElementSort(QString aSortName)
 
 bool ProjectModel::setNetClassName(const quint64 &aID, const QString &aClassName)
 {
-    ProjectNamedObject *classWithID;
+    ProjectNamedObject *classWithID = 0;
     foreach (ProjectNamedObject *netClass, mClasses.values())
     {
         if(netClass->name() == aClassName
@@ -215,7 +215,7 @@ bool ProjectModel::setNetClassName(const quint64 &aID, const QString &aClassName
 
 bool ProjectModel::setSortName(const quint64 &aID, const QString &aSortName)
 {
-    ProjectNamedObject *sortWithID;
+    ProjectNamedObject *sortWithID = 0;
     foreach (ProjectNamedObject *sort, mSorts.values())
     {
         if(sort->name() == aSortName
