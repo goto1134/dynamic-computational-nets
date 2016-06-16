@@ -61,7 +61,10 @@ RESOURCES += \
 
 DISTFILES += icons/new project.ico \
     translations/translation_en.ts \
-    translations/translation_ru.ts
+    translations/translation_ru.ts \
+    DCN.rc
+
+RC_FILE = DCN.rc
 
 TRANSLATIONS += translations/translation_en.ts \
     translations/translation_ru.ts
