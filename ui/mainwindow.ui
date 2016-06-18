@@ -12,7 +12,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Dynamic Computational Net Simulator</string>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedKingdom"/>

@@ -21,7 +21,6 @@ ElementSort::ElementSort(const QString &aName, const quint64 &aID, const QColor 
 
 ElementSort::ElementSort(QXmlStreamReader *aInputStream)
 {
-    setType(ProjectObject::Sort);
     load(aInputStream);
 }
 

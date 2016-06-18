@@ -15,7 +15,6 @@ class QPainterPath;
 class Connection;
 QT_END_NAMESPACE
 
-//! [0]
 class ArrowItem : public QObject, public QGraphicsLineItem
 {
         Q_OBJECT
@@ -50,6 +49,5 @@ class ArrowItem : public QObject, public QGraphicsLineItem
         QGraphicsTextItem *mTextItem;
         Connection *mConnection;
 };
-//! [0]
 
 #endif // ARROWITEM_H

@@ -60,6 +60,16 @@ void TerminalTransition::addOutputConnectionID(const quint64 &connectionID)
     mOutputConnectionsIDs.insert(connectionID);
 }
 
+void TerminalTransition::removeInputConnectionID(const quint64 &connectionID)
+{
+    mInputConnectionsIDs.remove(connectionID);
+}
+
+void TerminalTransition::removeOutputConnectionID(const quint64 &connectionID)
+{
+    mOutputConnectionsIDs.remove(connectionID);
+}
+
 TerminalTransition::TerminalTransition(const ProjectObject::Type &aType, const quint64 &aID, const QPointF &aPoint)
     :ProjectGraphicsObject(aType, aID, aPoint)
 {

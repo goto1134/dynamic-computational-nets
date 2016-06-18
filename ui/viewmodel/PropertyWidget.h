@@ -1,6 +1,7 @@
 #ifndef PROPERTYWIDGET_H
 #define PROPERTYWIDGET_H
 
+#include <QCheckBox>
 #include <QComboBox>
 #include <QLineEdit>
 #include <QPushButton>
@@ -45,6 +46,8 @@ class PropertyWidget : public QWidget
         //Кнопки
         QPushButton *mApplyButton;
         QPushButton *mCanselButton;
+
+        QCheckBox *mControlCheckBox;
 
         //Сорт позиции
         QComboBox *mSortBox;

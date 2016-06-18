@@ -2,6 +2,8 @@
 
 const QString NET_ID = "net_id";
 const QString CLASS_ID = "class_id";
+const QString TIME = "time";
+const QString CONTROL_CONNECTIONS = "control_connections";
 
 NonTerminalTransition::NonTerminalTransition(const quint64 &aID, const QPointF &aPoint)
     :TerminalTransition(ProjectObject::NTTransition, aID, aPoint)
@@ -32,6 +34,20 @@ void NonTerminalTransition::setNetID(const quint64 &classID, const quint64 &netI
     setNetID(netID);
 }
 
+void NonTerminalTransition::setConnectionControl(const quint64 &aID, const bool &aIsControl)
+{
+    if(aIsControl)
+    {
+        removeInputConnectionID(aID);
+        mControlConnections.insert(aID);
+    }
+    else
+    {
+        mControlConnections.remove(aID);
+        addInputConnectionID(aID);
+    }
+}
+
 void NonTerminalTransition::load(QXmlStreamReader *aInputStream)
 {
     if(aInputStream->isStartElement()
@@ -47,7 +63,12 @@ void NonTerminalTransition::load(QXmlStreamReader *aInputStream)
             {
                 mClassID = attribute.value().toULongLong();
             }
+            if(attribute.name().toString() == TIME)
+            {
+                mTime = attribute.value().toInt();
+            }
         }
+        getConnectionsIDs(&mControlConnections, aInputStream, CONTROL_CONNECTIONS);
         aInputStream->readNextStartElement();
         TerminalTransition::load(aInputStream);
     }
@@ -60,6 +81,8 @@ void NonTerminalTransition::save(QXmlStreamWriter *aOutputStream) const
     {
         aOutputStream->writeAttribute(NET_ID, QString::number(mNetID));
         aOutputStream->writeAttribute(CLASS_ID, QString::number(mClassID));
+        aOutputStream->writeAttribute(TIME, QString::number(mTime));
+        saveConnectionIDs(mControlConnections, aOutputStream, CONTROL_CONNECTIONS);
         TerminalTransition::save(aOutputStream);
     }
     aOutputStream->writeEndElement();
@@ -68,4 +91,14 @@ void NonTerminalTransition::save(QXmlStreamWriter *aOutputStream) const
 quint64 NonTerminalTransition::classID() const
 {
     return mClassID;
+}
+
+int NonTerminalTransition::time() const
+{
+    return mTime;
+}
+
+void NonTerminalTransition::setTime(int time)
+{
+    mTime = time;
 }

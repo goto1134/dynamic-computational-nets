@@ -50,11 +50,15 @@ class ProjectModel
 
         QString getName() const;
         void setName(const QString &name);
+
         /**
          * @brief generateID
          * @return Уникальный ID объекта.
          */
         quint64 generateID();
+
+        QPair<quint64, quint64> getAxiom() const;
+        void setAxiom(const QPair<quint64, quint64> &axiom);
 
     protected:
         ProjectModel(const QString &aName);
@@ -72,7 +76,7 @@ class ProjectModel
         QString mName;
         QMap<quint64, ElementSort *> mSorts;
         QMap<quint64, NetClass *> mClasses;
-
+        QPair<quint64, quint64> mAxiom;
     signals:
 
     public slots:

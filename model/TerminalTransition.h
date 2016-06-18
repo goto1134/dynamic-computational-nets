@@ -17,15 +17,17 @@ class TerminalTransition : public ProjectGraphicsObject
 
         void addInputConnectionID(const quint64 &connectionID);
         void addOutputConnectionID(const quint64 &connectionID);
+        void removeInputConnectionID(const quint64 &connectionID);
+        void removeOutputConnectionID(const quint64 &connectionID);
     protected:
         explicit TerminalTransition();
         explicit TerminalTransition(const Type &aType, const quint64 &aID, const QPointF &aPoint);
+        void saveConnectionIDs(QSet<quint64> source, QXmlStreamWriter *aOutputStream, QString name) const;
+        void getConnectionsIDs(QSet<quint64> *aConnectionSet, QXmlStreamReader *aInputStream, QString name);
     private:
         QSet<quint64> mInputConnectionsIDs;
         QSet<quint64> mOutputConnectionsIDs;
 
-        void saveConnectionIDs(QSet<quint64> source, QXmlStreamWriter *aOutputStream, QString name) const;
-        void getConnectionsIDs(QSet<quint64> *aConnectionSet, QXmlStreamReader *aInputStream, QString name);
     signals:
 
     public slots:

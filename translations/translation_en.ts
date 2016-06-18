@@ -4,15 +4,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <source>MainWindow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>toolBar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CreateDVS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -20,15 +12,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>LoadDVS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Load DVS Project</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>saveDVS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -45,14 +29,6 @@
     </message>
     <message>
         <source>Transition</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RegularConnection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ControlConnection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -80,11 +56,126 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>StepForward</source>
+        <source>Dynamic Computational Net Simulator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>StepBack</source>
+        <source>Create DCN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load DCN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save DCN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Regular Connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Control Connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Step Forward</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Step Back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NonTerminalTransition</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DC net project  (*.dcn)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PropertyWidget</name>
+    <message>
+        <source>Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Place type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resources</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Class</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Net</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Class ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Is control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cansel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sort with this name already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Class with this name already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Net with this name already exists in this class</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input places</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Output places</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

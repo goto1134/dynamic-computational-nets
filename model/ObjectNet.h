@@ -1,13 +1,14 @@
 #ifndef OBJECTNET_H
 #define OBJECTNET_H
 
+#include "Connection.h"
+
 #include <QObject>
 
 #include <model/base/ProjectNamedObject.h>
 class Place;
 class TerminalTransition;
 class NonTerminalTransition;
-class Connection;
 
 class ObjectNet: public ProjectNamedObject
 {
@@ -30,7 +31,7 @@ class ObjectNet: public ProjectNamedObject
         Place *addPlace(const QPointF &aPoint);
         TerminalTransition *addTransition(const QPointF &aPoint);
         NonTerminalTransition *addNonTerminalTransition(const QPointF &aPoint);
-        Connection *addConnection(const quint64 &aStartID, const quint64 &aEndID);
+        Connection *addConnection(const quint64 &aStartID, const quint64 &aEndID, const Connection::ConnectionVariant &aType);
         Connection *getConnectionByID(const quint64 &aID);
         void deletePlace(const quint64 &aID);
     private:

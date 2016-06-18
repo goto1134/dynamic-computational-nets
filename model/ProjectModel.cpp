@@ -29,6 +29,9 @@ const QString NET_CLASSES = "net_classes";
 const QString SORTS = "sorts";
 const QString MAX_ID = "max_id";
 const QString PROJECT_NAME = "project_name";
+const QString AXIOM_CLASS = "ax_class";
+const QString AXIOM_NET = "ax_net";
+
 
 ProjectModel &ProjectModel::newProject(const QString &aName)
 {
@@ -56,6 +59,8 @@ ProjectModel::ProjectModel(const QString &aName)
     mMaxID = 0;
     ElementSort *naturalSort = new ElementSort("nat", 0);
     mSorts.insert(0, naturalSort);
+    mAxiom.first = 0;
+    mAxiom.second = 0;
 }
 
 ProjectModel::ProjectModel(QXmlStreamReader *aInputStream)
@@ -78,6 +83,8 @@ void ProjectModel::save(QXmlStreamWriter *aOutputStream) const
         {
             aOutputStream->writeAttribute(PROJECT_NAME, mName);
             aOutputStream->writeAttribute(MAX_ID, QString::number(mMaxID));
+            aOutputStream->writeAttribute(AXIOM_CLASS, QString::number(mAxiom.first));
+            aOutputStream->writeAttribute(AXIOM_NET, QString::number(mAxiom.second));
             aOutputStream->writeStartElement(SORTS);
             {
                 foreach (ElementSort *sort, mSorts.values())
@@ -117,6 +124,14 @@ void ProjectModel::load(QXmlStreamReader *aInputStream)
             {
                 mMaxID = value.toULongLong();
             }
+            else if( name == AXIOM_CLASS)
+            {
+                mAxiom.first = value.toULongLong();
+            }
+            else if( name == AXIOM_NET)
+            {
+                mAxiom.second = value.toULongLong();
+            }
         }
         if(aInputStream->readNextStartElement()
                 && aInputStream->name() == SORTS)
@@ -143,6 +158,16 @@ void ProjectModel::load(QXmlStreamReader *aInputStream)
         }
     }
     aInputStream->skipCurrentElement();
+}
+
+QPair<quint64, quint64> ProjectModel::getAxiom() const
+{
+    return mAxiom;
+}
+
+void ProjectModel::setAxiom(const QPair<quint64, quint64> &axiom)
+{
+    mAxiom = axiom;
 }
 
 ///---------------------------------CHILDREN---------------------------------------

@@ -3,6 +3,8 @@
 
 #include <model/base/ProjectObject.h>
 
+class ObjectNet;
+
 const QString CONNECTION_LABEL = "connection";
 
 class Connection : public ProjectObject
@@ -12,12 +14,19 @@ class Connection : public ProjectObject
         enum ConnectionVariant
         {
             Control,
-            FromPlace,
-            FromTransition
+            InputTerminal,
+            OutputTerminal,
+            InputNonTerminal,
+            OutputNonTerminal
         };
-        explicit Connection(const quint64 &aID, const quint64 &aStartID, const quint64 &aEndID, const ConnectionVariant &type);
+
+        explicit Connection(const quint64 &aID, 
+                            const quint64 &aStartID, 
+                            const quint64 &aEndID, 
+                            const ConnectionVariant &aType,
+                            ObjectNet *aNet = 0);
         explicit Connection(const quint64 &aID);
-        explicit Connection(QXmlStreamReader *aInputStream);
+        explicit Connection(QXmlStreamReader *aInputStream, ObjectNet *aNet);
 
         void load(QXmlStreamReader *aInputStream);
         void save(QXmlStreamWriter *aOutputStream) const;
@@ -34,10 +43,9 @@ class Connection : public ProjectObject
         int time() const;
         void setTime(int time);
 
-        bool isControl() const;
-        void setIsControl(bool isControl);
-
         ConnectionVariant connectionType() const;
+        void switchControl();
+
 
     private:
         quint64 mStartID;
@@ -45,7 +53,7 @@ class Connection : public ProjectObject
         quint32 mResources;
         quint32 mTime;
         ConnectionVariant mConnectionType;
-        bool mIsControl;
+        ObjectNet *mNet;
     signals:
         dataChanged();
     public slots:

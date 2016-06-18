@@ -140,6 +140,8 @@ void PropertyWidget::addNTTransitionData()
     }
     addWidget(tr("Class"), mClassBox);
     addWidget(tr("Net"), mNetBox);
+    mTimeValue = getSpinBoxWithValue(transition->time());
+    addWidget(tr("Time"), mTimeValue);
 }
 
 void PropertyWidget::updateData()
@@ -188,6 +190,14 @@ void PropertyWidget::updateData()
             addWidget(tr("Resources"), mResourceNumber);
             mTimeValue = getSpinBoxWithValue(connection->time());
             addWidget(tr("Time"), mTimeValue);
+            Connection::ConnectionVariant conType = connection->connectionType();
+            if(conType == Connection::InputNonTerminal
+                    || conType == Connection::Control)
+            {
+                mControlCheckBox = new QCheckBox();
+                mControlCheckBox->setChecked(conType == Connection::Control);
+                addWidget(tr("Is control"), mControlCheckBox);
+            }
         }
     }
 
@@ -306,6 +316,11 @@ void PropertyWidget::aplyNTTransitionData()
     {
         transition->setNetID(netID);
     }
+    int time = mTimeValue->value();
+    if(transition->time() != time)
+    {
+        transition->setTime(time);
+    }
 }
 
 void PropertyWidget::apply()
@@ -347,6 +362,23 @@ void PropertyWidget::apply()
             if(time != connection->time())
             {
                 connection->setTime(time);
+            }
+            Connection::ConnectionVariant conType = connection->connectionType();
+            if(conType == Connection::InputNonTerminal
+                    || conType == Connection::Control)
+            {
+                bool isControl = mControlCheckBox->isChecked();
+                if(isControl)
+                {
+                    if(conType == Connection::InputNonTerminal)
+                    {
+                        connection->switchControl();
+                    }
+                }
+                else if(conType == Connection::Control)
+                {
+                    connection->switchControl();
+                }
             }
         }
     }

@@ -29,8 +29,8 @@ void ObjectNetRedactor::setObjectNet(ObjectNet *aObjectNet)
         NetObjectItem *endItem = mNetObjectItems.value(connection->endID());
 
         ArrowItem *arrow = new ArrowItem(startItem,
-                                        endItem,
-                                        connection);
+                                         endItem,
+                                         connection);
         startItem->addArrow(arrow);
         endItem->addArrow(arrow);
         addItem(arrow);
@@ -240,15 +240,39 @@ void ObjectNetRedactor::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                         && endItem->elementType() == NetObjectItem::PlaceType)
                     )
             {
-                Connection *connection = mObjectNet->addConnection(startItem->ID(), endItem->ID());
-                ArrowItem *arrow = new ArrowItem(startItem, endItem, connection);
-                arrow->setColor(Qt::black);
-                startItem->addArrow(arrow);
-                endItem->addArrow(arrow);
-                arrow->setZValue(-1000.0);
-                addItem(arrow);
-                arrow->updatePosition();
-                connect(arrow, SIGNAL(selected(quint64)), this, SLOT(connectionSelected(quint64)));
+                Connection::ConnectionVariant type = Connection::InputTerminal;
+                if(endItem->elementType() ==NetObjectItem::PlaceType)
+                {
+                    if(startItem->elementType() == NetObjectItem::TerminalTransitionType)
+                    {
+                        type = Connection::OutputTerminal;
+                    }
+                    else
+                    {
+                        type = Connection::OutputNonTerminal;
+                    }
+                }
+                else
+                {
+                    if(endItem->elementType() == NetObjectItem::NonTerminalTransitionType)
+                    {
+                        type = Connection::InputNonTerminal;
+                    }
+                }
+                Connection *connection = mObjectNet->addConnection(startItem->ID(),
+                                                                   endItem->ID(),
+                                                                   type);
+                if(connection)
+                {
+                    ArrowItem *arrow = new ArrowItem(startItem, endItem, connection);
+                    arrow->setColor(Qt::black);
+                    startItem->addArrow(arrow);
+                    endItem->addArrow(arrow);
+                    arrow->setZValue(-1000.0);
+                    addItem(arrow);
+                    arrow->updatePosition();
+                    connect(arrow, SIGNAL(selected(quint64)), this, SLOT(connectionSelected(quint64)));
+                }
             }
         }
     }

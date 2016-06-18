@@ -35,16 +35,6 @@ quint64 ProjectObject::ID() const
     return mID;
 }
 
-void ProjectObject::setID(const quint64 &aID)
-{
-    mID = aID;
-}
-
-void ProjectObject::setType(const Type &aType)
-{
-    mType = aType;
-}
-
 void ProjectObject::load(QXmlStreamReader *aInputStream)
 {
     if(aInputStream->isStartElement()

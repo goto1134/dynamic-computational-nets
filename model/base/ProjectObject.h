@@ -34,8 +34,6 @@ class ProjectObject : public QObject
 
     protected:
         explicit ProjectObject();
-        void setID(const quint64 &aID);
-        void setType(const Type &aType);
 
     private:
         quint64 mID;

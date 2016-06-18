@@ -1,29 +1,48 @@
 #include "Connection.h"
 
+#include "ObjectNet.h"
+#include "Place.h"
+#include "NonTerminalTransition.h"
+
 const QString START_ID = "start";
 const QString END_ID = "end";
 const QString TIME_LABEL = "time";
-const QString CONTROL_LABEL = "isControl";
 const QString CONNECTION_TYPE = "connection_type";
-
 
 Connection::Connection(const quint64 &aID,
                        const quint64 &aStartID,
                        const quint64 &aEndID,
-                       const Connection::ConnectionVariant &aType)
-:ProjectObject(ProjectObject::ConnectionType, aID)
+                       const Connection::ConnectionVariant &aType,
+                       ObjectNet *aNet)
+    :ProjectObject(ProjectObject::ConnectionType, aID)
 {
     mResources = 1;
-    mTime = 1;
-    mIsControl = false;
+    if(aType == InputTerminal
+            || aType == OutputTerminal)
+    {
+        mTime = 1;
+    }
+    else
+    {
+        mTime = 0;
+    }
     mStartID = aStartID;
     mEndID = aEndID;
     mConnectionType = aType;
+    if(aType == Control
+            || aType == InputNonTerminal)
+    {
+        mNet = aNet;
+    }
 }
 
-Connection::Connection(QXmlStreamReader *aInputStream)
+Connection::Connection(QXmlStreamReader *aInputStream, ObjectNet *aNet)
 {
     load(aInputStream);
+    if(mConnectionType == InputNonTerminal)
+    {
+        mNet = aNet;
+    }
 }
 
 void Connection::load(QXmlStreamReader *aInputStream)
@@ -50,10 +69,6 @@ void Connection::load(QXmlStreamReader *aInputStream)
             {
                 mTime = attribute.value().toUInt();
             }
-            else if( name == CONTROL_LABEL)
-            {
-                mIsControl = attribute.value().toUInt();
-            }
             else if(name == CONNECTION_TYPE)
             {
                 mConnectionType = static_cast<ConnectionVariant>(attribute.value().toUInt());
@@ -69,12 +84,11 @@ void Connection::save(QXmlStreamWriter *aOutputStream) const
 {
     aOutputStream->writeStartElement(CONNECTION_LABEL);
     {
+        aOutputStream->writeAttribute(CONNECTION_TYPE, QString::number(mConnectionType));
         aOutputStream->writeAttribute(START_ID, QString::number(mStartID));
         aOutputStream->writeAttribute(END_ID, QString::number(mEndID));
         aOutputStream->writeAttribute(TIME_LABEL, QString::number(mTime));
         aOutputStream->writeAttribute(RESOURCE_NUMBER_LABEL, QString::number(mResources));
-        aOutputStream->writeAttribute(CONTROL_LABEL, QString::number(mIsControl));
-        aOutputStream->writeAttribute(CONNECTION_TYPE, QString::number(mConnectionType));
         ProjectObject::save(aOutputStream);
     }
     aOutputStream->writeEndElement();
@@ -113,7 +127,15 @@ void Connection::setResources(int resources)
 
 int Connection::time() const
 {
-    return mTime;
+    if(mConnectionType == InputTerminal
+            || mConnectionType == OutputTerminal)
+    {
+        return mTime;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 void Connection::setTime(int time)
@@ -122,17 +144,22 @@ void Connection::setTime(int time)
     emit dataChanged();
 }
 
-bool Connection::isControl() const
-{
-    return mIsControl;
-}
-
-void Connection::setIsControl(bool isControl)
-{
-    mIsControl = isControl;
-}
-
 Connection::ConnectionVariant Connection::connectionType() const
 {
     return mConnectionType;
+}
+
+void Connection::switchControl()
+{
+    NonTerminalTransition *transition = static_cast<NonTerminalTransition *>(mNet->getTransitionByID(mEndID));
+    if(mConnectionType == InputNonTerminal && mNet->getPlaceByID(mStartID)->sortID() == 0)
+    {
+        transition->setConnectionControl(ID(), true);
+        mConnectionType = Control;
+    }
+    else if(mConnectionType == Control)
+    {
+        transition->setConnectionControl(ID(), false);
+        mConnectionType = InputNonTerminal;
+    }
 }

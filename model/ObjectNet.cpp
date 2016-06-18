@@ -57,7 +57,7 @@ void ObjectNet::load(QXmlStreamReader *aInputStream)
                 if(aInputStream->readNextStartElement()
                         && aInputStream->name() == CONNECTION_LABEL)
                 {
-                    Connection *connection = new Connection(aInputStream);
+                    Connection *connection = new Connection(aInputStream, this);
                     mConnections.insert(connection->ID(), connection);
                 }
             }
@@ -225,40 +225,57 @@ NonTerminalTransition *ObjectNet::addNonTerminalTransition(const QPointF &aPoint
     return transition;
 }
 
-Connection *ObjectNet::addConnection(const quint64 &aStartID, const quint64 &aEndID)
+Connection *ObjectNet::addConnection(const quint64 &aStartID, const quint64 &aEndID, const Connection::ConnectionVariant &aType)
 {
     Connection *connection = new Connection(ProjectModel::getInstance().generateID(),
-                                            aStartID,
-                                            aEndID,
-                                            getPlaceByID(aStartID)
-                                            ? Connection::FromPlace
-                                            : Connection::FromTransition);
-    mConnections.insert(connection->ID(), connection);
-    if(connection->connectionType() == Connection::FromPlace)
+                                            aStartID, aEndID, aType, this);
+    if(aType == Connection::InputTerminal
+            || aType == Connection::InputNonTerminal)
     {
-        getPlaceByID(connection->startID())->addOutputConnectionID(connection->ID());
-        if(TerminalTransition *transition = mTTransitions.value(aEndID,0))
+        if(Place *place = getPlaceByID(aStartID))
         {
-            transition->addInputConnectionID(connection->ID());
-        }
-        else
-        {
-            mNTTransitions.value(aEndID)->addInputConnectionID(connection->ID());
+            if(aType == Connection::InputTerminal)
+            {
+                TerminalTransition *transition = mTTransitions.value(aEndID);
+                place->addOutputConnectionID(connection->ID());
+                transition->addInputConnectionID(connection->ID());
+                mConnections.insert(connection->ID(), connection);
+                return connection;
+            }
+            else if(aType == Connection::InputNonTerminal)
+            {
+                NonTerminalTransition *transition = mNTTransitions.value(aEndID);
+                place->addOutputConnectionID(connection->ID());
+                transition->addInputConnectionID(connection->ID());
+                mConnections.insert(connection->ID(), connection);
+                return connection;
+            }
         }
     }
-    else
+    else if(aType == Connection::OutputTerminal
+            || aType == Connection::OutputNonTerminal)
     {
-        getPlaceByID(aEndID)->addInputConnectionID(connection->ID());
-        if(TerminalTransition *transition = mTTransitions.value(aStartID,0))
+        if(Place *place = getPlaceByID(aEndID))
         {
-            transition->addOutputConnectionID(connection->ID());
-        }
-        else
-        {
-            mNTTransitions.value(aStartID)->addOutputConnectionID(connection->ID());
+            if(aType == Connection::OutputTerminal)
+            {
+                TerminalTransition *transition = mTTransitions.value(aStartID);
+                place->addInputConnectionID(connection->ID());
+                transition->addOutputConnectionID(connection->ID());
+                mConnections.insert(connection->ID(), connection);
+                return connection;
+            }
+            else if(aType == Connection::OutputNonTerminal)
+            {
+                NonTerminalTransition *transition = mNTTransitions.value(aStartID);
+                place->addInputConnectionID(connection->ID());
+                transition->addOutputConnectionID(connection->ID());
+                mConnections.insert(connection->ID(), connection);
+                return connection;
+            }
         }
     }
-    return connection;
+    return 0;
 }
 
 Connection *ObjectNet::getConnectionByID(const quint64 &aID)
