@@ -33,7 +33,7 @@ class ArrowItem : public QObject, public QGraphicsLineItem
 
         void updatePosition();
     signals:
-        selected(const quint64 &aID);
+        void selected(const quint64 &aID);
     protected:
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) Q_DECL_OVERRIDE;
         void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
