@@ -33,4 +33,4 @@ script:
  - qmake -project
  - qmake DVS.pro
  - make --help
- - make CC=gcc-6
+ - make CXX=$COMPILER
