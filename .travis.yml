@@ -40,6 +40,7 @@ before_install:
  - export CC="gcc-6"
 
 script:
+ - $CXX --version
  - std=c++11
  - qmake -project
  - qmake DVS.pro
