@@ -1,12 +1,18 @@
 language: cpp
 
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - gcc-6
-    - g++-6
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages: 
+            - gcc-6
+            - g++-6
+      env: 
+        COMPILER=g++-6
 
 #install:    
  #- export CXX="g++-6" CC="gcc-6"
@@ -17,8 +23,6 @@ before_install:
  - sudo apt-get install -qq qt55base qt55multimedia qt55translations qt55tools
  - source /opt/qt55/bin/qt55-env.sh
  - export QTHOME=/opt/qt55
- - sudo apt-install --set c++ /usr/bin/g++-6
- - sudo apt-install --set cc /usr/bin/gcc-6
  #- sudo apt-get install -qq g++-5
 
 script:
