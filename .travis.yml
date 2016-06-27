@@ -27,4 +27,4 @@ script:
  - $CC --version
  - qmake -project
  - qmake DVS.pro
- - make
+ - make CC=gcc-6
