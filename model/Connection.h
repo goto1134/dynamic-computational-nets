@@ -55,7 +55,7 @@ class Connection : public ProjectObject
         ConnectionVariant mConnectionType;
         ObjectNet *mNet;
     signals:
-        dataChanged();
+        void dataChanged();
     public slots:
 };
 

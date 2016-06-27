@@ -33,7 +33,7 @@ class NonTerminalTransition : public TerminalTransition
         QSet<quint64> mControlConnections;
 
     signals:
-        netChanged(const quint64 &aClassID, const quint64 &aNetID);
+        void netChanged(const quint64 &aClassID, const quint64 &aNetID);
     public slots:
 };
 

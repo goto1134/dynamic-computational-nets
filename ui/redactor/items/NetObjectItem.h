@@ -70,7 +70,7 @@ class NetObjectItem : public QObject, public QGraphicsPolygonItem
         void initialize(ProjectGraphicsObject *aGraphicsObject);
 
     signals:
-        selected(const quint64 &aID);
+        void selected(const quint64 &aID);
     private slots:
         void resourceNumberChanged(const quint64 &aResourceNumber);
         void sortChanged();

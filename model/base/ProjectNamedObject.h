@@ -21,7 +21,7 @@ class ProjectNamedObject : public ProjectObject
     private:
         QString mName;
     signals:
-        nameChanged(const QString &aNewName);
+        void nameChanged(const QString &aNewName);
     public slots:
 };
 

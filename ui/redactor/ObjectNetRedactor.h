@@ -40,9 +40,9 @@ class ObjectNetRedactor : public QGraphicsScene
         void updateTransitions();
         void addNetItem(NetObjectItem *aItem);
     signals:
-        placeSelected(const quint64 &aClassID, const quint64 &aNetID, const quint64 &aObjectID);
-        transitionSelected(const quint64 &aClassID, const quint64 &aNetID, const quint64 &aObjectID);
-        connectionSelected(const quint64 &aClassID, const quint64 &aNetID, const quint64 &aObjectID);
+        void placeSelected(const quint64 &aClassID, const quint64 &aNetID, const quint64 &aObjectID);
+        void transitionSelected(const quint64 &aClassID, const quint64 &aNetID, const quint64 &aObjectID);
+        void connectionSelected(const quint64 &aClassID, const quint64 &aNetID, const quint64 &aObjectID);
     public slots:
         void setMouseTool();
         void setPlaceTool();
