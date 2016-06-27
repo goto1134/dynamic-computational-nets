@@ -24,7 +24,7 @@ before_install:
 
 script:
  - $CXX --version
- - std=c++11
+ - $CC --version
  - qmake -project
  - qmake DVS.pro
  - make
