@@ -6,3 +6,5 @@ script:
   - qmake -project
   - qmake DVS.pro
   - make
+
+language: C++
