@@ -8,21 +8,16 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - beineri-opt-qt551
           packages: 
             - gcc-6
             - g++-6
-            - qt55base
-            - qt55multimedia
-            - qt55translations
-            - qt55tools
       env: 
         COMPILER=g++-6
 
 before_install:
- #- sudo add-apt-repository ppa:beineri/opt-qt551 -y
- #- sudo apt-get update -qq
- #- sudo apt-get install -qq qt55base qt55multimedia qt55translations qt55tools
+ - sudo add-apt-repository ppa:beineri/opt-qt551 -y
+ - sudo apt-get update -qq
+ - sudo apt-get install -qq qt55base qt55multimedia qt55translations qt55tools
  - source /opt/qt55/bin/qt55-env.sh
  - export QTHOME=/opt/qt55
 
