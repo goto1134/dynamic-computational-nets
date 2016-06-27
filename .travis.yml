@@ -23,8 +23,11 @@ before_install:
  #- sudo apt-get install -qq g++-5
 
 script:
+ - g++ --version
  - $CXX --version
+ - gcc --version
  - $CC --version
  - qmake -project
  - qmake DVS.pro
+ - make --help
  - make CC=gcc-6
