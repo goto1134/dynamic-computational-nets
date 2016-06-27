@@ -1,5 +1,8 @@
 language: C++
 
+sudo: required
+dist: trusty
+
 compiler: mingw
 
 before_install:
