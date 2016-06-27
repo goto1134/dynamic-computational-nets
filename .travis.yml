@@ -8,8 +8,10 @@ addons:
     - gcc-6
     - g++-6
     update-alternatives:
-    - install /usr/bin/gcc gcc /usr/bin/gcc-6 50
-    - install /usr/bin/g++ g++ /usr/bin/g++-6 50
+    - remove-all gcc
+    - remove-all gcc 
+   #- install /usr/bin/gcc gcc /usr/bin/gcc-6 50
+   # - install /usr/bin/g++ g++ /usr/bin/g++-6 50
 
 #install:    
  #- export CXX="g++-6" CC="gcc-6"
