@@ -5,15 +5,15 @@ language: cpp
 #dist: trusty
 
 addons:
-  apt:
-    sources:
+#  apt:
+    #sources:
     # add PPAs with more up-to-date toolchains
-    - ubuntu-toolchain-r-test
+    #- ubuntu-toolchain-r-test
     #- llvm-toolchain-precise-3.6
-    packages:
+    #packages:
     # install toolchains
-    - gcc-5
-    - g++-5
+    #- gcc-6
+    #- g++-6
     #- clang-3.6
 
 matrix:
