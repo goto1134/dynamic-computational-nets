@@ -9,10 +9,11 @@ before_install:
  - sudo apt-get install -qq qt55base qt55multimedia qt55translations qt55tools
  - source /opt/qt55/bin/qt55-env.sh
  - export QTHOME=/opt/qt55
- - sudo apt-get install -qq g++-4.8
- - export CXX="g++-4.8"
+ - sudo apt-get install -qq g++-5
+ - export CXX="g++-5"
 
 script:
+ - std=c++11
  - qmake -project
  - qmake DVS.pro
  - make
