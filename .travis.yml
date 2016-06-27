@@ -24,8 +24,9 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-5
-      env: COMPILER=g++-5
+            - g++-6
+            - gcc-6
+      env: COMPILER=g++-6
 
 before_install:
  - sudo add-apt-repository ppa:beineri/opt-qt551 -y
@@ -34,8 +35,9 @@ before_install:
  - sudo apt-get install -qq qt55base qt55multimedia qt55translations qt55tools
  - source /opt/qt55/bin/qt55-env.sh
  - export QTHOME=/opt/qt55
-# - sudo apt-get install -qq g++-5
-# - export CXX="g++-5"
+ #- sudo apt-get install -qq g++-5
+ - export CXX="g++-6"
+ - export CC="gcc-6"
 
 script:
  - std=c++11
