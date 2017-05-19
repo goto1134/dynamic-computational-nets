@@ -1,82 +1,95 @@
-# Compiled Object files
+# Created by .ignore support plugin (hsz.mobi)
+### Qt template
+# C++ objects and libs
+
 *.slo
 *.lo
 *.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-
-# Compiled Static libraries
-*.lai
-*.la
 *.a
-*.lib
+*.la
+*.lai
+*.so
+*.dll
+*.dylib
 
-# Executables
-*.exe
-*.out
-*.app
-<<<<<<< HEAD
+# Qt-es
 
-# =========================
-# Operating System Files
-# =========================
+/.qmake.cache
+/.qmake.stash
+*.pro.user
+*.pro.user.*
+*.qbs.user
+*.qbs.user.*
+*.moc
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+Makefile*
+*build-*
 
-# OSX
-# =========================
+# QtCreator
 
-.DS_Store
-.AppleDouble
-.LSOverride
+*.autosave
 
-# Thumbnails
-._*
+# QtCtreator Qml
+*.qmlproject.user
+*.qmlproject.user.*
 
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
+# QtCtreator CMake
+CMakeLists.txt.user*
 
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
+### JetBrains template
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
-# Windows
-# =========================
+# User-specific stuff:
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
 
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
+# Sensitive or high-churn files:
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.xml
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
 
-# Folder config file
-Desktop.ini
+# Gradle:
+.idea/**/gradle.xml
+.idea/**/libraries
 
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
+# Mongo Explorer plugin:
+.idea/**/mongoSettings.xml
 
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
+## File-based project format:
+*.iws
 
-# Windows shortcuts
-*.lnk
-=======
->>>>>>> ba2e09640b27de7414882bdebad56d5b2fcf2fbc
+## Plugin-specific files:
+
+# IntelliJ
+/out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+### CMake template
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+
